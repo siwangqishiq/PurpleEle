@@ -1,12 +1,16 @@
-### 跨平台渲染库
-    计划支持平台 
-        Windows linux(ubuntu) macos Android iOS 
+### FarmFun 跨平台渲染库
+计划支持平台  
+- [x] Windows 
+- [x] linux(ubuntu) 
+- [x] macos 
+- [x] Android 
+- [ ] iOS 
 
-    环境: C++ 
-    
-    底层渲染库 
-        桌面端 OpenGL4.3   
-        移动端 OpenGL-es 3.0 
+环境: C++ 
+
+底层渲染库 
+    桌面端 OpenGL4.3   
+    移动端 OpenGL-es 3.0 
 
 ### 运行
     Windows 
