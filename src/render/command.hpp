@@ -86,7 +86,7 @@ private:
 
     std::unordered_map<wchar_t , wchar_t> symbolMap_;
     std::wstring symbolStr = 
-    L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
 };
 
 

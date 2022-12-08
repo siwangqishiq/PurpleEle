@@ -68,7 +68,10 @@ void TextRenderCommand::putParams(std::wstring text
         ,TextPaint &paint){
     paint_ = paint;
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
+
+    // auto t1 = currentTimeMillis();
     allocatorVRamForText(text.length());
+    // Logi("TextRenderCommand" , "allocatorVRamForText costtime : %lld" , (currentTimeMillis() - t1));
 
     if(vbo_ <= 0){
         return;
@@ -77,6 +80,8 @@ void TextRenderCommand::putParams(std::wstring text
 
     float x = left;
     float y = bottom;
+
+    auto t2 = currentTimeMillis();
 
     auto textRenderHelper = engine_->textRenderHelper_;
     std::vector<float> buf(vertexCount_ * attrCount_);
@@ -91,8 +96,11 @@ void TextRenderCommand::putParams(std::wstring text
         putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
         x += charInfoPtr->width * paint.textSizeScale + paint.gapSize;
     }//end for i
+    Logi("TextRenderCommand" , "allocatorVRamForText layout vertex : %lld" , (currentTimeMillis() - t2));
 
+    // auto t3 = currentTimeMillis();
     buildGlCommands(buf);
+    // Logi("TextRenderCommand" , "buildGlCommands time : %lld" , (currentTimeMillis() - t3));
 }
 
 void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limitRect, 
@@ -112,8 +120,8 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
 
     int pos = 0;
 
-    float x = 0.0f;
-    float y = charMaxHeight;
+    float x = limitRect.left;
+    float y = limitRect.top - charMaxHeight;
     float thisLineLeft = 0.0f;
 
     std::vector<float> buf(vertexCount_ * attrCount_);
@@ -122,16 +130,17 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         auto charInfoPtr = textRenderHelper->findCharInfo(ch);
         if(charInfoPtr != nullptr){
             float charRealWidth = charInfoPtr->width * sizeScale;
-            x += (charRealWidth + paint.gapSize);
-            
-            if(x > limitWidth){ //需要新起一行
-                x = 0.0f;
-                y += charMaxHeight;
+            if(x + (charRealWidth + paint.gapSize) > limitRect.left + limitWidth){
+                x = limitRect.left;
+                y -= (charMaxHeight + paint.gapSize);
             }
+            putVertexDataToBuf(buf , pos , x , y , charInfoPtr , paint);
+            x += (charRealWidth + paint.gapSize);
         }
-        
         pos++;
     }//end while
+
+    buildGlCommands(buf);
 }
 
 void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf, 
@@ -140,6 +149,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     const int attrPerChar = attrCount_ * vertCountPerChar_;
     const float sizeScale = paint_.textSizeScale;
     // Logi("text_render" , "size scale %f" , sizeScale);
+    // Logi("text_render" , "x y %f %f" , x , y);
 
     float charRealWidth = charInfoPtr->width * sizeScale;
     float charRealHeight = charInfoPtr->height * sizeScale;
@@ -222,6 +232,7 @@ void TextRenderCommand::runCommands(){
     if(fontTextureId_ <= 0){
         return;
     }
+    // Logi("TextRenderCommand" , "runCommands");
 
     //打开混合模式 文字有透明度
     glEnable(GL_BLEND);

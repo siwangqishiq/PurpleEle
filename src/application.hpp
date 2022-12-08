@@ -32,7 +32,7 @@ public:
 
     void onCreate();
 
-    virtual void onSceneUpdate();
+    virtual void updateSence();
     
     virtual void onResize(int width , int height);
     

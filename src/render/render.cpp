@@ -169,4 +169,17 @@ void TextRenderHelper::addSpecialTextCharInfo(){
     blankCharInfo->textureCoords[2] = 0.0f;
     blankCharInfo->textureCoords[3] = 0.0f;
     charInfoMaps_.insert(std::make_pair<>(blankCharInfo->value[0] , blankCharInfo));
+
+    //中文逗号
+    auto chineseCommaChar = std::make_shared<CharInfo>();
+    auto engCommaChar = charInfoMaps_[L','];
+    chineseCommaChar->textureId = engCommaChar->textureId;
+    chineseCommaChar->value = L"，";
+    chineseCommaChar->width = engCommaChar->width;
+    chineseCommaChar->height = engCommaChar->height;
+    chineseCommaChar->textureCoords[0] = engCommaChar->textureCoords[0];
+    chineseCommaChar->textureCoords[1] = engCommaChar->textureCoords[1];
+    chineseCommaChar->textureCoords[2] = engCommaChar->textureCoords[2];
+    chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
+    charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
 }
