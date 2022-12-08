@@ -183,3 +183,7 @@ void TextRenderHelper::addSpecialTextCharInfo(){
     chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
     charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
 }
+
+std::shared_ptr<TextRenderCommand> RenderCommandCache::acquireTextRender(std::wstring &content , Rect &rect ,TextPaint &paint){
+    return nullptr;
+}

@@ -55,6 +55,7 @@ bool TextRenderCommand::isSymbol(std::wstring ch){
 
 unsigned int TextRenderCommand::allocatorVRamForText(int textLength){
     vertexCount_ = vertCountPerChar_ * textLength;
+    // Logi("TextRenderCommand" , "vertexcount = %d", vertexCount_);
     int requestSize = vertexCount_ * attrCount_ * sizeof(float);
     int allocateSize = 0;
     // Logi("command" , "allocator size = %d" , requestSize);
@@ -81,8 +82,7 @@ void TextRenderCommand::putParams(std::wstring text
     float x = left;
     float y = bottom;
 
-    auto t2 = currentTimeMillis();
-
+    long long t2 = currentTimeMillis();
     auto textRenderHelper = engine_->textRenderHelper_;
     std::vector<float> buf(vertexCount_ * attrCount_);
 
@@ -96,7 +96,9 @@ void TextRenderCommand::putParams(std::wstring text
         putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
         x += charInfoPtr->width * paint.textSizeScale + paint.gapSize;
     }//end for i
-    Logi("TextRenderCommand" , "allocatorVRamForText layout vertex : %lld" , (currentTimeMillis() - t2));
+    Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
+        , vertexCount_
+        , (currentTimeMillis() - t2));
 
     // auto t3 = currentTimeMillis();
     buildGlCommands(buf);
@@ -109,8 +111,11 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         return;
     }
     paint_ = paint;
+    limitRect_ = limitRect;
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
     allocatorVRamForText(text.length());
+    
+    long long t2 = currentTimeMillis();
 
     auto textRenderHelper = engine_->textRenderHelper_;
     //todo 文本排版
@@ -139,6 +144,10 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         }
         pos++;
     }//end while
+
+    Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
+        , vertexCount_
+        , (currentTimeMillis() - t2));
 
     buildGlCommands(buf);
 }

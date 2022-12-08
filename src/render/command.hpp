@@ -49,6 +49,7 @@ public:
     }
 private:
     TextPaint paint_;
+    Rect limitRect_;
     glm::vec4 textColor_;
 
     const int vertCountPerChar_ = 6;//一个字符由几个顶点确定

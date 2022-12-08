@@ -70,6 +70,8 @@ private:
     float x_ = 0.0f;
     float y_ = 0.0f;
 
+    int textIndex = 0;
+
     float mScale = 1.0f;
     int mIndex = 1;
     bool showNumber = false; 

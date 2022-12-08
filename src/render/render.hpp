@@ -69,6 +69,7 @@ private:
     int textCommandIndex;
     std::vector<std::shared_ptr<TextRenderCommand>> textCommandPool;
     std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
+
 };
 
 //字符信息
@@ -99,5 +100,12 @@ private:
     void addSpecialTextCharInfo();
 
     std::unordered_map<wchar_t , std::shared_ptr<CharInfo>> charInfoMaps_;
+};
+
+//渲染命令缓存
+class RenderCommandCache{
+public:
+    std::shared_ptr<TextRenderCommand> acquireTextRender(std::wstring &content , Rect &rect ,TextPaint &paint);
+private:
 };
 
