@@ -1,0 +1,40 @@
+{
+    "list": [
+        {
+            "height": 11,
+            "texCoords": [
+                0.000000,
+                0.000000,
+                0.007324,
+                0.005371
+            ],
+            "texture": "font_texture_0.png",
+            "value": "`",
+            "width": 15
+        },
+        {
+            "height": 11,
+            "texCoords": [
+                0.000000,
+                0.000000,
+                0.007324,
+                0.005371
+            ],
+            "texture": "font_texture_0.png",
+            "value": "`",
+            "width": 15
+        },
+        {
+            "height": 11,
+            "texCoords": [
+                0.000000,
+                0.000000,
+                0.007324,
+                0.005371
+            ],
+            "texture": "font_texture_0.png",
+            "value": "`",
+            "width": 15
+        }
+    ]
+}

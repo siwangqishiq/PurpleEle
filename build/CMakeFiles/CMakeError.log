@@ -1,0 +1,140 @@
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_2ae44 && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_2ae44.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_94708 && [1/2] Building C object CMakeFiles/cmTC_94708.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_94708.exe
+FAILED: cmTC_94708.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_94708.dir/testCCompiler.c.o -o cmTC_94708.exe -Wl,--out-implib,libcmTC_94708.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_835b3 && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_835b3.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_e3f09 && [1/2] Building C object CMakeFiles/cmTC_e3f09.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_e3f09.exe
+FAILED: cmTC_e3f09.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_e3f09.dir/testCCompiler.c.o -o cmTC_e3f09.exe -Wl,--out-implib,libcmTC_e3f09.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_34c76 && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_34c76.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_4db53 && [1/2] Building C object CMakeFiles/cmTC_4db53.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_4db53.exe
+FAILED: cmTC_4db53.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_4db53.dir/testCCompiler.c.o -o cmTC_4db53.exe -Wl,--out-implib,libcmTC_4db53.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_41d6d && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_41d6d.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_51a54 && [1/2] Building C object CMakeFiles/cmTC_51a54.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_51a54.exe
+FAILED: cmTC_51a54.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_51a54.dir/testCCompiler.c.o -o cmTC_51a54.exe -Wl,--out-implib,libcmTC_51a54.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_871cd && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_871cd.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_db318 && [1/2] Building C object CMakeFiles/cmTC_db318.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_db318.exe
+FAILED: cmTC_db318.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_db318.dir/testCCompiler.c.o -o cmTC_db318.exe -Wl,--out-implib,libcmTC_db318.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_1af30 && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_1af30.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_e1cf3 && [1/2] Building C object CMakeFiles/cmTC_e1cf3.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_e1cf3.exe
+FAILED: cmTC_e1cf3.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_e1cf3.dir/testCCompiler.c.o -o cmTC_e1cf3.exe -Wl,--out-implib,libcmTC_e1cf3.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_a176c && ninja: error: '/usr/share/cmake-3.20.1/Modules/CMakeCCompilerABI.c', needed by 'CMakeFiles/cmTC_a176c.dir/CMakeCCompilerABI.c.o', missing and no known rule to make it
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: d:/code/gl_text_render/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/d/gits/depot_tools/ninja.exe cmTC_96390 && [1/2] Building C object CMakeFiles/cmTC_96390.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_96390.exe
+FAILED: cmTC_96390.exe 
+: && D:/msys64/mingw64/bin/gcc.exe  -Wl,--enable-auto-import CMakeFiles/cmTC_96390.dir/testCCompiler.c.o -o cmTC_96390.exe -Wl,--out-implib,libcmTC_96390.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && :
+CreateProcess failed: The system cannot find the file specified.
+ninja: build stopped: subcommand failed.
+
+
+
