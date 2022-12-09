@@ -7,7 +7,7 @@ WIN_DIR := .
 BUILD_DIR := build
 INCLUDE_DIR := ../include
 STD := c++14
-OPTPARAMS := -O0
+OPTPARAMS := -O3
 
 .PHONY: clean
 

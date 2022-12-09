@@ -7,6 +7,11 @@
 
 TextPaint TextRenderCommand::defaultTextPaint;
 
+unsigned int RenderCommand::allocatorVRam(int acquireSize , int &allocateSize){
+    VRamManager::getInstance().fetchVideoMemory(acquireSize , vbo_ ,vao_, vboOffset_ , allocateSize);
+    return vbo_;
+}
+
 float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){
     auto textRenderHelper = engine_->textRenderHelper_;
     float maxHeight = 0.0f;
@@ -51,8 +56,7 @@ unsigned int TextRenderCommand::allocatorVRamForText(int textLength){
     int requestSize = vertexCount_ * attrCount_ * sizeof(float);
     int allocateSize = 0;
     // Logi("command" , "allocator size = %d" , requestSize);
-    VRamManager::getInstance().fetchVideoMemory(requestSize , 
-        vbo_ ,vao_, vboOffset_ , allocateSize);
+    allocatorVRam(requestSize , allocateSize);
     return vbo_;
 }
 
@@ -107,7 +111,7 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
     allocatorVRamForText(text.length());
     
-    long long t2 = currentTimeMillis();
+    long long t2 = currentTimeMicro();
 
     auto textRenderHelper = engine_->textRenderHelper_;
     //todo 文本排版
@@ -139,8 +143,8 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
 
     // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
     //     , vertexCount_
-    //     , (currentTimeMillis() - t2));
-
+    //     , (currentTimeMicro() - t2));
+    
     buildGlCommands(buf);
 }
 

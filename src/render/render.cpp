@@ -77,6 +77,12 @@ void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd){
     renderCommandList_.push_back(cmd);
 }
 
+
+//绘制自定义shader
+void RenderEngine::renderShader(Shader &shader , Rect &showRect){
+    
+}
+
 void RenderEngine::renderText(std::wstring text , 
         float left , float bottom , TextPaint &paint){
     auto cmd = fetchTextRenderCommand(this);

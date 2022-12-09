@@ -60,6 +60,9 @@ public:
     void renderText(std::wstring text , 
             Rect &showRect , 
             TextPaint &paint);
+
+    //绘制自定义shader
+    void renderShader(Shader &shader , Rect &showRect);
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 

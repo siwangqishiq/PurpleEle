@@ -169,34 +169,33 @@ void Application::updateSence(){
     }
 
     TextPaint p1;
-    p1.textColor = glm::vec4(1.0f ,1.0f , 1.0f , 1.0f);
+    p1.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
     p1.textSizeScale = 0.5f;
     Rect limitRect;
     limitRect.left = 0.0f;
     limitRect.top = screenHeight_;
-    limitRect.width = screenWidth_;
+    limitRect.width = screenWidth_ /1.0f;
     limitRect.height = screenHeight_;
-
-    std::wstring showStr = showTextContent.substr(0 , textIndex);
-    renderEngine_->renderText(showStr,limitRect, p1);
-
-    textIndex++;
-    if(textIndex >= showTextContent.length()){
-        textIndex = 0;
-    }
-
-    // for(int i = 0 ; i < 10 ; i++){
-    //     renderEngine_->renderText(str , 0, screenHeight_ - i * CHAR_DEFAULT_HEIGHT , p1);
+//    std::wstring showStr = showTextContent.substr(0 , showTextContent.length());
+//    renderEngine_->renderText(showStr,limitRect, p1);
+    
+    // textIndex++;
+    // if(textIndex >= showTextContent.length()){
+    //     textIndex = 0;
     // }
 
-    TextPaint p2;
-    p2.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
-    p2.textSizeScale = 1.0f;
-    Rect limitRect2;
-    limitRect2.left = 0.0f;
-    limitRect2.top = screenHeight_;
-    limitRect2.width = screenWidth_ / 3.0f;
-    limitRect2.height = screenHeight_ / 2.0f;
+//     for(int i = 0 ; i < 10 ; i++){
+//         renderEngine_->renderText(showTextContent , 0, screenHeight_ - i * CHAR_DEFAULT_HEIGHT , p1);
+//     }
+
+//    TextPaint p2;
+//    p2.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
+//    p2.textSizeScale = 1.0f;
+//    Rect limitRect2;
+//    limitRect2.left = 0.0f;
+//    limitRect2.top = screenHeight_;
+//    limitRect2.width = screenWidth_ / 3.0f;
+//    limitRect2.height = screenHeight_ / 2.0f;
     // renderEngine_->renderText(str,limitRect2, p2);
 
     // TextPaint p1;
@@ -207,9 +206,9 @@ void Application::updateSence(){
     // p2.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
     // renderEngine_->renderText(L"那更春来,玉减香消" , 100, 300 + 100 , p2);
 
-    TextPaint p3;
-    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
-    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
+//    TextPaint p3;
+//    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
+//    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
 
     if(showNumber){
         TextPaint p4;
