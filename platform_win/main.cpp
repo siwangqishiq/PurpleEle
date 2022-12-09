@@ -72,6 +72,8 @@ int main(int argc , char *argv[]){
         
         glfwSwapBuffers(window);
         glfwPollEvents();
+        
+        glfwSwapInterval(1);//锁定固定帧率
     }//end while
     
     app->onFree();
