@@ -112,6 +112,10 @@ void Application::onCreate(){
         showFps = frameCount_;
         frameCount_ = 0;
     } , 1000L);
+
+     showTextContent = AssetManager::getInstance()->readTextFile("honglou.txt");
+//    showTextContent = AssetManager::getInstance()->readTextFile("shader/render_text_frag.glsl");
+    Logi("application" , "text file size : %d" , showTextContent.length());
 }
 
 void Application::onTrick(){
@@ -166,19 +170,18 @@ void Application::updateSence(){
 
     TextPaint p1;
     p1.textColor = glm::vec4(1.0f ,1.0f , 1.0f , 1.0f);
-    p1.textSizeScale = 1.0f;
+    p1.textSizeScale = 0.5f;
     Rect limitRect;
     limitRect.left = 0.0f;
     limitRect.top = screenHeight_;
     limitRect.width = screenWidth_;
     limitRect.height = screenHeight_;
-    std::wstring str = L"  多年以后，奥雷连诺上校站在行刑队面前，准会想起父亲带他去参观冰块的那个遥远的下午。当时，马孔多是个二十户人家的村庄，一座座土房都盖在河岸上，河水清澈，沿着遍布石头的河床流去，河里的石头光滑、洁白，活象史前的巨蛋。这块天地还是新开辟的，许多东西都叫不出名字，不得不用手指指点点。每年三月，衣衫褴楼的吉卜赛人都要在村边搭起帐篷，在笛鼓的喧嚣声中，向马孔多的居民介绍科学家的最新发明。他们首先带来的是磁铁。一个身躯高大的吉卜赛人，自称梅尔加德斯，满脸络腮胡子，手指瘦得象鸟的爪子，向观众出色地表演了他所谓的马其顿炼金术士创造的世界第八奇迹。他手里拿着两大块磁铁，从一座农舍走到另一座农舍，大家都惊异地看见，铁锅、铁盆、铁钳、铁炉都从原地倒下，木板上的钉子和螺丝嘎吱嘎吱地拼命想挣脱出来，甚至那些早就丢失的东西也从找过多次的地方兀然出现，乱七八糟地跟在梅尔加德斯的魔铁后面。“东西也是有生命的，”吉卜赛人用刺耳的声调说，“只消唤起它们的灵性。”霍·阿·布恩蒂亚狂热的想象力经常超过大自然的创造力，甚至越过奇迹和魔力的限度，他认为这种暂时无用的科学发明可以用来开采地下的金子";
 
-    std::wstring showStr = str.substr(0 , textIndex);
+    std::wstring showStr = showTextContent.substr(0 , textIndex);
     renderEngine_->renderText(showStr,limitRect, p1);
 
     textIndex++;
-    if(textIndex >= str.length()){
+    if(textIndex >= showTextContent.length()){
         textIndex = 0;
     }
 
@@ -204,10 +207,9 @@ void Application::updateSence(){
     // p2.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
     // renderEngine_->renderText(L"那更春来,玉减香消" , 100, 300 + 100 , p2);
 
-    // TextPaint p3;
-    // p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
-    // p3.textStyle = TextStyle::italic;
-    // renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
+    TextPaint p3;
+    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
+    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
 
     if(showNumber){
         TextPaint p4;

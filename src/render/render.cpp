@@ -8,6 +8,8 @@
 #include "../libjson/json.hpp"
 #include "glheader.hpp"
 
+std::unordered_map<wchar_t , wchar_t> SymbolMap;
+
 void RenderEngine::render(){
     // glClearColor(0.0f , 1.0f , 0.0f , 1.0f);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -52,6 +54,8 @@ void RenderEngine::loadTextRenderResource(){
     Logi(TAG , "render init loadTextRenderResource");
     textRenderHelper_ = std::make_shared<TextRenderHelper>();
     textRenderHelper_->loadRes(*this);
+
+    TextRenderHelper::loadSymbolMap();
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -182,6 +186,18 @@ void TextRenderHelper::addSpecialTextCharInfo(){
     chineseCommaChar->textureCoords[2] = engCommaChar->textureCoords[2];
     chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
     charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
+}
+
+void TextRenderHelper::loadSymbolMap(){
+    std::wstring symbolStr = L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
+    for(wchar_t ch : symbolStr){
+        SymbolMap.insert({ch , ch});
+    }
+    Logi("isymbol" , "map size = %d " , SymbolMap.size());
+}
+
+bool TextRenderHelper::isSymbol(std::wstring &ch){
+    return SymbolMap.find(ch[0]) != SymbolMap.end();
 }
 
 std::shared_ptr<TextRenderCommand> RenderCommandCache::acquireTextRender(std::wstring &content , Rect &rect ,TextPaint &paint){

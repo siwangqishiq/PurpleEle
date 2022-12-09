@@ -74,20 +74,18 @@ private:
                             float x ,float y,
                             std::shared_ptr<CharInfo> charInfo ,
                             TextPaint &paint);
-    
-    bool isSymbol(std::wstring ch);
-
-    std::unordered_map<wchar_t , wchar_t> loadSymbolMap(){
-        std::unordered_map<wchar_t , wchar_t> symbolMap;
-        for(wchar_t ch : symbolStr){
-            symbolMap[ch] = ch;
-        }
-        return symbolMap;
-    }
-
-    std::unordered_map<wchar_t , wchar_t> symbolMap_;
-    std::wstring symbolStr = 
-    L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
+        
+    // bool isSymbol(std::wstring ch);
+    // std::unordered_map<wchar_t , wchar_t> loadSymbolMap(){
+    //     std::unordered_map<wchar_t , wchar_t> symbolMap;
+    //     for(wchar_t ch : symbolStr){
+    //         symbolMap[ch] = ch;
+    //     }
+    //     return symbolMap;
+    // }
+    // std::unordered_map<wchar_t , wchar_t> symbolMap_;
+    // std::wstring symbolStr = 
+    // L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
 };
 
 

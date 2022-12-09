@@ -23,7 +23,7 @@ private:
 
     void createNewBuffer();
 public:
-    const int ALLOCATOR_SIZE = 512 * 1024;//512K 一次分配512K字节 
+    const int ALLOCATOR_SIZE = 1024 * 1024;//一次分配1M缓存 
 
     int fetchVideoMemory(int requestSize ,
             unsigned int &bufferId , unsigned int &vao,

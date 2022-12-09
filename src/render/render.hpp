@@ -17,6 +17,7 @@
 #include "render/shader.hpp"
 #include <unordered_map>
 #include "common.hpp"
+#include "log.hpp"
 
 
 class Application;
@@ -82,8 +83,8 @@ struct CharInfo{
 };
 
 //字符默认高度
-const float CHAR_DEFAULT_HEIGHT = 64.0f;
-const float SPACE_WIDTH = 16.0f;
+static const float CHAR_DEFAULT_HEIGHT = 64.0f;
+static const float SPACE_WIDTH = 16.0f;
 
 class TextRenderHelper{
 public:
@@ -94,6 +95,11 @@ public:
     std::shared_ptr<CharInfo> findCharInfo(wchar_t &ch);
 
     unsigned int mainTextureId_;
+
+    static void loadSymbolMap();
+
+    static bool isSymbol(std::wstring &ch);
+
 private:
     void buildTextCharConfig();
 
@@ -106,6 +112,5 @@ private:
 class RenderCommandCache{
 public:
     std::shared_ptr<TextRenderCommand> acquireTextRender(std::wstring &content , Rect &rect ,TextPaint &paint);
-private:
 };
 

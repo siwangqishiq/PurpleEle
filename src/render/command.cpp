@@ -5,7 +5,6 @@
 #include "../../libjson/json.hpp"
 #include "common.hpp"
 
-
 TextPaint TextRenderCommand::defaultTextPaint;
 
 float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){
@@ -17,7 +16,7 @@ float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint
         if(charInfoPtr == nullptr){
             continue;
         }
-
+        
         float realHeight = charInfoPtr->height * defaultTextPaint.textSizeScale;
         if(maxHeight < realHeight) {
             maxHeight = realHeight;
@@ -27,7 +26,7 @@ float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint
 }
 
 float TextRenderCommand::calOffsetY(std::shared_ptr<CharInfo> charInfo , float scale){
-    if(charInfo == nullptr || isSymbol(charInfo->value)){
+    if(TextRenderHelper::isSymbol(charInfo->value)){
         return 0.0f;
     }else{
         float charRealHeight = charInfo->height * scale;
@@ -44,13 +43,6 @@ float TextRenderCommand::calTextStyleItalicOffset(std::shared_ptr<CharInfo> char
         return (FONT_DEFAULT_SIZE * paint.textSizeScale) / 3.0f;
     }
     return 0.0f;
-}
-
-bool TextRenderCommand::isSymbol(std::wstring ch){
-    auto charMap = loadSymbolMap();
-    //Logi("issymbol" , "%d symbolMap %s" ,ch.empty(), ToByteString(ch).c_str());
-    //std::cout << "xx : " << (symbolMap_.find(ch[0]) != symbolMap_.end()) << std::endl;
-    return charMap.find(ch[0]) != charMap.end();
 }
 
 unsigned int TextRenderCommand::allocatorVRamForText(int textLength){
@@ -82,7 +74,7 @@ void TextRenderCommand::putParams(std::wstring text
     float x = left;
     float y = bottom;
 
-    long long t2 = currentTimeMillis();
+    long long t2 = currentTimeMicro();
     auto textRenderHelper = engine_->textRenderHelper_;
     std::vector<float> buf(vertexCount_ * attrCount_);
 
@@ -96,9 +88,9 @@ void TextRenderCommand::putParams(std::wstring text
         putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
         x += charInfoPtr->width * paint.textSizeScale + paint.gapSize;
     }//end for i
-    Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
-        , vertexCount_
-        , (currentTimeMillis() - t2));
+    // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
+    //     , vertexCount_
+    //     , (currentTimeMicro() - t2));
 
     // auto t3 = currentTimeMillis();
     buildGlCommands(buf);
@@ -145,9 +137,9 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         pos++;
     }//end while
 
-    Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
-        , vertexCount_
-        , (currentTimeMillis() - t2));
+    // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
+    //     , vertexCount_
+    //     , (currentTimeMillis() - t2));
 
     buildGlCommands(buf);
 }

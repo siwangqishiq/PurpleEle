@@ -10,6 +10,7 @@
 
 class RenderEngine;
 class Timer;
+
 /**
  * @brief  应用入口
  * 
@@ -18,8 +19,8 @@ class Application {
 public:
     const std::string TAG = "Application"; 
 
-    int viewWidth_ = 800;
-    int viewHeight_ = 600;
+    int viewWidth_ = 1280;
+    int viewHeight_ = 800;
 
     int screenWidth_ = viewWidth_;
     int screenHeight_ = viewHeight_;
@@ -76,4 +77,6 @@ private:
     int mIndex = 1;
     bool showNumber = false; 
     int showFps = 0;
+
+    std::wstring showTextContent;
 };
