@@ -36,6 +36,10 @@ struct TextPaint{
     glm::vec4 textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
     TextStyle textStyle = normal;
     TextGravity textGravity = left;
+
+    inline void setTextSize(float size){
+        textSizeScale = (size / FONT_DEFAULT_SIZE);
+    }
 };
 
 //形状绘制 配置参数
