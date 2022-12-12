@@ -15,6 +15,20 @@ enum TextGravity{
     right
 };
 
+enum FillStyle{
+    Filled = 1,
+    Stroken = 2
+};
+
+
+//矩形
+struct Rect{
+    float left;
+    float top;
+    float width;
+    float height;
+};
+
 //文本绘制 配置
 struct TextPaint{
     float textSizeScale = 1.0f;
@@ -24,13 +38,13 @@ struct TextPaint{
     TextGravity textGravity = left;
 };
 
-//矩形
-struct Rect{
-    float left;
-    float top;
-    float width;
-    float height;
+//形状绘制 配置参数
+struct Paint{
+    glm::vec4 color = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
+    FillStyle fillStyle = Filled;
+    float stokenWidth = 1.0f;
 };
+
 
 
 

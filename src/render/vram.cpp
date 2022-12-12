@@ -36,7 +36,7 @@ void VRamManager::clear(){
 }
 
 int VRamAllcator::fetchVideoMemory(int requestSize ,
-            unsigned int &bufferId ,
+            unsigned int &bufferId,
             unsigned int &vao,
             int &offset , int &size){
     if(requestSize > ALLOCATOR_SIZE){

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "common.hpp"
 #include <vector>
+#include "shader.hpp"
 
 class RenderEngine;
 struct CharInfo;
@@ -27,6 +28,7 @@ protected:
     int vboOffset_;
 
     int vertexCount_;
+    int attrCount_;
 };
 
 // 文本渲染命令
@@ -75,6 +77,24 @@ private:
                             float x ,float y,
                             std::shared_ptr<CharInfo> charInfo ,
                             TextPaint &paint);
+};
+
+//自定义shader渲染命令
+class ShaderRenderCommand : public RenderCommand {
+public:
+    ShaderRenderCommand(Shader shader, RenderEngine *engine) 
+        :RenderCommand(engine){
+        shader_ = shader;
+    }
+
+    void putParams(Rect &rect);
+    
+    virtual void runCommands();
+
+protected:
+    Shader shader_;
+
+    void buildGlCommands(std::vector<float> &buf);
 };
 
 

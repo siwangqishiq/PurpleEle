@@ -80,7 +80,9 @@ void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd){
 
 //绘制自定义shader
 void RenderEngine::renderShader(Shader &shader , Rect &showRect){
-    
+    auto cmd = fetchShaderRenderCommand(shader , this);
+    cmd->putParams(showRect);
+    submitRenderCommand(cmd);
 }
 
 void RenderEngine::renderText(std::wstring text , 
@@ -105,6 +107,13 @@ std::shared_ptr<TextRenderCommand> RenderEngine::fetchTextRenderCommand(RenderEn
     // later use pool to reuse
     auto newCmd = 
         std::make_shared<TextRenderCommand>(this);
+    newCmd->used = true;
+    return newCmd;
+}
+
+std::shared_ptr<ShaderRenderCommand> RenderEngine::fetchShaderRenderCommand(Shader &shader, RenderEngine *engine){
+    auto newCmd = 
+        std::make_shared<ShaderRenderCommand>(shader, this);
     newCmd->used = true;
     return newCmd;
 }
@@ -208,4 +217,25 @@ bool TextRenderHelper::isSymbol(std::wstring &ch){
 
 std::shared_ptr<TextRenderCommand> RenderCommandCache::acquireTextRender(std::wstring &content , Rect &rect ,TextPaint &paint){
     return nullptr;
+}
+
+
+//绘制圆形
+void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &paint){
+    
+}
+
+//绘制矩形
+void RenderEngine::renderRect(Rect &rectangle ,Paint &paint){
+
+}
+
+//绘制椭圆
+void RenderEngine::renderOval(Rect &rectangle ,Paint &paint){
+
+}
+
+//绘制圆角矩形
+void RenderEngine::renderRoundRect(Rect &rectangle ,float radius , Paint &paint){
+    
 }

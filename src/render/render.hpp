@@ -24,6 +24,7 @@ class Application;
 class RenderCommand;
 class TextRenderHelper;
 class TextRenderCommand;
+class ShaderRenderCommand;
 
 class RenderEngine{
 public:
@@ -50,19 +51,29 @@ public:
     //归一化变换矩阵
     glm::mat3 normalMatrix_;
 
-    //render api
-    void renderText(std::wstring text , 
-            float left , 
-            float bottom , 
-            TextPaint &paint); //文本
+    //render api 
+
+    //绘制文字
+    void renderText(std::wstring text , float left , float bottom , TextPaint &paint); //文本
 
     //将文本包裹在一个矩形内渲染
-    void renderText(std::wstring text , 
-            Rect &showRect , 
-            TextPaint &paint);
+    void renderText(std::wstring text , Rect &showRect , TextPaint &paint);
 
-    //绘制自定义shader
+    //在指定矩形区域内绘制自定义shader
     void renderShader(Shader &shader , Rect &showRect);
+
+    //绘制圆形
+    void renderCircle(float cx , float cy , float radius , Paint &paint);
+
+    //绘制矩形
+    void renderRect(Rect &rectangle ,Paint &paint);
+
+    //绘制椭圆
+    void renderOval(Rect &rectangle ,Paint &paint);
+
+    //绘制圆角矩形
+    void renderRoundRect(Rect &rectangle ,float radius , Paint &paint);
+
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 
@@ -72,8 +83,10 @@ private:
 
     int textCommandIndex;
     std::vector<std::shared_ptr<TextRenderCommand>> textCommandPool;
-    std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
 
+    //fetch new render command
+    std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
+    std::shared_ptr<ShaderRenderCommand> fetchShaderRenderCommand(Shader &shader ,RenderEngine *engine);
 };
 
 //字符信息

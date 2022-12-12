@@ -116,6 +116,14 @@ void Application::onCreate(){
      showTextContent = AssetManager::getInstance()->readTextFile("honglou.txt");
 //    showTextContent = AssetManager::getInstance()->readTextFile("shader/render_text_frag.glsl");
     Logi("application" , "text file size : %d" , showTextContent.length());
+
+    testShader = ShaderManager::getInstance()->loadAssetShader("test_shader1"
+            , "shader/shader_vert.glsl" 
+            , "shader/shader_frag.glsl");
+
+    testShader2 = ShaderManager::getInstance()->loadAssetShader("test_shader2"
+            , "shader/shader_vert.glsl" 
+            , "shader/shader2_frag.glsl");
 }
 
 void Application::onTrick(){
@@ -152,32 +160,32 @@ void Application::onTrick(){
 void Application::updateSence(){
     // float x = x_;
 
-    float x = 0.0f;
-    float y = 0.0f;
+    // float x = 0.0f;
+    // float y = 0.0f;
 
-    TextPaint paint1;
-    paint1.textSizeScale = 1.5f;
-    paint1.textColor = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
-    // paint1.textStyle = TextStyle::italic;
-    renderEngine_->renderText(L"你好世界HelloWorld" , x_ , y_ , paint1);
-    float velocity = 0.0001f;
-    float deltaTime = getLastFrameDeltaTime();
-    x_ += velocity * deltaTime;
-    if(x_ > viewWidth_){
-        x_ = 0.0f;
-        y_ += 20.0f;
-    }
+    // TextPaint paint1;
+    // paint1.textSizeScale = 1.5f;
+    // paint1.textColor = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
+    // renderEngine_->renderText(L"你好世界HelloWorld" , x_ , y_ , paint1);
 
-    TextPaint p1;
-    p1.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
-    p1.textSizeScale = 0.5f;
-    Rect limitRect;
-    limitRect.left = 0.0f;
-    limitRect.top = screenHeight_;
-    limitRect.width = screenWidth_ /1.0f;
-    limitRect.height = screenHeight_;
-//    std::wstring showStr = showTextContent.substr(0 , showTextContent.length());
-//    renderEngine_->renderText(showStr,limitRect, p1);
+    // float velocity = 0.0001f;
+    // float deltaTime = getLastFrameDeltaTime();
+    // x_ += velocity * deltaTime;
+    // if(x_ > viewWidth_){
+    //     x_ = 0.0f;
+    //     y_ += 20.0f;
+    // }
+
+    // TextPaint p1;
+    // p1.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
+    // p1.textSizeScale = 0.5f;
+    // Rect limitRect;
+    // limitRect.left = 0.0f;
+    // limitRect.top = screenHeight_;
+    // limitRect.width = screenWidth_ /1.0f;
+    // limitRect.height = screenHeight_;
+    // std::wstring showStr = showTextContent.substr(0 , showTextContent.length());
+    // renderEngine_->renderText(showStr,limitRect, p1);
     
     // textIndex++;
     // if(textIndex >= showTextContent.length()){
@@ -210,6 +218,20 @@ void Application::updateSence(){
 //    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
 //    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
 
+    Rect shaderRect;
+    shaderRect.left = 100.0f;
+    shaderRect.top = screenHeight_;
+    shaderRect.width = 200.0f;
+    shaderRect.height = 200.0f;
+    renderEngine_->renderShader(testShader , shaderRect);
+
+    Rect shaderRect2;
+    shaderRect2.left = 500.0f;
+    shaderRect2.top = screenHeight_ - 200;
+    shaderRect2.width = 200.0f;
+    shaderRect2.height = 200.0f;
+    renderEngine_->renderShader(testShader2 , shaderRect2);
+    
     if(showNumber){
         TextPaint p4;
         p4.textSizeScale = 1.0f;

@@ -69,7 +69,7 @@ int main(int argc , char *argv[]){
     while (!glfwWindowShouldClose(window)) {
         // std::cout << "tick" << std::endl;
         app->update();
-        
+            
         glfwSwapBuffers(window);
         glfwPollEvents();
         

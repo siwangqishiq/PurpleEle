@@ -62,7 +62,7 @@ public:
 private:
     std::shared_ptr<RenderEngine> renderEngine_ = nullptr;
 
-    //for test
+    //for -----------test---------------------
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
 
     //定时器  调度定时任务 或 延时任务
@@ -79,4 +79,7 @@ private:
     int showFps = 0;
 
     std::wstring showTextContent;
+
+    Shader testShader;
+    Shader testShader2;
 };
