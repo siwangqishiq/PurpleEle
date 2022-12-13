@@ -67,7 +67,7 @@ private:
 
     //定时器  调度定时任务 或 延时任务
     std::shared_ptr<Timer> timer_ = nullptr;
-
+    
     float x_ = 0.0f;
     float y_ = 0.0f;
 
@@ -79,6 +79,7 @@ private:
     int showFps = 0;
 
     std::wstring showTextContent;
+    long startTime = 0;
 
     Shader testShader;
     Shader testShader2;

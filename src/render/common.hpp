@@ -16,8 +16,8 @@ enum TextGravity{
 };
 
 enum FillStyle{
-    Filled = 1,
-    Stroken = 2
+    Filled = 0,
+    Stroken = 1
 };
 
 

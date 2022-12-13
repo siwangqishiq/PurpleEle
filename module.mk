@@ -7,7 +7,7 @@ WIN_DIR := .
 BUILD_DIR := build
 INCLUDE_DIR := ../include
 STD := c++14
-OPTPARAMS := -O3
+OPTPARAMS := -O1
 
 .PHONY: clean
 
@@ -48,9 +48,7 @@ ${BUILD_DIR}/command.o:${SRC_DIR}/render/command.cpp ${SRC_DIR}/render/command.h
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/command.cpp -o ${BUILD_DIR}/command.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
 ${BUILD_DIR}/triangle.o:${SRC_DIR}/render/triangle.cpp \
-						${SRC_DIR}/render/triangle.hpp \
-						${ASSET_DIR}/shader/triangle_vert.glsl \
-						${ASSET_DIR}/shader/triangle_frag.glsl 
+						${SRC_DIR}/render/triangle.hpp 
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/triangle.cpp -o ${BUILD_DIR}/triangle.o -I ${INCLUDE_DIR} -I ${SRC_DIR} 
 
 ${BUILD_DIR}/timer.o:${SRC_DIR}/widget/timer.cpp \

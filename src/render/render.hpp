@@ -25,6 +25,7 @@ class RenderCommand;
 class TextRenderHelper;
 class TextRenderCommand;
 class ShaderRenderCommand;
+class ShapeRenderCommand;
 
 class RenderEngine{
 public:
@@ -79,6 +80,8 @@ private:
 
     void loadTextRenderResource();
 
+    void loadShapeShader();
+
     void resetNormalMat(float w , float h);
 
     int textCommandIndex;
@@ -86,7 +89,8 @@ private:
 
     //fetch new render command
     std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
-    std::shared_ptr<ShaderRenderCommand> fetchShaderRenderCommand(Shader &shader ,RenderEngine *engine);
+    std::shared_ptr<ShaderRenderCommand> fetchShaderRenderCommand(RenderEngine *engine);
+    std::shared_ptr<ShapeRenderCommand> fetchShaderShapeRenderCommand(RenderEngine *engine);
 };
 
 //字符信息

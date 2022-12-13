@@ -124,6 +124,8 @@ void Application::onCreate(){
     testShader2 = ShaderManager::getInstance()->loadAssetShader("test_shader2"
             , "shader/shader_vert.glsl" 
             , "shader/shader2_frag.glsl");
+
+    startTime = static_cast<long>(currentTimeMillis());
 }
 
 void Application::onTrick(){
@@ -218,25 +220,51 @@ void Application::updateSence(){
 //    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
 //    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
 
-    Rect shaderRect;
-    shaderRect.left = 100.0f;
-    shaderRect.top = screenHeight_;
-    shaderRect.width = 200.0f;
-    shaderRect.height = 200.0f;
-    renderEngine_->renderShader(testShader , shaderRect);
+    // Rect shaderRect;
+    // shaderRect.left = 100.0f;
+    // shaderRect.top = screenHeight_;
+    // shaderRect.width = 200.0f;
+    // shaderRect.height = 200.0f;
+    // renderEngine_->renderShader(testShader , shaderRect);
+
+    // Rect shaderRect2;
+    // shaderRect2.left = 500.0f;
+    // shaderRect2.top = screenHeight_ - 200;
+    // shaderRect2.width = 200.0f;
+    // shaderRect2.height = 200.0f;
+    // renderEngine_->renderShader(testShader2 , shaderRect2);
 
     Rect shaderRect2;
-    shaderRect2.left = 500.0f;
+    shaderRect2.left = 300.0f;
     shaderRect2.top = screenHeight_ - 200;
-    shaderRect2.width = 200.0f;
-    shaderRect2.height = 200.0f;
-    renderEngine_->renderShader(testShader2 , shaderRect2);
+    shaderRect2.width = 100.0f;
+    shaderRect2.height = 100.0f;
+    Paint paint;
+
+    long cur = static_cast<long>(currentTimeMillis());
+    long delta = cur - startTime;
+    float t = (float)delta / (float)2000.0f;
+    float colorValueR = glm::sin(t) / 2.0f + 0.5f;
+    float colorValueG = glm::cos(t) / 2.0f + 0.5f;
+    // Logi("time" , "%f" , colorValueR);
+    // paint.color = glm::vec4(colorValueR , colorValueR , colorValueR ,1.0f);
+    paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
+    paint.fillStyle = Stroken; 
+    paint.stokenWidth = 16.0f * colorValueR;
+    renderEngine_->renderRect(shaderRect2 , paint);
+
+    Rect shaderRect3;
+    shaderRect3.left = 0.0f;
+    shaderRect3.top = 200.0f;
+    shaderRect3.width = screenWidth_;
+    shaderRect3.height = 200.0f;
+    renderEngine_->renderRect(shaderRect3 , paint);
     
     if(showNumber){
         TextPaint p4;
-        p4.textSizeScale = 1.0f;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
-        renderEngine_->renderText(std::to_wstring(showFps) , 0, 0 , p4);
+        renderEngine_->renderText(std::to_wstring(showFps) , screenWidth_ - 100.0f, 
+            screenHeight_ - 64.0f, p4);
     }
 }
 

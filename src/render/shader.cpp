@@ -215,6 +215,10 @@ Shader ShaderManager::loadShaderByPath(std::string shaderName , std::string vert
     return shaderMap[shaderName];
 }
 
+Shader ShaderManager::getShaderByName(std::string shaderName){
+    return shaderMap[shaderName];
+}
+
 void ShaderManager::clear() {
     Logi(TAG_SHADER , "shader manager clear");
 

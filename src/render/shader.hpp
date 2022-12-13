@@ -82,5 +82,7 @@ public:
 
     Shader loadShaderByPath(std::string shaderName , std::string vertexPath , std::string fragPath);
 
+    Shader getShaderByName(std::string shaderName);
+
     void clear();
 };

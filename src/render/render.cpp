@@ -7,6 +7,7 @@
 #include "resource/asset_manager.hpp"
 #include "../libjson/json.hpp"
 #include "glheader.hpp"
+#include "application.hpp"
 
 std::unordered_map<wchar_t , wchar_t> SymbolMap;
 
@@ -48,6 +49,7 @@ void RenderEngine::init(){
     loadTextRenderResource();//text render init
     // Logi(TAG , "render engine init end");
 
+    loadShapeShader();
 }
 
 void RenderEngine::loadTextRenderResource(){
@@ -56,6 +58,15 @@ void RenderEngine::loadTextRenderResource(){
     textRenderHelper_->loadRes(*this);
 
     TextRenderHelper::loadSymbolMap();
+}
+
+void RenderEngine::loadShapeShader(){
+    Logi(TAG , "render init loadShapeShader");
+
+    ShaderManager::getInstance()->loadAssetShader("shape_rect" , 
+        "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
+    ShaderManager::getInstance()->loadAssetShader("shape_circle" , 
+        "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -77,11 +88,10 @@ void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd){
     renderCommandList_.push_back(cmd);
 }
 
-
 //绘制自定义shader
 void RenderEngine::renderShader(Shader &shader , Rect &showRect){
-    auto cmd = fetchShaderRenderCommand(shader , this);
-    cmd->putParams(showRect);
+    auto cmd = fetchShaderRenderCommand(this);
+    cmd->putParams(shader ,showRect);
     submitRenderCommand(cmd);
 }
 
@@ -111,9 +121,9 @@ std::shared_ptr<TextRenderCommand> RenderEngine::fetchTextRenderCommand(RenderEn
     return newCmd;
 }
 
-std::shared_ptr<ShaderRenderCommand> RenderEngine::fetchShaderRenderCommand(Shader &shader, RenderEngine *engine){
+std::shared_ptr<ShaderRenderCommand> RenderEngine::fetchShaderRenderCommand(RenderEngine *engine){
     auto newCmd = 
-        std::make_shared<ShaderRenderCommand>(shader, this);
+        std::make_shared<ShaderRenderCommand>(this);
     newCmd->used = true;
     return newCmd;
 }
@@ -219,6 +229,13 @@ std::shared_ptr<TextRenderCommand> RenderCommandCache::acquireTextRender(std::ws
     return nullptr;
 }
 
+std::shared_ptr<ShapeRenderCommand> RenderEngine::fetchShaderShapeRenderCommand(RenderEngine *engine){
+    auto newCmd = 
+        std::make_shared<ShapeRenderCommand>(this);
+    newCmd->used = true;
+    return newCmd;
+}
+
 
 //绘制圆形
 void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &paint){
@@ -227,7 +244,9 @@ void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &pain
 
 //绘制矩形
 void RenderEngine::renderRect(Rect &rectangle ,Paint &paint){
-
+    auto cmd = fetchShaderShapeRenderCommand(this);
+    cmd->putParams(rectangle , paint, ShapeType::ShapeRect);
+    submitRenderCommand(cmd);
 }
 
 //绘制椭圆

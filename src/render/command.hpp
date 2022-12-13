@@ -82,19 +82,41 @@ private:
 //自定义shader渲染命令
 class ShaderRenderCommand : public RenderCommand {
 public:
-    ShaderRenderCommand(Shader shader, RenderEngine *engine) 
+    ShaderRenderCommand(RenderEngine *engine) 
         :RenderCommand(engine){
-        shader_ = shader;
     }
 
-    void putParams(Rect &rect);
+    void putParams(Shader shader, Rect &rect);
     
     virtual void runCommands();
 
+    //set shader params
+    virtual void fillShader();
 protected:
     Shader shader_;
+    Rect rect_;
 
     void buildGlCommands(std::vector<float> &buf);
+};
+
+enum ShapeType{
+    ShapeCircle = 0,
+    ShapeRect = 1,
+    ShapeRoundRect = 2,
+    ShapeOval = 3
+};
+
+class ShapeRenderCommand : public ShaderRenderCommand {
+public:
+    ShapeRenderCommand(RenderEngine *engine) :ShaderRenderCommand(engine){
+    }
+
+    void putParams(Rect &rect ,Paint &paint, ShapeType type);
+
+    virtual void fillShader();
+private:
+    ShapeType shapeType_ = ShapeRect;
+    Paint paint_;
 };
 
 

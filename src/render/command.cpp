@@ -4,6 +4,7 @@
 #include "vram.hpp"
 #include "../../libjson/json.hpp"
 #include "common.hpp"
+#include "application.hpp"
 
 TextPaint TextRenderCommand::defaultTextPaint;
 
@@ -292,7 +293,10 @@ void TextRenderCommand::fillTextVertData(std::wstring &text , float left , float
     }//end for i;
 }
 
-void ShaderRenderCommand::putParams(Rect &rect){
+void ShaderRenderCommand::putParams(Shader shader , Rect &rect){
+    shader_ = shader;
+    rect_ = rect;
+
     vertexCount_ = 4; //4个顶点
     attrCount_ = 3;//每个顶点3个属性长度
 
@@ -337,6 +341,10 @@ void ShaderRenderCommand::buildGlCommands(std::vector<float> &buf){
     glBindVertexArray(0);
 }
 
+void ShaderRenderCommand::fillShader(){
+    //do nothing
+}
+
 void ShaderRenderCommand::runCommands(){
     if(shader_.programId <= 0){
         return;
@@ -348,6 +356,7 @@ void ShaderRenderCommand::runCommands(){
 
     shader_.useShader();
     shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
+    fillShader();
 
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
@@ -358,3 +367,26 @@ void ShaderRenderCommand::runCommands(){
     glBindBuffer(GL_ARRAY_BUFFER , 0);
     glBindVertexArray(0);
 }   
+
+void ShapeRenderCommand::putParams(Rect &rect ,Paint &paint, ShapeType type){
+    shader_ = ShaderManager::getInstance()->getShaderByName(std::string("shape_rect"));
+    paint_ = paint;
+
+    ShaderRenderCommand::putParams(shader_ , rect);
+}
+
+void ShapeRenderCommand::fillShader(){
+    shader_.setUniformVec4("uColor" , paint_.color);
+    shader_.setUniformInt("uFillStyle" , paint_.fillStyle);
+    shader_.setUniformFloat("uStrokenWidth" , paint_.stokenWidth);
+    shader_.setUniformFloat("uWidth" , rect_.width);
+    shader_.setUniformFloat("uHeight" , rect_.height);
+    shader_.setUniformVec4("uRect" , 
+        glm::vec4(rect_.left , rect_.top , rect_.width , rect_.height));
+    
+    int viewWidth = engine_->appContext_->viewWidth_;
+    int viewHeight = engine_->appContext_->viewHeight_;
+
+    shader_.setUniformFloat("uViewWidth" , viewWidth);
+    shader_.setUniformFloat("uViewHeight" , viewHeight);
+}
