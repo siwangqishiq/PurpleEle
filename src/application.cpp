@@ -237,8 +237,8 @@ void Application::updateSence(){
     Rect shaderRect2;
     shaderRect2.left = 300.0f;
     shaderRect2.top = screenHeight_ - 200;
-    shaderRect2.width = 100.0f;
-    shaderRect2.height = 100.0f;
+    shaderRect2.width = 200.0f;
+    shaderRect2.height = 200.0f;
     Paint paint;
 
     long cur = static_cast<long>(currentTimeMillis());
@@ -247,10 +247,10 @@ void Application::updateSence(){
     float colorValueR = glm::sin(t) / 2.0f + 0.5f;
     float colorValueG = glm::cos(t) / 2.0f + 0.5f;
     // Logi("time" , "%f" , colorValueR);
-    // paint.color = glm::vec4(colorValueR , colorValueR , colorValueR ,1.0f);
-    paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
-    paint.fillStyle = Stroken; 
-    paint.stokenWidth = 16.0f * colorValueR;
+    paint.color = glm::vec4(colorValueR , colorValueG , 1.0f ,1.0f);
+    // paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
+    paint.fillStyle = Stroken;
+    paint.stokenWidth = 100.0f * colorValueR;
     renderEngine_->renderRect(shaderRect2 , paint);
 
     Rect shaderRect3;
@@ -263,7 +263,8 @@ void Application::updateSence(){
     if(showNumber){
         TextPaint p4;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
-        renderEngine_->renderText(std::to_wstring(showFps) , screenWidth_ - 100.0f, 
+        std::wstring name = L"FPS ";
+        renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 200.0f, 
             screenHeight_ - 64.0f, p4);
     }
 }

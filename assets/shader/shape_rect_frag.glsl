@@ -11,13 +11,14 @@ uniform vec4 uRect;
 out vec4 fragColor;
 
 float stokeRect(vec2 pos){
-    if(pos.x >= uRect.x && pos.x <= uRect.x + uStrokenWidth 
-        || pos.x <= uRect.x + uRect.z && pos.x >= uRect.x + uRect.z - uStrokenWidth
-        || pos.y <= uRect.y && pos.y >= uRect.y - uStrokenWidth
-        || pos.y >= uRect.y - uRect.w && pos.y <= uRect.y - uRect.w + uStrokenWidth){
-        return 1.0f;
-    }
-    return 0.0f;
+    
+
+    float left = step(uRect.x , pos.x) * (1.0f - step(uRect.x + uStrokenWidth , pos.x));
+    float right = (1.0f - step(uRect.x + uRect.z , pos.x)) * step(uRect.x + uRect.z - uStrokenWidth , pos.x);
+    float top = (1.0f - step(uRect.y , pos.y)) * step(uRect.y - uStrokenWidth , pos.y);
+    float bottom = step(uRect.y - uRect.w , pos.y) * (1.0f - step(uRect.y - uRect.w + uStrokenWidth ,pos.y));
+
+    return min(1.0f , left + right + top + bottom);
 }
 
 void main(){
