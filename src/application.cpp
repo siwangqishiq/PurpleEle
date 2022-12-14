@@ -234,38 +234,66 @@ void Application::updateSence(){
     // shaderRect2.height = 200.0f;
     // renderEngine_->renderShader(testShader2 , shaderRect2);
 
-    Rect shaderRect2;
-    shaderRect2.left = 300.0f;
-    shaderRect2.top = screenHeight_ - 200;
-    shaderRect2.width = 200.0f;
-    shaderRect2.height = 200.0f;
+    // Rect shaderRect2;
+    // shaderRect2.left = 300.0f;
+    // shaderRect2.top = screenHeight_ - 200;
+    // shaderRect2.width = 200.0f;
+    // shaderRect2.height = 200.0f;
     Paint paint;
 
-    long cur = static_cast<long>(currentTimeMillis());
-    long delta = cur - startTime;
-    float t = (float)delta / (float)2000.0f;
-    float colorValueR = glm::sin(t) / 2.0f + 0.5f;
-    float colorValueG = glm::cos(t) / 2.0f + 0.5f;
-    // Logi("time" , "%f" , colorValueR);
-    paint.color = glm::vec4(colorValueR , colorValueG , 1.0f ,1.0f);
-    // paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
-    paint.fillStyle = Stroken;
-    paint.stokenWidth = 100.0f * colorValueR;
-    renderEngine_->renderRect(shaderRect2 , paint);
+    // long cur = static_cast<long>(currentTimeMillis());
+    // long delta = cur - startTime;
+    // float t = (float)delta / (float)2000.0f;
+    // float colorValueR = glm::sin(t) / 2.0f + 0.5f;
+    // float colorValueG = glm::cos(t) / 2.0f + 0.5f;
+    // // Logi("time" , "%f" , colorValueR);
+    // paint.color = glm::vec4(colorValueR , colorValueG , 1.0f ,1.0f);
+    // // paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
+    // paint.fillStyle = Stroken;
+    // paint.stokenWidth = 100.0f * colorValueR;
+    // renderEngine_->renderRect(shaderRect2 , paint);
 
-    Rect shaderRect3;
-    shaderRect3.left = 0.0f;
-    shaderRect3.top = 200.0f;
-    shaderRect3.width = screenWidth_;
-    shaderRect3.height = 200.0f;
-    renderEngine_->renderRect(shaderRect3 , paint);
+    // Rect shaderRect3;
+    // shaderRect3.left = 0.0f;
+    // shaderRect3.top = 200.0f;
+    // shaderRect3.width = screenWidth_;
+    // shaderRect3.height = 200.0f;
+    // renderEngine_->renderRect(shaderRect3 , paint);
+
+    Paint circelPaint;
+    circelPaint.fillStyle = Filled;
+    circelPaint.stokenWidth = 1.0f;
+    circelPaint.color = glm::vec4(1.0f , 0.0f , 1.0f , 1.0f);
+
+    float radius = 32.0;
+    float cx = radius;
+    float cy = screenHeight_ - radius;
+
+//    renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+    long long t1 = currentTimeMicro();
+
+    Logi("viewHeight" , "%f" , (float)viewHeight_ / 4.0f);
+    renderEngine_->renderCircle((float)viewWidth_ / 2.0f , (float)viewHeight_ / 2.0f , mRadius , circelPaint);
+
+    mRadius++;
+    if(mRadius >= 500.0f){
+        mRadius = 100.0f;
+    }
+//    for(;cy >= 0; cy -= 2*radius){
+//        cx = radius;
+//        for(;cx <= screenWidth_ ; cx += 2*radius){
+//            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+//        }
+//    }//end for y
+    long long t2 = currentTimeMicro();
+    Logi("renderCircle" , "draw circle time: %lld", (t2 - t1));
     
     if(showNumber){
         TextPaint p4;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
-        std::wstring name = L"FPS ";
-        renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 200.0f, 
-            screenHeight_ - 64.0f, p4);
+        std::wstring name = L"帧率:";
+        renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 220.0f, 
+            screenHeight_ - 80.0f, p4);
     }
 }
 

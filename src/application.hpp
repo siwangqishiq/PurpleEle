@@ -83,4 +83,5 @@ private:
 
     Shader testShader;
     Shader testShader2;
+    float mRadius = 100.0f;
 };

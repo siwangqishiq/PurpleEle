@@ -332,8 +332,7 @@ void ShaderRenderCommand::buildGlCommands(std::vector<float> &buf){
     glBindVertexArray(vao_);
     // Logi("cmd" , "vboOffset_ = %d",vboOffset_);
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
-    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ , 
-        buf.size() * sizeof(float) , buf.data());
+    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,buf.size() * sizeof(float) , buf.data());
     // glEnableVertexAttribArray(0);
     // glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 3 * sizeof(float) , 
     //     reinterpret_cast<void *>(vboOffset_));
@@ -369,13 +368,25 @@ void ShaderRenderCommand::runCommands(){
 }   
 
 void ShapeRenderCommand::putParams(Rect &rect ,Paint &paint, ShapeType type){
-    shader_ = ShaderManager::getInstance()->getShaderByName(std::string("shape_rect"));
+    // Logi("ShapeRenderCommand" , "ShapeRenderCommand shape = %d" , type);
+    switch(type){
+        case ShapeCircle:
+        shader_ = ShaderManager::getInstance()->getShaderByName(std::string("shape_circle"));
+        break;
+        case ShapeRect:
+        shader_ = ShaderManager::getInstance()->getShaderByName(std::string("shape_rect"));
+        break;
+        default:
+        shader_ = ShaderManager::getInstance()->getShaderByName(std::string("shape_rect"));
+        break;
+    }//end switch
     paint_ = paint;
-
+    
     ShaderRenderCommand::putParams(shader_ , rect);
 }
 
 void ShapeRenderCommand::fillShader(){
+    // Logi("shader_" , "shader_ id = %d" , shader_.programId);
     shader_.setUniformVec4("uColor" , paint_.color);
     shader_.setUniformInt("uFillStyle" , paint_.fillStyle);
     shader_.setUniformFloat("uStrokenWidth" , paint_.stokenWidth);

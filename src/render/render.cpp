@@ -65,8 +65,15 @@ void RenderEngine::loadShapeShader(){
 
     ShaderManager::getInstance()->loadAssetShader("shape_rect" , 
         "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
+
     ShaderManager::getInstance()->loadAssetShader("shape_circle" , 
-        "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
+        "shader/shape_vert.glsl", "shader/shape_circle_frag.glsl");
+
+    ShaderManager::getInstance()->loadAssetShader("shape_oval" , 
+        "shader/shape_vert.glsl", "shader/shape_oval_frag.glsl");
+
+    ShaderManager::getInstance()->loadAssetShader("shape_round_rect" , 
+        "shader/shape_vert.glsl", "shader/shape_round_rect_frag.glsl");
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -214,7 +221,7 @@ void TextRenderHelper::addSpecialTextCharInfo(){
 }
 
 void TextRenderHelper::loadSymbolMap(){
-    std::wstring symbolStr = L"1234567890!@#$%^&*()_[]{};,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
+    std::wstring symbolStr = L"1234567890!@#$%^&*()_[]{}:;,.<>/?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ，";
     for(wchar_t ch : symbolStr){
         SymbolMap.insert({ch , ch});
     }
@@ -239,7 +246,18 @@ std::shared_ptr<ShapeRenderCommand> RenderEngine::fetchShaderShapeRenderCommand(
 
 //绘制圆形
 void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &paint){
-    
+    Rect rect;
+    rect.left = cx - radius;
+    rect.top = cy + radius;
+    rect.width = 2 * radius;
+    rect.height = 2 * radius;
+
+    long long t1 = currentTimeMicro();
+    auto cmd = fetchShaderShapeRenderCommand(this);
+    cmd->putParams(rect , paint, ShapeType::ShapeCircle);
+    long long t2 = currentTimeMicro();
+    // Logi("renderCircle" , "put params time: %lld", (t2 - t1));
+     submitRenderCommand(cmd);
 }
 
 //绘制矩形

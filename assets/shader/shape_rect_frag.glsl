@@ -12,7 +12,6 @@ out vec4 fragColor;
 
 float stokeRect(vec2 pos){
     
-
     float left = step(uRect.x , pos.x) * (1.0f - step(uRect.x + uStrokenWidth , pos.x));
     float right = (1.0f - step(uRect.x + uRect.z , pos.x)) * step(uRect.x + uRect.z - uStrokenWidth , pos.x);
     float top = (1.0f - step(uRect.y , pos.y)) * step(uRect.y - uStrokenWidth , pos.y);

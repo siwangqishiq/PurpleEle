@@ -27,6 +27,14 @@ struct Rect{
     float top;
     float width;
     float height;
+
+    inline float getRight(){
+        return left + width;
+    }
+
+    inline float getBottom(){
+        return top - height;
+    }
 };
 
 //文本绘制 配置
