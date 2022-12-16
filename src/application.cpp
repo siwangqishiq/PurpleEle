@@ -263,30 +263,28 @@ void Application::updateSence(){
     Paint circelPaint;
     circelPaint.fillStyle = Filled;
     circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(1.0f , 0.0f , 1.0f , 1.0f);
+    circelPaint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
 
     float radius = 32.0;
     float cx = radius;
     float cy = screenHeight_ - radius;
 
 //    renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-    long long t1 = currentTimeMicro();
-
-    Logi("viewHeight" , "%f" , (float)viewHeight_ / 4.0f);
-    renderEngine_->renderCircle((float)viewWidth_ / 2.0f , (float)viewHeight_ / 2.0f , mRadius , circelPaint);
-
-    mRadius++;
-    if(mRadius >= 500.0f){
-        mRadius = 100.0f;
-    }
-//    for(;cy >= 0; cy -= 2*radius){
-//        cx = radius;
-//        for(;cx <= screenWidth_ ; cx += 2*radius){
-//            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-//        }
-//    }//end for y
+//    long long t1 = currentTimeMicro();
+//    renderEngine_->renderCircle((float)viewWidth_ / 2.0f , (float)viewHeight_ / 2.0f , mRadius , circelPaint);
+//
+//    mRadius++;
+//    if(mRadius >= 500.0f){
+//        mRadius = 100.0f;
+//    }
+    for(;cy >= 0; cy -= 2*radius){
+        cx = radius;
+        for(;cx <= screenWidth_ ; cx += 2*radius){
+            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+        }
+    }//end for y
     long long t2 = currentTimeMicro();
-    Logi("renderCircle" , "draw circle time: %lld", (t2 - t1));
+//    Logi("renderCircle" , "draw circle time: %lld", (t2 - t1));
     
     if(showNumber){
         TextPaint p4;

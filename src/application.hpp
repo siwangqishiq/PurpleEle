@@ -19,7 +19,7 @@ class Application {
 public:
     const std::string TAG = "Application"; 
 
-    int viewWidth_ = 1280;
+    int viewWidth_ = 1080;
     int viewHeight_ = 800;
 
     int screenWidth_ = viewWidth_;
