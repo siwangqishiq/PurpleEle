@@ -27,6 +27,8 @@ class TextRenderCommand;
 class ShaderRenderCommand;
 class ShapeRenderCommand;
 
+class ShapeBatch;
+
 class RenderEngine{
 public:
     const std::string TAG = "RenderEngine";
@@ -75,6 +77,7 @@ public:
     //绘制圆角矩形
     void renderRoundRect(Rect &rectangle ,float radius , Paint &paint);
 
+    std::shared_ptr<ShapeBatch> getShapeBatch();
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 
@@ -91,6 +94,10 @@ private:
     std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
     std::shared_ptr<ShaderRenderCommand> fetchShaderRenderCommand(RenderEngine *engine);
     std::shared_ptr<ShapeRenderCommand> fetchShaderShapeRenderCommand(RenderEngine *engine);
+
+
+    //batch render
+    std::shared_ptr<ShapeBatch> shapeBatch_;
 };
 
 //字符信息

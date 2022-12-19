@@ -89,7 +89,7 @@ public:
     void putParams(Shader shader, Rect &rect);
     
     virtual void runCommands();
-
+    
     //set shader params
     virtual void fillShader();
 protected:

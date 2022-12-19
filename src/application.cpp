@@ -160,131 +160,7 @@ void Application::onTrick(){
 }
 
 void Application::updateSence(){
-    // float x = x_;
-
-    // float x = 0.0f;
-    // float y = 0.0f;
-
-    // TextPaint paint1;
-    // paint1.textSizeScale = 1.5f;
-    // paint1.textColor = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
-    // renderEngine_->renderText(L"你好世界HelloWorld" , x_ , y_ , paint1);
-
-    // float velocity = 0.0001f;
-    // float deltaTime = getLastFrameDeltaTime();
-    // x_ += velocity * deltaTime;
-    // if(x_ > viewWidth_){
-    //     x_ = 0.0f;
-    //     y_ += 20.0f;
-    // }
-
-    // TextPaint p1;
-    // p1.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
-    // p1.textSizeScale = 0.5f;
-    // Rect limitRect;
-    // limitRect.left = 0.0f;
-    // limitRect.top = screenHeight_;
-    // limitRect.width = screenWidth_ /1.0f;
-    // limitRect.height = screenHeight_;
-    // std::wstring showStr = showTextContent.substr(0 , showTextContent.length());
-    // renderEngine_->renderText(showStr,limitRect, p1);
-    
-    // textIndex++;
-    // if(textIndex >= showTextContent.length()){
-    //     textIndex = 0;
-    // }
-
-//     for(int i = 0 ; i < 10 ; i++){
-//         renderEngine_->renderText(showTextContent , 0, screenHeight_ - i * CHAR_DEFAULT_HEIGHT , p1);
-//     }
-
-//    TextPaint p2;
-//    p2.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
-//    p2.textSizeScale = 1.0f;
-//    Rect limitRect2;
-//    limitRect2.left = 0.0f;
-//    limitRect2.top = screenHeight_;
-//    limitRect2.width = screenWidth_ / 3.0f;
-//    limitRect2.height = screenHeight_ / 2.0f;
-    // renderEngine_->renderText(str,limitRect2, p2);
-
-    // TextPaint p1;
-    // p1.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
-    // renderEngine_->renderText(L"堆枕乌云堕翠翘" , 100, 300 + 100 + 100, p1);
-
-    // TextPaint p2;
-    // p2.textColor = glm::vec4(0.0f ,1.0f , 0.0f , 1.0f);
-    // renderEngine_->renderText(L"那更春来,玉减香消" , 100, 300 + 100 , p2);
-
-//    TextPaint p3;
-//    p3.textColor = glm::vec4(1.0f ,1.0f , 0.0f , 1.0f);
-//    renderEngine_->renderText(L"嬛嬛一袅楚宫腰" , 100, 300 , p3);
-
-    // Rect shaderRect;
-    // shaderRect.left = 100.0f;
-    // shaderRect.top = screenHeight_;
-    // shaderRect.width = 200.0f;
-    // shaderRect.height = 200.0f;
-    // renderEngine_->renderShader(testShader , shaderRect);
-
-    // Rect shaderRect2;
-    // shaderRect2.left = 500.0f;
-    // shaderRect2.top = screenHeight_ - 200;
-    // shaderRect2.width = 200.0f;
-    // shaderRect2.height = 200.0f;
-    // renderEngine_->renderShader(testShader2 , shaderRect2);
-
-    // Rect shaderRect2;
-    // shaderRect2.left = 300.0f;
-    // shaderRect2.top = screenHeight_ - 200;
-    // shaderRect2.width = 200.0f;
-    // shaderRect2.height = 200.0f;
-    Paint paint;
-
-    // long cur = static_cast<long>(currentTimeMillis());
-    // long delta = cur - startTime;
-    // float t = (float)delta / (float)2000.0f;
-    // float colorValueR = glm::sin(t) / 2.0f + 0.5f;
-    // float colorValueG = glm::cos(t) / 2.0f + 0.5f;
-    // // Logi("time" , "%f" , colorValueR);
-    // paint.color = glm::vec4(colorValueR , colorValueG , 1.0f ,1.0f);
-    // // paint.color = glm::vec4(1.0f , 1.0f , 0.0f ,1.0f);
-    // paint.fillStyle = Stroken;
-    // paint.stokenWidth = 100.0f * colorValueR;
-    // renderEngine_->renderRect(shaderRect2 , paint);
-
-    // Rect shaderRect3;
-    // shaderRect3.left = 0.0f;
-    // shaderRect3.top = 200.0f;
-    // shaderRect3.width = screenWidth_;
-    // shaderRect3.height = 200.0f;
-    // renderEngine_->renderRect(shaderRect3 , paint);
-
-    Paint circelPaint;
-    circelPaint.fillStyle = Filled;
-    circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
-
-    float radius = 32.0;
-    float cx = radius;
-    float cy = screenHeight_ - radius;
-
-//    renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-//    long long t1 = currentTimeMicro();
-//    renderEngine_->renderCircle((float)viewWidth_ / 2.0f , (float)viewHeight_ / 2.0f , mRadius , circelPaint);
-//
-//    mRadius++;
-//    if(mRadius >= 500.0f){
-//        mRadius = 100.0f;
-//    }
-    for(;cy >= 0; cy -= 2*radius){
-        cx = radius;
-        for(;cx <= screenWidth_ ; cx += 2*radius){
-            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-        }
-    }//end for y
-    long long t2 = currentTimeMicro();
-//    Logi("renderCircle" , "draw circle time: %lld", (t2 - t1));
+    testRender1();
     
     if(showNumber){
         TextPaint p4;
@@ -293,6 +169,29 @@ void Application::updateSence(){
         renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 220.0f, 
             screenHeight_ - 80.0f, p4);
     }
+}
+
+void Application::testRender1(){
+    Paint circelPaint;
+    circelPaint.fillStyle = Stroken;
+    circelPaint.stokenWidth = 1.0f;
+    circelPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
+    
+    float radius = 8.0f;
+
+    float cx = radius;
+    float cy = screenHeight_ - radius;
+
+    bool isFilled = false;
+    for(;cy >= 0; cy -= 2*radius){
+        cx = radius;
+        for(;cx <= screenWidth_ ; cx += 2*radius){
+            circelPaint.fillStyle = isFilled?Filled:Stroken;
+            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+            isFilled = !isFilled;
+        }
+    }//end for y
+    long long t2 = currentTimeMicro();
 }
 
 long long Application::getLastFrameDeltaTime(){

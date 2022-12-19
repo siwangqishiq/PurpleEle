@@ -8,6 +8,7 @@
 #include "../libjson/json.hpp"
 #include "glheader.hpp"
 #include "application.hpp"
+#include "render_batch.hpp"
 
 std::unordered_map<wchar_t , wchar_t> SymbolMap;
 
@@ -29,6 +30,10 @@ void RenderEngine::render(){
 }
 
 void RenderEngine::free(){
+    if(shapeBatch_ != nullptr){
+        shapeBatch_->dispose();
+    }
+
     VRamManager::getInstance().clear();
     ShaderManager::getInstance()->clear();
     TextureManager::getInstance()->clear();
@@ -50,6 +55,8 @@ void RenderEngine::init(){
     // Logi(TAG , "render engine init end");
 
     loadShapeShader();
+
+    shapeBatch_ = std::make_shared<ShapeBatch>();
 }
 
 void RenderEngine::loadTextRenderResource(){
@@ -126,6 +133,10 @@ std::shared_ptr<TextRenderCommand> RenderEngine::fetchTextRenderCommand(RenderEn
         std::make_shared<TextRenderCommand>(this);
     newCmd->used = true;
     return newCmd;
+}
+
+std::shared_ptr<ShapeBatch> RenderEngine::getShapeBatch(){
+    return shapeBatch_;
 }
 
 std::shared_ptr<ShaderRenderCommand> RenderEngine::fetchShaderRenderCommand(RenderEngine *engine){
@@ -256,8 +267,8 @@ void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &pain
     auto cmd = fetchShaderShapeRenderCommand(this);
     cmd->putParams(rect , paint, ShapeType::ShapeCircle);
     long long t2 = currentTimeMicro();
-    // Logi("renderCircle" , "put params time: %lld", (t2 - t1));
-     submitRenderCommand(cmd);
+     // Logi("renderCircle" , "put params time: %lld", (t2 - t1));
+    submitRenderCommand(cmd);
 }
 
 //绘制矩形

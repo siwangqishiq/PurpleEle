@@ -23,6 +23,7 @@ compile: build_dir \
 		${BUILD_DIR}/shader.o \
 		${BUILD_DIR}/triangle.o \
 		${BUILD_DIR}/render.o \
+		${BUILD_DIR}/render_batch.o \
 		${BUILD_DIR}/command.o \
 		${BUILD_DIR}/vram.o \
 		${BUILD_DIR}/asset_manager.o \
@@ -63,6 +64,10 @@ ${BUILD_DIR}/render.o:${SRC_DIR}/render/render.cpp \
 						${ASSET_DIR}/shader/render_text_vert.glsl \
 						${ASSET_DIR}/shader/render_text_frag.glsl 
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/render.cpp -o ${BUILD_DIR}/render.o -I ${INCLUDE_DIR} -I ${SRC_DIR} 
+
+${BUILD_DIR}/render_batch.o:${SRC_DIR}/render/render_batch.cpp \
+						${SRC_DIR}/render/render_batch.hpp 
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/render_batch.cpp -o ${BUILD_DIR}/render_batch.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
 ${BUILD_DIR}/texture.o:${SRC_DIR}/render/texture.cpp ${SRC_DIR}/render/texture.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/texture.cpp -o ${BUILD_DIR}/texture.o -I ${INCLUDE_DIR} -I ${SRC_DIR}

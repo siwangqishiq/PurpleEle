@@ -49,7 +49,7 @@ public:
     std::shared_ptr<RenderEngine> getRender() {
         return renderEngine_;
     }
-
+    
     std::shared_ptr<Timer> getTimer();
 
     int fixedRateTaskId = -1;
@@ -83,5 +83,7 @@ private:
 
     Shader testShader;
     Shader testShader2;
-    float mRadius = 100.0f;
+    float mRadius = 180.0f;
+
+    void testRender1();
 };

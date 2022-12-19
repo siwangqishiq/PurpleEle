@@ -27,9 +27,14 @@ void main(){
     float radius = uRect.w / 2.0f;
     vec2 center = vec2(uRect.x + radius , uRect.y - radius);
 
-    if(uFillStyle == 0){
-        fragColor = uColor * fillCircle(pos, center , radius);
-    }else{
-         fragColor = uColor * stokenCircle(pos, center , radius);
-    }
+    float maskValue = step(0.5f , float(uFillStyle)) * stokenCircle(pos , center , radius);
+    maskValue += (1.0f - step(0.5f , float(uFillStyle)))* fillCircle(pos, center , radius);
+    maskValue = min(1.0f , maskValue);
+    //
+//    if(uFillStyle == 0){
+//        fragColor = uColor * fillCircle(pos, center , radius);
+//    }else{
+//         fragColor = uColor * stokenCircle(pos, center , radius);
+//    }
+    fragColor = uColor * maskValue;
 }
