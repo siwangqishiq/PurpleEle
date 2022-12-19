@@ -186,9 +186,9 @@ void Application::testRender1(){
     for(;cy >= 0; cy -= 2*radius){
         cx = radius;
         for(;cx <= screenWidth_ ; cx += 2*radius){
-            circelPaint.fillStyle = isFilled?Filled:Stroken;
+            // circelPaint.fillStyle = isFilled?Filled:Stroken;
             renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-            isFilled = !isFilled;
+            // isFilled = !isFilled;
         }
     }//end for y
     long long t2 = currentTimeMicro();

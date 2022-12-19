@@ -20,13 +20,15 @@ protected:
     int vboOffset_;
 
     int vertexMaxCount_ = 0;
-    int vertexAttrCount_ = 0;
+    int attrCountPerVertex_ = 0;
 };
 
 class VRamManager;
 
 class ShapeBatch : public Batch{
 public:
+    const int VERTEX_COUNT_PER_PERMITIVE = 6;//每个图元包含的顶点数量
+
     ShapeBatch();
     
     void init();

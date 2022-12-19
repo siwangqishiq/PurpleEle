@@ -7,29 +7,32 @@
 
 ShapeBatch::ShapeBatch(){
     isDrawing_ = false;
-
+    
     vertexMaxCount_ = 1024;
-    vertexAttrCount_ = 3 + 3 + 1 + 3;//pos color mode rect
+    attrCountPerVertex_ = 3 + 3 + 1 + 3;//pos color mode rect
 }
 
 void ShapeBatch::init(){
-    int requestSize = vertexMaxCount_ * vertexAttrCount_ * sizeof(float);
+    int requestSize = vertexMaxCount_ * attrCountPerVertex_ * sizeof(float);
     vramManager_ = std::make_shared<VRamManager>();
     
+    buffer_ = std::make_shared<std::vector<float>>(vertexMaxCount_ * attrCountPerVertex_);
+
     int requestSizeResult = 0;
     vramManager_->fetchVideoMemory(requestSize , vbo_ ,vao_, vboOffset_ , requestSizeResult);
-
-    buffer_ = std::make_shared<std::vector<float>>(vertexMaxCount_ * vertexAttrCount_);
+    Logi("ShapeBatch" , "fetch video memoroy size : %d" , requestSizeResult);
 }
 
 void ShapeBatch::begin(){
-
-    
+    isDrawing_ = true;
+    index = 0;
 }
 
 void ShapeBatch::end(){
     flush();
+
     isDrawing_ = false;
+    index = 0;
 }
 
 void ShapeBatch::flush(){
@@ -49,6 +52,11 @@ void ShapeBatch::renderCircle(float cx , float cy , float radius , Paint &paint)
         Logi("ShapeBatch" , "batch is not call begin()");
         return;
     }
+
+    int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
+    if(index + addedSize >= buffer_->size()){
+        end();
+    }
 }
 
 //绘制矩形
@@ -57,4 +65,10 @@ void ShapeBatch::renderRect(Rect &rectangle ,Paint &paint){
         Logi("ShapeBatch" , "batch is not call begin()");
         return;
     }
+
+    int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
+    if(index + addedSize >= buffer_->size()){
+        end();
+    }
+
 }

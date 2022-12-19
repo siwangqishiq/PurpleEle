@@ -57,6 +57,7 @@ void RenderEngine::init(){
     loadShapeShader();
 
     shapeBatch_ = std::make_shared<ShapeBatch>();
+    shapeBatch_->init();
 }
 
 void RenderEngine::loadTextRenderResource(){
