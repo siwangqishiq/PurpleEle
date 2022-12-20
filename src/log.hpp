@@ -5,14 +5,14 @@
 #include <stdexcept>
 #include <memory>
 
-#ifdef __ANDROID__
+// #ifdef __ANDROID__
 
-#include <android/log.h>
+// #include <android/log.h>
 
-#define  LOG_TAG    "textrender"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+// #define  LOG_TAG    "textrender"
+// #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
-#endif
+// #endif
 
 #include <string>
 #include <chrono>

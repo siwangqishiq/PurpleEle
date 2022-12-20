@@ -198,11 +198,14 @@ void Application::testRender1(){
 
     renderEngine_->getShapeBatch()->begin();
 
-    float width = 20.0f;
-    float height = 20.0f;
+    float width = 32.0f;
+    float height = 32.0f;
     float x = 0.0f;
     float y = height;
     float padding = 4.0f;
+    int rectCount = 0;
+
+    long long t1 = currentTimeMicro();
     for(; y <= screenHeight_ ; y += height + padding){
         for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
             Rect rect;
@@ -210,17 +213,19 @@ void Application::testRender1(){
             rect.top = y;
             rect.width = width;
             rect.height = height;
+            rectCount++;
             renderEngine_->getShapeBatch()->renderRect(rect , circelPaint);
-        }
-    }//end for x
+        }//end for x
+    }//end for y
     renderEngine_->getShapeBatch()->end();
     long long t2 = currentTimeMicro();
+    // Logi("test_render" , "delta %lld count : %d" , (t2 - t1) , rectCount);
 }
 
 long long Application::getLastFrameDeltaTime(){
-    if(timeStamp_ <= 0 ){
-        return 0L;
-    }
+    // if(timeStamp_ <= 0 ){
+    //     return 0L;
+    // }
     return currentTimeMicro() - timeStamp_;
 }
 

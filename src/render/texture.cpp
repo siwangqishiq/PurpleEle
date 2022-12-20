@@ -34,7 +34,7 @@ std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFile
         format = GL_RGB;
     }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_ARGB){
         format = GL_RGBA;
-    }else if(fileConfig.channel = TEXTURE_FILE_CHANNEL_RGBA){
+    }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGBA){
         format = GL_RGBA;
     }
     
