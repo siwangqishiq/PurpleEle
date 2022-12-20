@@ -38,8 +38,10 @@ public:
 class VRamManager{
 public:
     const char *TAG = "VRamManager";
-
-    static VRamManager& getInstance();
+    
+    static std::shared_ptr<VRamManager> getInstance();
+    
+    static std::shared_ptr<VRamManager> instance_;
 
     VRamManager();
 

@@ -9,7 +9,7 @@
 TextPaint TextRenderCommand::defaultTextPaint;
 
 unsigned int RenderCommand::allocatorVRam(int acquireSize , int &allocateSize){
-    VRamManager::getInstance().fetchVideoMemory(acquireSize , vbo_ ,vao_, vboOffset_ , allocateSize);
+    VRamManager::getInstance()->fetchVideoMemory(acquireSize , vbo_ ,vao_, vboOffset_ , allocateSize);
     return vbo_;
 }
 

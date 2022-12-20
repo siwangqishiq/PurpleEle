@@ -29,6 +29,7 @@ public:
 
     ~TextureManager(){
         Logi(TAG , "TextureManager deconstruct");
+        clear();
     }
 
     void clear();

@@ -50,7 +50,7 @@ public:
     }
 
     ~AssetManager(){
-        Logi("asset_manager" , "asset manager deconstruct");
+        Logi("asset_manager" , "~asset manager deconstruct");
     }
 
 protected:

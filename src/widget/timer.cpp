@@ -11,6 +11,7 @@ Timer::~Timer(){
     if(!taskList_.empty()){
         clear();
     }
+    Logi("timer" , "~timer deconstructor");
 }
 
 //delay 毫秒后 执行

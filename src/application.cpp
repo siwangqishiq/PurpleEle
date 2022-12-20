@@ -8,6 +8,7 @@
 #include "render/texture.hpp"
 #include "render/common.hpp"
 #include "widget/timer.hpp"
+#include "render/render_batch.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -132,14 +133,17 @@ void Application::onTrick(){
     // Log(TAG , "app trick");
     // Logi(TAG , "getLastFrameDeltaTimeMirco = %lld" , getLastFrameDeltaTime());
 
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     long long timeStart = currentTimeMillis();
     if(renderEngine_ == nullptr){
         return;
     }
-    
+
     //user logic and draw
     updateSence();
-
+    
     //定时器triker
     if(timer_ != nullptr){
         timer_->trick(this);
@@ -147,7 +151,7 @@ void Application::onTrick(){
 
     //gl commands run
     renderEngine_->render();
-    
+
     // for test
     // triangleDemo_->trick(renderEngine_->normalMatrix_);
 
@@ -177,20 +181,39 @@ void Application::testRender1(){
     circelPaint.stokenWidth = 1.0f;
     circelPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
     
-    float radius = 8.0f;
+    float radius = 16.0f;
 
     float cx = radius;
     float cy = screenHeight_ - radius;
 
     bool isFilled = false;
-    for(;cy >= 0; cy -= 2*radius){
-        cx = radius;
-        for(;cx <= screenWidth_ ; cx += 2*radius){
-            // circelPaint.fillStyle = isFilled?Filled:Stroken;
-            renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-            // isFilled = !isFilled;
+    // for(;cy >= 0; cy -= 2*radius){
+    //     cx = radius;
+    //     for(;cx <= screenWidth_ ; cx += 2*radius){
+    //         // circelPaint.fillStyle = isFilled?Filled:Stroken;
+    //         renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+    //         // isFilled = !isFilled;
+    //     }
+    // }//end for y
+
+    renderEngine_->getShapeBatch()->begin();
+
+    float width = 20.0f;
+    float height = 20.0f;
+    float x = 0.0f;
+    float y = height;
+    float padding = 4.0f;
+    for(; y <= screenHeight_ ; y += height + padding){
+        for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
+            Rect rect;
+            rect.left = x;
+            rect.top = y;
+            rect.width = width;
+            rect.height = height;
+            renderEngine_->getShapeBatch()->renderRect(rect , circelPaint);
         }
-    }//end for y
+    }//end for x
+    renderEngine_->getShapeBatch()->end();
     long long t2 = currentTimeMicro();
 }
 

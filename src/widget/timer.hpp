@@ -26,7 +26,7 @@ public:
     Timer();
 
     ~Timer();
-
+    
     //delay 毫秒后 执行
     int schedule(std::function<void(Application *)> runnable, long long delay);
 

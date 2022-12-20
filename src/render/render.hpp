@@ -33,7 +33,13 @@ class RenderEngine{
 public:
     const std::string TAG = "RenderEngine";
 
-    RenderEngine(Application *appContext) : appContext_(appContext){}
+    RenderEngine(Application *appContext) : appContext_(appContext){
+        Logi("RenderEngine" , "Render Engine con");
+    }
+
+    ~RenderEngine(){
+        Logi("RenderEngine" , "~RenderEngine Engine decon");
+    }
 
     Application *appContext_;
 

@@ -59,10 +59,7 @@ ${BUILD_DIR}/timer.o:${SRC_DIR}/widget/timer.cpp \
 ${BUILD_DIR}/vram.o:${SRC_DIR}/render/vram.cpp ${SRC_DIR}/render/vram.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/vram.cpp -o ${BUILD_DIR}/vram.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
-${BUILD_DIR}/render.o:${SRC_DIR}/render/render.cpp \
-						${SRC_DIR}/render/render.hpp \
-						${ASSET_DIR}/shader/render_text_vert.glsl \
-						${ASSET_DIR}/shader/render_text_frag.glsl 
+${BUILD_DIR}/render.o:${SRC_DIR}/render/render.cpp ${SRC_DIR}/render/render.hpp 
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/render.cpp -o ${BUILD_DIR}/render.o -I ${INCLUDE_DIR} -I ${SRC_DIR} 
 
 ${BUILD_DIR}/render_batch.o:${SRC_DIR}/render/render_batch.cpp \

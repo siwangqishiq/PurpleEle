@@ -2,9 +2,13 @@
 #include "log.hpp"
 #include "glheader.hpp"
 
-VRamManager& VRamManager::getInstance() {
-    static VRamManager instance;
-    return instance;
+std::shared_ptr<VRamManager> VRamManager::instance_ = nullptr;
+
+std::shared_ptr<VRamManager> VRamManager::getInstance() {
+    if(instance_ == nullptr){
+        instance_ = std::make_shared<VRamManager>();
+    }
+    return instance_;
 }
 
 VRamManager::VRamManager(){
