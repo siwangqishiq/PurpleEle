@@ -46,8 +46,20 @@ float renderRect(vec2 pos){
     return 1.0f;
 }
 
+float stokenCircle(vec2 pos , vec2 center , float radius){
+    float stokenWidth = vShape.z;
+    float innerRadius = radius - stokenWidth;
+    float value = (1.0f - step(radius , distance(pos , center))) *(step(innerRadius , distance(pos , center)));
+    return min(1.0f , value);
+}
+
 float renderCircle(vec2 pos){
-    return 1.0f;
+    float radius = vRect.w / 2.0f;
+    vec2 center = vec2(vRect.x + radius , vRect.y - radius);
+    if(abs(vShape.y - mode_stoken) <= eps){
+        return stokenCircle(pos , center , radius);
+    }
+    return 1.0f - step(radius , distance(pos , center));
 }
 
 void main(){

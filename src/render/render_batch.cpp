@@ -97,10 +97,20 @@ void ShapeBatch::dispose(){
 
 //绘制圆形
 void ShapeBatch::renderCircle(float cx , float cy , float radius , Paint &paint){
+    Rect rect;
+    rect.left = cx - radius;
+    rect.top = cy + radius;
+    rect.width = 2 * radius;
+    rect.height = 2 * radius;
+    formatShape(ShapeType::ShapeCircle , rect , paint);
 }
 
 //绘制矩形
 void ShapeBatch::renderRect(Rect &rectangle ,Paint &paint){
+    formatShape(ShapeType::ShapeRect , rectangle , paint);
+}
+
+void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint){
     if(!isDrawing_){
         Logi("ShapeBatch" , "batch is not call begin()");
         return;
@@ -112,7 +122,7 @@ void ShapeBatch::renderRect(Rect &rectangle ,Paint &paint){
         begin();
     }
 
-    updateVertexData(ShapeType::ShapeRect , rectangle , paint);
+    updateVertexData(type , rect , paint);
 }
 
 void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint){

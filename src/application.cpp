@@ -173,8 +173,8 @@ void Application::onTrick(){
 }
 
 void Application::updateSence(){
-    testRender1();
-    
+    // testRender1();
+    testRender2();
     if(showNumber){
         TextPaint p4;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
@@ -184,27 +184,38 @@ void Application::updateSence(){
     }
 }
 
+void Application::testRender2(){
+    Paint circelPaint;
+    circelPaint.fillStyle = Filled;
+    circelPaint.stokenWidth = 1.0f;
+    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
+
+    float radius = 16.0f;
+    float cx = radius;
+    float cy = screenHeight_ - radius;
+    float padding = 4.0f;
+
+    bool isFilled = false;
+    renderEngine_->getShapeBatch()->begin();
+    for(;cy >= 0; cy -= 2*radius + padding){
+        cx = radius;
+        for(;cx <= screenWidth_ ; cx += 2*radius + padding){
+            circelPaint.fillStyle = GenRandomFloat()>0.5f?Filled:Stroken;
+            // renderEngine_->renderCircle(cx , cy , radius , circelPaint);
+            circelPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , GenRandomFloat() , 1.0f);
+            renderEngine_->getShapeBatch()->renderCircle(cx , cy , radius , circelPaint);
+            isFilled = !isFilled;
+        }
+    }//end for y
+    renderEngine_->getShapeBatch()->end();
+}
+
 void Application::testRender1(){
     bool isFilled = false;
     Paint circelPaint;
     circelPaint.fillStyle = Stroken;
     circelPaint.stokenWidth = 1.0f;
     circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-    
-    // float radius = 16.0f;
-
-    // float cx = radius;
-    // float cy = screenHeight_ - radius;
-
-    // for(;cy >= 0; cy -= 2*radius){
-    //     cx = radius;
-    //     for(;cx <= screenWidth_ ; cx += 2*radius){
-    //         // circelPaint.fillStyle = isFilled?Filled:Stroken;
-    //         renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-    //         // isFilled = !isFilled;
-    //     }
-    // }//end for y
-
     renderEngine_->getShapeBatch()->begin();
 
     float width = 32.0f;

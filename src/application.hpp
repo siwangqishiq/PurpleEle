@@ -86,4 +86,5 @@ private:
     float mRadius = 180.0f;
 
     void testRender1();
+    void testRender2();
 };

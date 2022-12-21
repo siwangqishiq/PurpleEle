@@ -70,6 +70,8 @@ protected:
     std::vector<float> vertexBuffer_;
     std::shared_ptr<VRamManager> vramManager_;
 
+    void formatShape(ShapeType type , Rect &rect , Paint &paint);
+
     void updateVertexData(ShapeType type , Rect &rect ,Paint &paint);
 
     void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
