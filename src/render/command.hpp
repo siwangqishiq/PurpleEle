@@ -99,13 +99,6 @@ protected:
     void buildGlCommands(std::vector<float> &buf);
 };
 
-enum ShapeType{
-    ShapeCircle = 0,
-    ShapeRect = 1,
-    ShapeRoundRect = 2,
-    ShapeOval = 3
-};
-
 class ShapeRenderCommand : public ShaderRenderCommand {
 public:
     ShapeRenderCommand(RenderEngine *engine) :ShaderRenderCommand(engine){

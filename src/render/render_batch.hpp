@@ -64,14 +64,16 @@ public:
     void renderRect(Rect &rectangle ,Paint &paint);
 
 protected:
-    int index = 0;
-    
-    std::vector<float> vertexBuffer_;
-
     RenderEngine *renderEngine_;
+
+    int index_ = 0;
+    std::vector<float> vertexBuffer_;
     std::shared_ptr<VRamManager> vramManager_;
 
-    void updateVertexData(Rect &rect ,Paint &paint);
+    void updateVertexData(ShapeType type , Rect &rect ,Paint &paint);
+
+    void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
+            ,Rect &rect ,Paint &paint);
 };
 
 

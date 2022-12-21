@@ -15,8 +15,7 @@ ShapeBatch::ShapeBatch(RenderEngine *renderEngine){
     isDrawing_ = false;
     
     vertexMaxCount_ = 1024;
-    attrCountPerVertex_ = 3;//pos
-    // attrCountPerVertex_ = 3 + 3 + 1 + 3;//pos + color + mode + rect
+    attrCountPerVertex_ = 3 + 4 + 4 + 4;//pos + color + shape + rect
 }
 
 void ShapeBatch::init(){
@@ -32,8 +31,17 @@ void ShapeBatch::init(){
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 3 * sizeof(float) , 
-        reinterpret_cast<void *>(vboOffset_));
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , attrCountPerVertex_ * sizeof(float) ,
+        reinterpret_cast<void *>(vboOffset_ + 0));
+    glVertexAttribPointer(1 , 4 , GL_FLOAT , GL_FALSE , attrCountPerVertex_ * sizeof(float) ,
+                          reinterpret_cast<void *>(vboOffset_ + 3* sizeof(float)));
+    glVertexAttribPointer(2 , 4 , GL_FLOAT , GL_FALSE , attrCountPerVertex_ * sizeof(float) ,
+                          reinterpret_cast<void *>(vboOffset_ + (3 + 4)* sizeof(float)));
+    glVertexAttribPointer(3 , 4 , GL_FLOAT , GL_FALSE , attrCountPerVertex_ * sizeof(float) ,
+                          reinterpret_cast<void *>(vboOffset_ + (3 + 4 + 4)* sizeof(float)));
     glBindVertexArray(0);
 
     shader_ = ShaderManager::getInstance()->loadAssetShader("shape_batch_render",
@@ -42,14 +50,14 @@ void ShapeBatch::init(){
 
 void ShapeBatch::begin(){
     isDrawing_ = true;
-    index = 0;
+    index_ = 0;
 }
 
 void ShapeBatch::end(){
     flush();
 
     isDrawing_ = false;
-    index = 0;
+    index_ = 0;
     vertexCount_ = 0;
 }
 
@@ -59,13 +67,13 @@ void ShapeBatch::flush(){
 }
 
 void ShapeBatch::executeGlCommands(){
-    if(index <= 0){
+    if(index_ <= 0){
         return;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
-    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ , 
-        index * sizeof(float) , vertexBuffer_.data());
+    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
+                    index_ * sizeof(float) , vertexBuffer_.data());
     glBindBuffer(GL_ARRAY_BUFFER , 0);
 
     glEnable(GL_BLEND);
@@ -99,50 +107,60 @@ void ShapeBatch::renderRect(Rect &rectangle ,Paint &paint){
     }
 
     int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
-    if(index + addedSize >= vertexBuffer_.size()){
+    if(index_ + addedSize >= vertexBuffer_.size()){
         end();
         begin();
     }
 
-    updateVertexData(rectangle , paint);
+    updateVertexData(ShapeType::ShapeRect , rectangle , paint);
 }
 
-void ShapeBatch::updateVertexData(Rect &rect ,Paint &paint){
+void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint){
     //v1
-    vertexBuffer_[index + 0] = rect.left;
-    vertexBuffer_[index + 1] = rect.getBottom();
-    vertexBuffer_[index + 2] = 1.0f;
+    putVertexAttribute(0 , type, rect.left , rect.getBottom() , rect, paint);
 
     //v2
-    vertexBuffer_[index + 3] = rect.getRight();
-    vertexBuffer_[index + 4] = rect.getBottom();
-    vertexBuffer_[index + 5] = 1.0f;
+    putVertexAttribute(1 ,type, rect.getRight() , rect.getBottom(), rect , paint);
 
     //v3
-    vertexBuffer_[index + 6] = rect.getRight();
-    vertexBuffer_[index + 7] = rect.top;
-    vertexBuffer_[index + 8] = 1.0f;
+    putVertexAttribute(2 ,type , rect.getRight() , rect.top, rect , paint);
 
     //v4
-    vertexBuffer_[index + 9] = rect.left;
-    vertexBuffer_[index + 10] = rect.getBottom();
-    vertexBuffer_[index + 11] = 1.0f;
+    putVertexAttribute(3 ,type , rect.left , rect.getBottom(), rect , paint);
 
     //v5
-    vertexBuffer_[index + 12] = rect.getRight();
-    vertexBuffer_[index + 13] = rect.top;
-    vertexBuffer_[index + 14] = 1.0f;
+    putVertexAttribute(4 ,type , rect.getRight() , rect.top, rect , paint);
 
     //v6
-    vertexBuffer_[index + 15] = rect.left;
-    vertexBuffer_[index + 16] = rect.top;
-    vertexBuffer_[index + 17] = 1.0f;
+    putVertexAttribute(5 ,type , rect.left , rect.top, rect , paint);
 
-    index += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
+    index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
     vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
+}
 
-    // for(int i = 0 ; i < index ;i++){
-    //     std::cout << vertexBuffer_[i] << "  ";
-    // }
-    // std::cout << std::endl;
+void ShapeBatch::putVertexAttribute(int vertexIndex ,ShapeType type ,float x , float y 
+        ,Rect &rect ,Paint &paint){
+    const int offset = index_ + vertexIndex * attrCountPerVertex_;
+    //position
+    vertexBuffer_[offset + 0] = x;
+    vertexBuffer_[offset + 1] = y;
+    vertexBuffer_[offset + 2] = 1.0f;
+
+    //color
+    vertexBuffer_[offset + 3] = paint.color.r;
+    vertexBuffer_[offset + 4] = paint.color.g;
+    vertexBuffer_[offset + 5] = paint.color.b;
+    vertexBuffer_[offset + 6] = paint.color.a;
+
+    //shape
+    vertexBuffer_[offset + 7] = type;
+    vertexBuffer_[offset + 8] = paint.fillStyle;
+    vertexBuffer_[offset + 9] = paint.stokenWidth;
+    vertexBuffer_[offset + 10] = 1.0f;
+
+    //rect
+    vertexBuffer_[offset + 11] = rect.left;
+    vertexBuffer_[offset + 12] = rect.top;
+    vertexBuffer_[offset + 13] = rect.width;
+    vertexBuffer_[offset + 14] = rect.height;
 }

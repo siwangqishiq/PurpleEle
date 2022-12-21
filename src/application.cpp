@@ -9,6 +9,7 @@
 #include "render/common.hpp"
 #include "widget/timer.hpp"
 #include "render/render_batch.hpp"
+#include "utils.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -127,12 +128,20 @@ void Application::onCreate(){
             , "shader/shader2_frag.glsl");
 
     startTime = static_cast<long>(currentTimeMillis());
+
+
+    // for(int i= 0 ; i < 20 ; i++){
+    //     Logi("random" , "%d" , GenRandomInt(0,10));
+    // }
+    // for(int i= 0 ; i < 20 ; i++){
+    //     Logi("random" , "%f" , GenRandomFloat());
+    // }
 }
 
 void Application::onTrick(){
     // Log(TAG , "app trick");
     // Logi(TAG , "getLastFrameDeltaTimeMirco = %lld" , getLastFrameDeltaTime());
-
+    
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -176,17 +185,17 @@ void Application::updateSence(){
 }
 
 void Application::testRender1(){
+    bool isFilled = false;
     Paint circelPaint;
     circelPaint.fillStyle = Stroken;
     circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(1.0f , 1.0f , 0.0f , 1.0f);
+    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
     
-    float radius = 16.0f;
+    // float radius = 16.0f;
 
-    float cx = radius;
-    float cy = screenHeight_ - radius;
+    // float cx = radius;
+    // float cy = screenHeight_ - radius;
 
-    bool isFilled = false;
     // for(;cy >= 0; cy -= 2*radius){
     //     cx = radius;
     //     for(;cx <= screenWidth_ ; cx += 2*radius){
@@ -202,7 +211,7 @@ void Application::testRender1(){
     float height = 32.0f;
     float x = 0.0f;
     float y = height;
-    float padding = 4.0f;
+    float padding = 2.0f;
     int rectCount = 0;
 
     long long t1 = currentTimeMicro();
@@ -214,7 +223,12 @@ void Application::testRender1(){
             rect.width = width;
             rect.height = height;
             rectCount++;
+               
+//             circelPaint.fillStyle = GenRandomFloat() >0.5f?Filled:Stroken;
+//            circelPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , GenRandomFloat() , 1.0f);
             renderEngine_->getShapeBatch()->renderRect(rect , circelPaint);
+
+            isFilled = !isFilled;
         }//end for x
     }//end for y
     renderEngine_->getShapeBatch()->end();

@@ -46,7 +46,7 @@ namespace detail
 
 		T			= type of scalar values (e.g. float, double)
 		N			= number of components in the vector (e.g. 3)
-		E0...3		= what index the n-th element of this swizzle refers to in the unswizzled vec
+		E0...3		= what index_ the n-th element of this swizzle refers to in the unswizzled vec
 
 		DUPLICATE_ELEMENTS = 1 if there is a repeated element, 0 otherwise (used to specialize swizzles
 			containing duplicate elements so that they cannot be used as r-values).

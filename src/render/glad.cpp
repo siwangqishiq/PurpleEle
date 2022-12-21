@@ -176,7 +176,7 @@ static int get_exts(void) {
         exts = (const char *)glGetString(GL_EXTENSIONS);
 #ifdef _GLAD_IS_SOME_NEW_VERSION
     } else {
-        unsigned int index;
+        unsigned int index_;
 
         num_exts_i = 0;
         glGetIntegerv(GL_NUM_EXTENSIONS, &num_exts_i);
@@ -188,15 +188,15 @@ static int get_exts(void) {
             return 0;
         }
 
-        for(index = 0; index < (unsigned)num_exts_i; index++) {
-            const char *gl_str_tmp = (const char*)glGetStringi(GL_EXTENSIONS, index);
+        for(index_ = 0; index_ < (unsigned)num_exts_i; index_++) {
+            const char *gl_str_tmp = (const char*)glGetStringi(GL_EXTENSIONS, index_);
             size_t len = strlen(gl_str_tmp);
 
             char *local_str = (char*)malloc((len+1) * sizeof(char));
             if(local_str != NULL) {
                 memcpy(local_str, gl_str_tmp, (len+1) * sizeof(char));
             }
-            exts_i[index] = local_str;
+            exts_i[index_] = local_str;
         }
     }
 #endif
@@ -241,12 +241,12 @@ static int has_ext(const char *ext) {
         }
 #ifdef _GLAD_IS_SOME_NEW_VERSION
     } else {
-        int index;
+        int index_;
         if(exts_i == NULL) return 0;
-        for(index = 0; index < num_exts_i; index++) {
-            const char *e = exts_i[index];
+        for(index_ = 0; index_ < num_exts_i; index_++) {
+            const char *e = exts_i[index_];
 
-            if(exts_i[index] != NULL && strcmp(e, ext) == 0) {
+            if(exts_i[index_] != NULL && strcmp(e, ext) == 0) {
                 return 1;
             }
         }

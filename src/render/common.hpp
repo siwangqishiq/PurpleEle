@@ -4,6 +4,13 @@
 
 const float FONT_DEFAULT_SIZE = 64.0f;
 
+enum ShapeType{
+    ShapeCircle = 0,
+    ShapeRect = 1,
+    ShapeRoundRect = 2,
+    ShapeOval = 3
+};
+
 enum TextStyle{
     normal = 0,//普通
     italic = 1 //斜体

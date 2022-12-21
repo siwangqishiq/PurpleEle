@@ -5587,7 +5587,7 @@ static int stbi__tga_info(stbi__context *s, int *x, int *y, int *comp)
             stbi__rewind(s);
             return 0;
         }
-        stbi__skip(s,4);       // skip index of first colormap entry and number of entries
+        stbi__skip(s,4);       // skip index_ of first colormap entry and number of entries
         sz = stbi__get8(s);    //   check bits per palette color entry
         if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) {
             stbi__rewind(s);
@@ -5646,7 +5646,7 @@ static int stbi__tga_test(stbi__context *s)
    sz = stbi__get8(s);   //   image type
    if ( tga_color_type == 1 ) { // colormapped (paletted) image
       if (sz != 1 && sz != 9) goto errorEnd; // colortype 1 demands image type 1 or 9
-      stbi__skip(s,4);       // skip index of first colormap entry and number of entries
+      stbi__skip(s,4);       // skip index_ of first colormap entry and number of entries
       sz = stbi__get8(s);    //   check bits per palette color entry
       if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
       stbi__skip(s,4);       // skip image x and y origin
@@ -5657,7 +5657,7 @@ static int stbi__tga_test(stbi__context *s)
    if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test width
    if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test height
    sz = stbi__get8(s);   //   bits per pixel
-   if ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) goto errorEnd; // for colormapped images, bpp is size of an index
+   if ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) goto errorEnd; // for colormapped images, bpp is size of an index_
    if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
 
    res = 1; // if we got this far, everything's good and we can return 1 instead of 0
@@ -5812,10 +5812,10 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
             //   load however much data we did have
             if ( tga_indexed )
             {
-               // read in index, then perform the lookup
+               // read in index_, then perform the lookup
                int pal_idx = (tga_bits_per_pixel == 8) ? stbi__get8(s) : stbi__get16le(s);
                if ( pal_idx >= tga_palette_len ) {
-                  // invalid index
+                  // invalid index_
                   pal_idx = 0;
                }
                pal_idx *= tga_comp;

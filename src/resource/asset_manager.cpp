@@ -62,7 +62,7 @@ std::wstring AndroidAssetManager::readTextFile(std::string path){
     fileContentBuf[fileSize] = '\0';
     AAsset_close(file);
     
-    LOGI("file content = %s" , fileContentBuf.get());
+    Logi("asset_manager","file content = %s" , fileContentBuf.get());
     std::wstring contentStr = toWideString(std::string(fileContentBuf.get()));
     // delete[] fileContentBuf;
 
