@@ -174,13 +174,58 @@ void Application::onTrick(){
 
 void Application::updateSence(){
     // testRender1();
-    testRender2();
+//    testRender2();
+    testRender3();
     if(showNumber){
         TextPaint p4;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
         std::wstring name = L"帧率:";
         renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 220.0f, 
             screenHeight_ - 80.0f, p4);
+    }
+}
+
+void Application::testRender3(){
+    Paint circelPaint;
+    circelPaint.fillStyle = Stroken;
+    circelPaint.stokenWidth = 1.0f;
+    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
+
+    mRadius++;
+
+    float cx = screenWidth_ / 2.0f;
+    float cy = screenHeight_ / 2.0f;
+    renderEngine_->getShapeBatch()->begin();
+
+    float width = 32.0f;
+    float height = 32.0f;
+    float x = 0.0f;
+    float y = height;
+    float padding = 2.0f;
+    int rectCount = 0;
+    long long t1 = currentTimeMicro();
+    for(; y <= screenHeight_ ; y += height + padding){
+        for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
+            Rect rect;
+            rect.left = x;
+            rect.top = y;
+            rect.width = width;
+            rect.height = height;
+            rectCount++;
+            Paint paint;
+            paint.fillStyle = Stroken;
+            paint.stokenWidth = 1.0f;
+            paint.color = glm::vec4(0.0f , 1.0f , 1.0f , 1.0f);
+            renderEngine_->getShapeBatch()->renderRect(rect , paint);
+        }//end for x
+    }//end for y
+
+    renderEngine_->getShapeBatch()->renderCircle(cx , cy , mRadius , circelPaint);
+    renderEngine_->getShapeBatch()->end();
+    long long t2 = currentTimeMicro();
+
+    if(mRadius > screenHeight_ / 2.0f){
+        mRadius = 0.0f;
     }
 }
 

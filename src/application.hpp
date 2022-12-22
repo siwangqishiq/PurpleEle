@@ -83,8 +83,9 @@ private:
 
     Shader testShader;
     Shader testShader2;
-    float mRadius = 180.0f;
+    float mRadius = 1.0f;
 
     void testRender1();
     void testRender2();
+    void testRender3();
 };

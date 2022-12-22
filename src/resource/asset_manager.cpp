@@ -72,7 +72,7 @@ std::wstring AndroidAssetManager::readTextFile(std::string path){
 std::unique_ptr<uint8_t> AndroidAssetManager::readTextureFile(std::string path ,TextureFileConfig &fileConfig){
     Logi("asset" , "android version %d" , android_get_device_api_level());
 
-    if(android_get_device_api_level() >= 33){
+    if(android_get_device_api_level() >= 34){
         return readTextureFileByImageDecoder(path , fileConfig);
     }else{
         return readTextureFileByStbi(path , fileConfig);
