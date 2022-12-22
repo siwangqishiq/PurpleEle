@@ -67,10 +67,10 @@ float renderOval(vec2 pos){
     float rb = vRect.w / 2.0f;
     vec2 center = vec2(vRect.x + ra , vRect.y - rb);
 
-    if((((pos.x - center.x) * (pos.x - center.x)) / (ra * ra) + ((pos.y - center.y) * (pos.y - center.y)) / (rb * rb)) <= 1.0f){
-        return 1.0f;
-    }
-    return 0.0f;
+    float xa = pos.x - center.x;
+    float xb = pos.y - center.y;
+    // (pos.x - center.x) * (pos.x - center.x)
+    return 1.0f - step(1.0f , (pow(xa , 2) / pow(ra , 2) + (pow(xb , 2)) / pow(rb , 2)));
 }
 
 void main(){

@@ -194,15 +194,15 @@ void Application::testRender4(){
     circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
     renderEngine_->getShapeBatch()->begin();
 
-    float width = 64.0f;
-    float height = 32.0f;
+    float width = 50.0f;
+    float height = 40.0f;
     float x = 0.0f;
-    float y = height;
-    float padding = 2.0f;
+    float y = 0.0f;
+    float padding = 4.0f;
     int rectCount = 0;
 
     long long t1 = currentTimeMicro();
-    for(; y <= screenHeight_ ; y += height + padding){
+    for(; y <= screenHeight_+ height; y += height + padding){
         for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
             Rect rect;
             rect.left = x;
