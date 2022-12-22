@@ -62,6 +62,17 @@ float renderCircle(vec2 pos){
     return 1.0f - step(radius , distance(pos , center));
 }
 
+float renderOval(vec2 pos){
+    float ra = vRect.z / 2.0f;
+    float rb = vRect.w / 2.0f;
+    vec2 center = vec2(vRect.x + ra , vRect.y - rb);
+
+    if((((pos.x - center.x) * (pos.x - center.x)) / (ra * ra) + ((pos.y - center.y) * (pos.y - center.y)) / (rb * rb)) <= 1.0f){
+        return 1.0f;
+    }
+    return 0.0f;
+}
+
 void main(){
     float value = 0.0f;
     vec2 pos = gl_FragCoord.xy;
@@ -69,6 +80,8 @@ void main(){
         value = renderRect(pos);
     }else if(abs(vShape.x - shape_circle) <= eps){
         value = renderCircle(pos);
+    }else if(abs(vShape.x - shape_oval) <= eps){
+        value = renderOval(pos);
     }
     fragColor = vColor * value;
 }

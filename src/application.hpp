@@ -88,4 +88,5 @@ private:
     void testRender1();
     void testRender2();
     void testRender3();
+    void testRender4();
 };

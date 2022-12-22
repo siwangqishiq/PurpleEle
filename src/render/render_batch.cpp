@@ -106,8 +106,12 @@ void ShapeBatch::renderCircle(float cx , float cy , float radius , Paint &paint)
 }
 
 //绘制矩形
-void ShapeBatch::renderRect(Rect &rectangle ,Paint &paint){
-    formatShape(ShapeType::ShapeRect , rectangle , paint);
+void ShapeBatch::renderRect(Rect &rect ,Paint &paint){
+    formatShape(ShapeType::ShapeRect , rect , paint);
+}
+
+void  ShapeBatch::renderOval(Rect &rect , Paint &paint){
+    formatShape(ShapeType::ShapeOval , rect , paint);
 }
 
 void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint){

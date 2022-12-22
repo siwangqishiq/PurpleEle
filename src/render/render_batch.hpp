@@ -63,6 +63,9 @@ public:
     //绘制矩形
     void renderRect(Rect &rectangle ,Paint &paint);
 
+    //绘制椭圆
+    void renderOval(Rect &rect , Paint &paint);
+
 protected:
     RenderEngine *renderEngine_;
 
