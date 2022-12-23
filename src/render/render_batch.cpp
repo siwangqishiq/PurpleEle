@@ -110,11 +110,15 @@ void ShapeBatch::renderRect(Rect &rect ,Paint &paint){
     formatShape(ShapeType::ShapeRect , rect , paint);
 }
 
-void  ShapeBatch::renderOval(Rect &rect , Paint &paint){
+void ShapeBatch::renderOval(Rect &rect , Paint &paint){
     formatShape(ShapeType::ShapeOval , rect , paint);
 }
 
-void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint){
+void ShapeBatch::renderRoundRect(Rect &rect ,float radius , Paint &paint){
+    formatShape(ShapeType::ShapeRoundRect , rect , paint , radius);
+}
+
+void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint , float extra){
     if(!isDrawing_){
         Logi("ShapeBatch" , "batch is not call begin()");
         return;
@@ -126,34 +130,35 @@ void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint){
         begin();
     }
 
-    updateVertexData(type , rect , paint);
+    updateVertexData(type , rect , paint , extra);
 }
 
-void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint){
+void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint , float extra){
     //v1
-    putVertexAttribute(0 , type, rect.left , rect.getBottom() , rect, paint);
+    putVertexAttribute(0 , type, rect.left , rect.getBottom() , rect, paint , extra);
 
     //v2
-    putVertexAttribute(1 ,type, rect.getRight() , rect.getBottom(), rect , paint);
+    putVertexAttribute(1 ,type, rect.getRight() , rect.getBottom(), rect , paint ,extra);
 
     //v3
-    putVertexAttribute(2 ,type , rect.getRight() , rect.top, rect , paint);
+    putVertexAttribute(2 ,type , rect.getRight() , rect.top, rect , paint , extra);
 
     //v4
-    putVertexAttribute(3 ,type , rect.left , rect.getBottom(), rect , paint);
+    putVertexAttribute(3 ,type , rect.left , rect.getBottom(), rect , paint , extra);
 
     //v5
-    putVertexAttribute(4 ,type , rect.getRight() , rect.top, rect , paint);
+    putVertexAttribute(4 ,type , rect.getRight() , rect.top, rect , paint , extra);
 
     //v6
-    putVertexAttribute(5 ,type , rect.left , rect.top, rect , paint);
+    putVertexAttribute(5 ,type , rect.left , rect.top, rect , paint , extra);
 
     index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
     vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
 }
 
-void ShapeBatch::putVertexAttribute(int vertexIndex ,ShapeType type ,float x , float y 
-        ,Rect &rect ,Paint &paint){
+void ShapeBatch::putVertexAttribute(int vertexIndex 
+            ,ShapeType type ,float x , float y 
+            ,Rect &rect ,Paint &paint , float extra){
     const int offset = index_ + vertexIndex * attrCountPerVertex_;
     //position
     vertexBuffer_[offset + 0] = x;
@@ -170,7 +175,7 @@ void ShapeBatch::putVertexAttribute(int vertexIndex ,ShapeType type ,float x , f
     vertexBuffer_[offset + 7] = type;
     vertexBuffer_[offset + 8] = paint.fillStyle;
     vertexBuffer_[offset + 9] = paint.stokenWidth;
-    vertexBuffer_[offset + 10] = 1.0f;
+    vertexBuffer_[offset + 10] = extra; //if shape roundrect this is round rect radius
 
     //rect
     vertexBuffer_[offset + 11] = rect.left;

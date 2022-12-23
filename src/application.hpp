@@ -27,7 +27,7 @@ public:
     
     void onInit();
 
-    void onTrick();
+    void onTick();
 
     void onFree();
 
@@ -89,4 +89,6 @@ private:
     void testRender2();
     void testRender3();
     void testRender4();
+    void testRenderRoundRect();
+    void testRenderTableTennis();
 };

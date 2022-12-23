@@ -66,6 +66,9 @@ public:
     //绘制椭圆
     void renderOval(Rect &rect , Paint &paint);
 
+    //绘制圆角矩形
+    void renderRoundRect(Rect &rect ,float radius , Paint &paint);
+
 protected:
     RenderEngine *renderEngine_;
 
@@ -73,12 +76,12 @@ protected:
     std::vector<float> vertexBuffer_;
     std::shared_ptr<VRamManager> vramManager_;
 
-    void formatShape(ShapeType type , Rect &rect , Paint &paint);
+    void formatShape(ShapeType type , Rect &rect , Paint &paint , float extra = 0.0f);
 
-    void updateVertexData(ShapeType type , Rect &rect ,Paint &paint);
+    void updateVertexData(ShapeType type , Rect &rect ,Paint &paint , float extra = 0.0f);
 
     void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
-            ,Rect &rect ,Paint &paint);
+            ,Rect &rect ,Paint &paint , float extra);
 };
 
 

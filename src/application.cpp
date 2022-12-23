@@ -28,7 +28,7 @@ void Application::init(){
 
 
 void Application::update(){
-    onTrick();
+    onTick();
 }
 
 void Application::free(){
@@ -138,7 +138,7 @@ void Application::onCreate(){
     // }
 }
 
-void Application::onTrick(){
+void Application::onTick(){
     // Log(TAG , "app trick");
     // Logi(TAG , "getLastFrameDeltaTimeMirco = %lld" , getLastFrameDeltaTime());
     
@@ -176,7 +176,10 @@ void Application::updateSence(){
     // testRender1();
 //    testRender2();
 //    testRender3();
-    testRender4();
+    // testRender4();
+//    testRenderRoundRect();
+    testRenderTableTennis();
+
     if(showNumber){
         TextPaint p4;
         p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
@@ -184,6 +187,36 @@ void Application::updateSence(){
         renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 220.0f, 
             screenHeight_ - 80.0f, p4);
     }
+}
+
+void Application::testRenderTableTennis(){
+    
+}
+
+void Application::testRenderRoundRect(){
+    Paint paint;
+    paint.fillStyle = Filled;
+    paint.stokenWidth = 1.0f;
+    paint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
+
+    float width = 300.0f;
+    float height = 200.0f;
+    float left = screenWidth_ / 2.0f - width / 2.0f;
+    float top = screenHeight_ / 2.0f + height / 2.0f;
+    float radius = mRadius++;
+
+    if(mRadius >= height /2.0f){
+        mRadius = 1.0f;
+    }
+
+    renderEngine_->getShapeBatch()->begin();
+    Rect rect;
+    rect.left = left;
+    rect.top = top;
+    rect.width = width;
+    rect.height = height;
+    renderEngine_->getShapeBatch()->renderRoundRect(rect , radius , paint);
+    renderEngine_->getShapeBatch()->end();
 }
 
 void Application::testRender4(){
