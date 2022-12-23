@@ -25,6 +25,9 @@
 class WinApplication : public Application{
 };
 
+static bool MouseActionDown = false;
+static int mouseX = 0;
+static int mouseY = 0;
 
 int main(int argc , char *argv[]){
     glfwInit();
@@ -54,6 +57,23 @@ int main(int argc , char *argv[]){
         std::shared_ptr<WinApplication> app= 
             *(static_cast<std::shared_ptr<WinApplication> *>(app_));
         app->onResize(w , h);
+    });
+
+    glfwSetMouseButtonCallback(window , [](GLFWwindow* windows_,int button,int event,int mods){
+        // void* app_ = glfwGetWindowUserPointer(windows_);
+        // std::shared_ptr<WinApplication> app= 
+        //     *(static_cast<std::shared_ptr<WinApplication> *>(app_));
+        // std::cout << "event " << button << "  " << event << std::endl;
+    });
+
+    glfwSetCursorPosCallback(window , [](GLFWwindow* windows_,double x,double y){
+        mouseX = static_cast<int>(x);
+        mouseY = static_cast<int>(y);
+        std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
+    });
+
+    glfwSetKeyCallback(window , [](GLFWwindow* windows_,int key,int scancode,int action,int mods){
+        std::cout << "key " << key << "  scancode " << scancode << " action " << action << std::endl;
     });
 
     // glad: load all OpenGL function pointers
