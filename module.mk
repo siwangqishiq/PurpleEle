@@ -34,7 +34,7 @@ ${BUILD_DIR}/json.o: ${DIR}/libjson/json.cpp ${DIR}/libjson/json.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${DIR}/libjson/json.cpp -o ${BUILD_DIR}/json.o
 
 ${BUILD_DIR}/utils.o: ${SRC_DIR}/utils.cpp ${SRC_DIR}/utils.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/utils.cpp -o ${BUILD_DIR}/utils.o
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/utils.cpp -I ${INCLUDE_DIR} -o ${BUILD_DIR}/utils.o
 
 ${BUILD_DIR}/application.o: ${SRC_DIR}/application.hpp ${SRC_DIR}/application.cpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/application.cpp -o ${BUILD_DIR}/application.o -I ${INCLUDE_DIR} -I ${SRC_DIR}

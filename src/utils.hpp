@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include "glm/vec4.hpp"
 
 //rect
 //struct Rect{
@@ -18,6 +19,9 @@ std::vector<std::string> StingSplit(std::string str , std::string delimiter);
 
 //从文件路径中得到文件夹路径
 std::string FindDirectoryPath(std::string path);
+
+//颜色转换
+glm::vec4 ConvertColor(int red , int green , int blue , int alpha);
 
 
 inline long long CurrentTimeMillis(){

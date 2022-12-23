@@ -190,7 +190,64 @@ void Application::updateSence(){
 }
 
 void Application::testRenderTableTennis(){
-    
+    // Logi("test" , "viewWidth = %d , viewHeight = %d    screen %d , %d", viewWidth_ , viewHeight_ ,screenWidth_  ,screenHeight_);
+
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = ConvertColor(210,180,140,255);
+    Rect bottomRect;
+    bottomRect.height = 0.8f * viewHeight_;
+    bottomRect.width = 2 * bottomRect.height;
+    bottomRect.left = viewWidth_ / 2.0f - bottomRect.width / 2.0f;
+    bottomRect.top = viewHeight_ / 2.0f + bottomRect.height / 2.0f;
+    float roundRadius = bottomRect.height / 15.0f;
+
+    Paint groundPaint;
+    groundPaint.fillStyle = Filled;
+    groundPaint.color = ConvertColor(0,255,0,255);
+    Rect groundRect;
+    float paddingHor = 60.0f;
+    float paddingVtl = 45.0f;
+    groundRect.width = bottomRect.width - 2 * paddingHor;
+    groundRect.height = bottomRect.height - 2 * paddingVtl;
+    groundRect.left = viewWidth_ / 2.0f - groundRect.width / 2.0f;
+    groundRect.top = viewHeight_ / 2.0f + groundRect.height / 2.0f;
+
+    //hole
+    Paint holePaint;
+    holePaint.fillStyle = Filled;
+    holePaint.color = ConvertColor(0 , 0, 0, 255);
+
+    float holeRadius = 30.0f;
+    glm::vec2 holePosition[6];
+    holePosition[0].x = groundRect.left;
+    holePosition[0].y = groundRect.top;
+
+    holePosition[1].x = groundRect.left + groundRect.width / 2.0f;
+    holePosition[1].y = groundRect.top;
+
+    holePosition[2].x = groundRect.getRight();
+    holePosition[2].y = groundRect.top;
+
+    holePosition[3].x = groundRect.left;
+    holePosition[3].y = groundRect.getBottom();
+
+    holePosition[4].x = groundRect.left + groundRect.width / 2.0f;
+    holePosition[4].y = groundRect.getBottom();
+
+    holePosition[5].x = groundRect.getRight();
+    holePosition[5].y = groundRect.getBottom();
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRoundRect(bottomRect , roundRadius ,bottomPaint);
+    renderEngine_->getShapeBatch()->renderRect(groundRect , groundPaint);
+
+    for(int i = 0 ; i < 6 ;i++){
+        auto pos = holePosition[i];
+        renderEngine_->getShapeBatch()->renderCircle(pos.x , pos.y , holeRadius , holePaint);
+    }//end for i
+
+    renderEngine_->getShapeBatch()->end();
 }
 
 void Application::testRenderRoundRect(){

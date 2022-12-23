@@ -1,3 +1,4 @@
+#include "glm/vec4.hpp"
 #include "utils.hpp"
 
 std::string& StringTrim(std::string &s, std::string suffix){
@@ -38,4 +39,8 @@ std::string FindDirectoryPath(std::string path){
         directory = path.substr(0, lastSlashIdx);
     }
     return directory;
+}
+
+glm::vec4 ConvertColor(int red , int green , int blue , int alpha){
+    return glm::vec4(red / 255.0f , green / 255.0f , blue / 255.0f , alpha / 255.0f);
 }
