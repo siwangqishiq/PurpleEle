@@ -31,6 +31,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/resource/asset_manager.cpp
         ${SRC_DIR}/render/texture.cpp
         ${SRC_DIR}/widget/timer.cpp
+        ${SRC_DIR}/game/test_demo.cpp
         )
 
 set(opengl_lib GLESv3)

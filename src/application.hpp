@@ -10,6 +10,7 @@
 
 class RenderEngine;
 class Timer;
+class TestDemo;
 
 /**
  * @brief  应用入口
@@ -52,43 +53,24 @@ public:
     
     std::shared_ptr<Timer> getTimer();
 
-    int fixedRateTaskId = -1;
-
     int frameCount_ = 0;
 
     //获取上一帧经过的时间
     long long getLastFrameDeltaTime();
     long long timeStamp_ = -1L;
-private:
-    std::shared_ptr<RenderEngine> renderEngine_ = nullptr;
+protected:
+    long startTime_;
 
+    //渲染器
+    std::shared_ptr<RenderEngine> renderEngine_ = nullptr;
+    //定时器  调度定时任务 或 延时任务
+    std::shared_ptr<Timer> timer_ = nullptr;
+private:
     //for -----------test---------------------
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
 
-    //定时器  调度定时任务 或 延时任务
-    std::shared_ptr<Timer> timer_ = nullptr;
-    
-    float x_ = 0.0f;
-    float y_ = 0.0f;
+    std::shared_ptr<TestDemo> testDemo_ = nullptr;
 
-    int textIndex = 0;
-
-    float mScale = 1.0f;
-    int mIndex = 1;
-    bool showNumber = false; 
+    bool showNumber = false;
     int showFps = 0;
-
-    std::wstring showTextContent;
-    long startTime = 0;
-
-    Shader testShader;
-    Shader testShader2;
-    float mRadius = 1.0f;
-
-    void testRender1();
-    void testRender2();
-    void testRender3();
-    void testRender4();
-    void testRenderRoundRect();
-    void testRenderTableTennis();
 };

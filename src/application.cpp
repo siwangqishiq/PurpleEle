@@ -10,9 +10,14 @@
 #include "widget/timer.hpp"
 #include "render/render_batch.hpp"
 #include "utils.hpp"
+#include "game/test_demo.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
+    if(testDemo_ != nullptr){
+        testDemo_->dispose();
+    }
+
     if(timer_ != nullptr){
         timer_->clear();
     }
@@ -43,9 +48,16 @@ void Application::onResize(int w , int h){
     Logi(TAG , "app onresize %d , %d" , w , h);
     screenWidth_ = w;
     screenHeight_ = h;
+
+    viewWidth_ = w;
+    viewHeight_ = h;
     
     if(renderEngine_ != nullptr){
         renderEngine_->onScreenResize();
+    }
+
+    if(testDemo_ != nullptr){
+        testDemo_->init();
     }
 }
 
@@ -70,22 +82,6 @@ void Application::onInit(){
     triangleDemo_ = std::make_shared<Triangle>();
     triangleDemo_->init();
 
-    // getTimer()->schedule([this](Application *app){
-    //     Logi("timer" , "hello timer1111!");
-    // } , 20 * 1000L);
-
-
-    // fixedRateTaskId = getTimer()->scheduleAtFixedRate([this](Application *app){
-    //     Logi("timer" , "fixed %lld" , currentTimeMillis());
-    //     app->mIndex++;
-    //     int rmId = app->fixedRateTaskId;
-    //     if(app->mIndex >= 10){
-    //         app->getTimer()->removeScheduleTask(rmId);
-    //     }
-    // } , 1000L);
-
-
-
     showNumber = true;
 
     // TextPaint paint;
@@ -104,7 +100,6 @@ void Application::onInit(){
     // auto info2 = TextureManager::getInstance()->acquireTexture("text/font_texture_1.png");
 
     timeStamp_ = currentTimeMicro();
-
     onCreate();
 }
 
@@ -115,27 +110,10 @@ void Application::onCreate(){
         frameCount_ = 0;
     } , 1000L);
 
-     showTextContent = AssetManager::getInstance()->readTextFile("honglou.txt");
-//    showTextContent = AssetManager::getInstance()->readTextFile("shader/render_text_frag.glsl");
-    Logi("application" , "text file size : %d" , showTextContent.length());
+    testDemo_ = std::make_shared<TestDemo>(this);
+    startTime_ = static_cast<long>(currentTimeMillis());
 
-    testShader = ShaderManager::getInstance()->loadAssetShader("test_shader1"
-            , "shader/shader_vert.glsl" 
-            , "shader/shader_frag.glsl");
-
-    testShader2 = ShaderManager::getInstance()->loadAssetShader("test_shader2"
-            , "shader/shader_vert.glsl" 
-            , "shader/shader2_frag.glsl");
-
-    startTime = static_cast<long>(currentTimeMillis());
-
-
-    // for(int i= 0 ; i < 20 ; i++){
-    //     Logi("random" , "%d" , GenRandomInt(0,10));
-    // }
-    // for(int i= 0 ; i < 20 ; i++){
-    //     Logi("random" , "%f" , GenRandomFloat());
-    // }
+    testDemo_->init();
 }
 
 void Application::onTick(){
@@ -178,7 +156,8 @@ void Application::updateSence(){
 //    testRender3();
     // testRender4();
 //    testRenderRoundRect();
-    testRenderTableTennis();
+    // testRenderTableTennis();
+    testDemo_->tick();
 
     if(showNumber){
         TextPaint p4;
@@ -189,231 +168,6 @@ void Application::updateSence(){
     }
 }
 
-void Application::testRenderTableTennis(){
-    // Logi("test" , "viewWidth = %d , viewHeight = %d    screen %d , %d", viewWidth_ , viewHeight_ ,screenWidth_  ,screenHeight_);
-
-    Paint bottomPaint;
-    bottomPaint.fillStyle = Filled;
-    bottomPaint.color = ConvertColor(210,180,140,255);
-    Rect bottomRect;
-    bottomRect.height = 0.8f * viewHeight_;
-    bottomRect.width = 2 * bottomRect.height;
-    bottomRect.left = viewWidth_ / 2.0f - bottomRect.width / 2.0f;
-    bottomRect.top = viewHeight_ / 2.0f + bottomRect.height / 2.0f;
-    float roundRadius = bottomRect.height / 15.0f;
-
-    Paint groundPaint;
-    groundPaint.fillStyle = Filled;
-    groundPaint.color = ConvertColor(0,255,0,255);
-    Rect groundRect;
-    float paddingHor = 60.0f;
-    float paddingVtl = 45.0f;
-    groundRect.width = bottomRect.width - 2 * paddingHor;
-    groundRect.height = bottomRect.height - 2 * paddingVtl;
-    groundRect.left = viewWidth_ / 2.0f - groundRect.width / 2.0f;
-    groundRect.top = viewHeight_ / 2.0f + groundRect.height / 2.0f;
-
-    //hole
-    Paint holePaint;
-    holePaint.fillStyle = Filled;
-    holePaint.color = ConvertColor(0 , 0, 0, 255);
-
-    float holeRadius = 30.0f;
-    glm::vec2 holePosition[6];
-    holePosition[0].x = groundRect.left;
-    holePosition[0].y = groundRect.top;
-
-    holePosition[1].x = groundRect.left + groundRect.width / 2.0f;
-    holePosition[1].y = groundRect.top;
-
-    holePosition[2].x = groundRect.getRight();
-    holePosition[2].y = groundRect.top;
-
-    holePosition[3].x = groundRect.left;
-    holePosition[3].y = groundRect.getBottom();
-
-    holePosition[4].x = groundRect.left + groundRect.width / 2.0f;
-    holePosition[4].y = groundRect.getBottom();
-
-    holePosition[5].x = groundRect.getRight();
-    holePosition[5].y = groundRect.getBottom();
-
-    renderEngine_->getShapeBatch()->begin();
-    renderEngine_->getShapeBatch()->renderRoundRect(bottomRect , roundRadius ,bottomPaint);
-    renderEngine_->getShapeBatch()->renderRect(groundRect , groundPaint);
-
-    for(int i = 0 ; i < 6 ;i++){
-        auto pos = holePosition[i];
-        renderEngine_->getShapeBatch()->renderCircle(pos.x , pos.y , holeRadius , holePaint);
-    }//end for i
-
-    renderEngine_->getShapeBatch()->end();
-}
-
-void Application::testRenderRoundRect(){
-    Paint paint;
-    paint.fillStyle = Filled;
-    paint.stokenWidth = 1.0f;
-    paint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-
-    float width = 300.0f;
-    float height = 200.0f;
-    float left = screenWidth_ / 2.0f - width / 2.0f;
-    float top = screenHeight_ / 2.0f + height / 2.0f;
-    float radius = mRadius++;
-
-    if(mRadius >= height /2.0f){
-        mRadius = 1.0f;
-    }
-
-    renderEngine_->getShapeBatch()->begin();
-    Rect rect;
-    rect.left = left;
-    rect.top = top;
-    rect.width = width;
-    rect.height = height;
-    renderEngine_->getShapeBatch()->renderRoundRect(rect , radius , paint);
-    renderEngine_->getShapeBatch()->end();
-}
-
-void Application::testRender4(){
-    bool isFilled = false;
-    Paint circelPaint;
-    circelPaint.fillStyle = Filled;
-    circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-    renderEngine_->getShapeBatch()->begin();
-
-    float width = 50.0f;
-    float height = 40.0f;
-    float x = 0.0f;
-    float y = 0.0f;
-    float padding = 4.0f;
-    int rectCount = 0;
-
-    long long t1 = currentTimeMicro();
-    for(; y <= screenHeight_+ height; y += height + padding){
-        for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
-            Rect rect;
-            rect.left = x;
-            rect.top = y;
-            rect.width = width;
-            rect.height = height;
-            rectCount++;
-            renderEngine_->getShapeBatch()->renderOval(rect , circelPaint);
-        }//end for x
-    }//end for y
-    renderEngine_->getShapeBatch()->end();
-    long long t2 = currentTimeMicro();
-    // Logi("test_render" , "delta %lld count : %d" , (t2 - t1) , rectCount);
-}
-
-void Application::testRender3(){
-    Paint circelPaint;
-    circelPaint.fillStyle = Stroken;
-    circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-
-    mRadius++;
-
-    float cx = screenWidth_ / 2.0f;
-    float cy = screenHeight_ / 2.0f;
-    renderEngine_->getShapeBatch()->begin();
-
-    float width = 32.0f;
-    float height = 32.0f;
-    float x = 0.0f;
-    float y = height;
-    float padding = 2.0f;
-    int rectCount = 0;
-    long long t1 = currentTimeMicro();
-    for(; y <= screenHeight_ ; y += height + padding){
-        for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
-            Rect rect;
-            rect.left = x;
-            rect.top = y;
-            rect.width = width;
-            rect.height = height;
-            rectCount++;
-            Paint paint;
-            paint.fillStyle = Stroken;
-            paint.stokenWidth = 1.0f;
-            paint.color = glm::vec4(0.0f , 1.0f , 1.0f , 1.0f);
-            renderEngine_->getShapeBatch()->renderRect(rect , paint);
-        }//end for x
-    }//end for y
-
-    renderEngine_->getShapeBatch()->renderCircle(cx , cy , mRadius , circelPaint);
-    renderEngine_->getShapeBatch()->end();
-    long long t2 = currentTimeMicro();
-
-    if(mRadius > screenHeight_ / 2.0f){
-        mRadius = 0.0f;
-    }
-}
-
-void Application::testRender2(){
-    Paint circelPaint;
-    circelPaint.fillStyle = Filled;
-    circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-
-    float radius = 16.0f;
-    float cx = radius;
-    float cy = screenHeight_ - radius;
-    float padding = 4.0f;
-
-    bool isFilled = false;
-    renderEngine_->getShapeBatch()->begin();
-    for(;cy >= 0; cy -= 2*radius + padding){
-        cx = radius;
-        for(;cx <= screenWidth_ ; cx += 2*radius + padding){
-            circelPaint.fillStyle = GenRandomFloat()>0.5f?Filled:Stroken;
-            // renderEngine_->renderCircle(cx , cy , radius , circelPaint);
-            circelPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , GenRandomFloat() , 1.0f);
-            renderEngine_->getShapeBatch()->renderCircle(cx , cy , radius , circelPaint);
-            isFilled = !isFilled;
-        }
-    }//end for y
-    renderEngine_->getShapeBatch()->end();
-}
-
-void Application::testRender1(){
-    bool isFilled = false;
-    Paint circelPaint;
-    circelPaint.fillStyle = Stroken;
-    circelPaint.stokenWidth = 1.0f;
-    circelPaint.color = glm::vec4(0.0f , 1.0f , 0.0f , 1.0f);
-    renderEngine_->getShapeBatch()->begin();
-
-    float width = 32.0f;
-    float height = 32.0f;
-    float x = 0.0f;
-    float y = height;
-    float padding = 2.0f;
-    int rectCount = 0;
-
-    long long t1 = currentTimeMicro();
-    for(; y <= screenHeight_ ; y += height + padding){
-        for(x = 0.0f;x <= screenWidth_ ; x += width + padding){
-            Rect rect;
-            rect.left = x;
-            rect.top = y;
-            rect.width = width;
-            rect.height = height;
-            rectCount++;
-               
-//             circelPaint.fillStyle = GenRandomFloat() >0.5f?Filled:Stroken;
-//            circelPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , GenRandomFloat() , 1.0f);
-            renderEngine_->getShapeBatch()->renderRect(rect , circelPaint);
-
-            isFilled = !isFilled;
-        }//end for x
-    }//end for y
-    renderEngine_->getShapeBatch()->end();
-    long long t2 = currentTimeMicro();
-    // Logi("test_render" , "delta %lld count : %d" , (t2 - t1) , rectCount);
-}
 
 long long Application::getLastFrameDeltaTime(){
     // if(timeStamp_ <= 0 ){

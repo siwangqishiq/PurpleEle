@@ -53,7 +53,7 @@ void RenderEngine::init(){
 
     loadTextRenderResource();//text render init
     // Logi(TAG , "render engine init end");
-
+    
     loadShapeShader();
     
     shapeBatch_ = std::make_shared<ShapeBatch>(this);//std::shared_ptr<RenderEngine>(this)

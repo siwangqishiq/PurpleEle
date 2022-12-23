@@ -50,7 +50,7 @@ float stokeRect(vec2 pos){
 }
 
 float renderRect(vec2 pos){
-    if(abs(vShape.y - mode_stoken) <= eps){
+    if(floatEqual(vShape.y , mode_stoken)){
         return stokeRect(pos);
     }
     return 1.0f;
@@ -66,7 +66,7 @@ float stokenCircle(vec2 pos , vec2 center , float radius){
 float renderCircle(vec2 pos){
     float radius = vRect.w / 2.0f;
     vec2 center = vec2(vRect.x + radius , vRect.y - radius);
-    if(abs(vShape.y - mode_stoken) <= eps){
+    if(floatEqual(vShape.y , mode_stoken)){
         return stokenCircle(pos , center , radius);
     }
     return 1.0f - step(radius , distance(pos , center));
