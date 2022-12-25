@@ -3,12 +3,15 @@
 #include "render/common.hpp"
 #include "render/render.hpp"
 #include "render/render_batch.hpp"
+#include "audio/audio.hpp"
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
     viewHeight_ = appContext->viewHeight_;
 
     renderEngine_ = appContext->getRender();
+
+    testAudio();
 }
 
 void TestDemo::tick(){
@@ -249,4 +252,14 @@ void TestDemo::testRender1(){
     renderEngine_->getShapeBatch()->end();
     long long t2 = currentTimeMicro();
     // Logi("test_render" , "delta %lld count : %d" , (t2 - t1) , rectCount);
+}
+
+void TestDemo::testAudio(){
+    AudioManager::getInstance()->loadMusic("musicA" , "music_name");
+    AudioManager::getInstance()->loadSound("soundA" , "soundA_name");
+
+    AudioManager::getInstance()->playSound("soundA");
+    AudioManager::getInstance()->playMusic("musicA");
+    
+    AudioManager::getInstance()->dispose();
 }

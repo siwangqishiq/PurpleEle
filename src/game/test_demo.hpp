@@ -25,6 +25,9 @@ private:
     std::shared_ptr<RenderEngine> renderEngine_;
 
     float mRadius = 1.0f;
+
+    
+    void testAudio();
     
     void testRender1();
     void testRender2();

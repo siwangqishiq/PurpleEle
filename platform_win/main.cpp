@@ -69,11 +69,11 @@ int main(int argc , char *argv[]){
     glfwSetCursorPosCallback(window , [](GLFWwindow* windows_,double x,double y){
         mouseX = static_cast<int>(x);
         mouseY = static_cast<int>(y);
-        std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
+        // std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
     });
 
     glfwSetKeyCallback(window , [](GLFWwindow* windows_,int key,int scancode,int action,int mods){
-        std::cout << "key " << key << "  scancode " << scancode << " action " << action << std::endl;
+        // std::cout << "key " << key << "  scancode " << scancode << " action " << action << std::endl;
     });
 
     // glad: load all OpenGL function pointers
