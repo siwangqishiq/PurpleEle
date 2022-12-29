@@ -75,5 +75,9 @@ ${BUILD_DIR}/texture.o:${SRC_DIR}/render/texture.cpp ${SRC_DIR}/render/texture.h
 ${BUILD_DIR}/asset_manager.o:${SRC_DIR}/resource/asset_manager.cpp ${SRC_DIR}/resource/asset_manager.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/resource/asset_manager.cpp -o ${BUILD_DIR}/asset_manager.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
+${BUILD_DIR}/audio_manager.o:${SRC_DIR}/audio/audio.cpp \
+						${SRC_DIR}/audio/audio.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_manager.o 
+
 ${BUILD_DIR}/test_demo.o:${SRC_DIR}/game/test_demo.cpp ${SRC_DIR}/game/test_demo.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/test_demo.cpp -o ${BUILD_DIR}/test_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}

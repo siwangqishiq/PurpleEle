@@ -15,12 +15,12 @@ void TestDemo::init(){
 }
 
 void TestDemo::tick(){
-    // testRender1();
+    testRender1();
     // testRender2();
     // testRender3();
     // testRender4();
 //    testRenderRoundRect();
-     testRenderTableTennis();
+    //  testRenderTableTennis();
 }
 
 void TestDemo::dispose(){
