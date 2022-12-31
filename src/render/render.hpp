@@ -28,6 +28,7 @@ class ShaderRenderCommand;
 class ShapeRenderCommand;
 
 class ShapeBatch;
+class SpriteBatch;
 
 class RenderEngine{
 public:
@@ -84,6 +85,8 @@ public:
     void renderRoundRect(Rect &rectangle ,float radius , Paint &paint);
 
     std::shared_ptr<ShapeBatch> getShapeBatch();
+
+    std::shared_ptr<SpriteBatch> getSpriteBatch();
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 
@@ -104,6 +107,8 @@ private:
 
     //batch render
     std::shared_ptr<ShapeBatch> shapeBatch_;
+
+    std::shared_ptr<SpriteBatch> spriteBatch_;
 };
 
 //字符信息

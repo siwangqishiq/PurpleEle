@@ -5,6 +5,10 @@
 #include <vector>
 #include "shader.hpp"
 
+
+class RenderEngine;
+class VRamManager;
+
 // 批处理操作
 // 
 class Batch{
@@ -14,6 +18,8 @@ public:
     virtual void end() = 0;
 
     virtual void dispose() = 0;
+
+    virtual void allocatorMemory();
 
     // ~Batch();
 protected:
@@ -28,10 +34,12 @@ protected:
     int vertexCount_ = 0;
 
     Shader shader_;
-};
 
-class RenderEngine;
-class VRamManager;
+    RenderEngine *renderEngine_;
+    int index_ = 0;
+    std::vector<float> vertexBuffer_;
+    std::shared_ptr<VRamManager> vramManager_;
+};
 
 class ShapeBatch : public Batch{
 public:
@@ -70,11 +78,6 @@ public:
     void renderRoundRect(Rect &rect ,float radius , Paint &paint);
 
 protected:
-    RenderEngine *renderEngine_;
-
-    int index_ = 0;
-    std::vector<float> vertexBuffer_;
-    std::shared_ptr<VRamManager> vramManager_;
 
     void formatShape(ShapeType type , Rect &rect , Paint &paint , float extra = 0.0f);
 
@@ -82,6 +85,33 @@ protected:
 
     void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
             ,Rect &rect ,Paint &paint , float extra);
+};
+
+class Image;
+
+class SpriteBatch : public Batch{
+public:
+    SpriteBatch(RenderEngine *renderEngine);
+
+    virtual void begin();
+
+    virtual void end();
+
+    virtual void dispose();
+
+    void init();
+
+    void flush();
+
+    void executeGlCommands();
+
+    void renderImage(Image &image , Rect &srcRect , Rect &dstRect);
+
+    ~SpriteBatch(){
+        Logi("SpriteBatch" , "~SpriteBatch descon");
+    }
+private:
+    int status;
 };
 
 

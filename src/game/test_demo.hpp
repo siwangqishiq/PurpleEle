@@ -3,6 +3,7 @@
 #include "application.hpp"
 
 class RenderEngine;
+class Image;
 
 class TestDemo{
 public:
@@ -26,7 +27,8 @@ private:
 
     float mRadius = 1.0f;
 
-    
+    std::shared_ptr<Image> testImage;
+
     void testAudio();
     
     void testRender1();
@@ -35,4 +37,6 @@ private:
     void testRender4();
     void testRenderRoundRect();
     void testRenderTableTennis();
+
+    void testRenderSprite1();
 };

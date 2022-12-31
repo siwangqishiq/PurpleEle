@@ -4,6 +4,7 @@
 #include "render/render.hpp"
 #include "render/render_batch.hpp"
 #include "audio/audio.hpp"
+#include "render/sprite.hpp"
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -12,19 +13,44 @@ void TestDemo::init(){
     renderEngine_ = appContext->getRender();
 
     testAudio();
+    testImage = BuildImageByAsset("lan.jpg");
+
+    Logi("testDemo" , "testImage w : %d , h : %d" , 
+        testImage->getWidth(),testImage->getHeight());
 }
 
 void TestDemo::tick(){
-    testRender1();
+    // testRender1();
     // testRender2();
     // testRender3();
     // testRender4();
-//    testRenderRoundRect();
-    //  testRenderTableTennis();
+    // testRenderRoundRect();
+    // testRenderTableTennis();
+    testRenderSprite1();
 }
 
 void TestDemo::dispose(){
 
+}
+
+void TestDemo::testRenderSprite1(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+    
+    Rect srcRect;
+    srcRect.left = 0.0f;
+    srcRect.top = testImage->getHeight();
+    srcRect.height = testImage->getHeight();
+    srcRect.width = testImage->getWidth();
+
+    Rect dstRect;
+    dstRect.left = 0.0f;
+    dstRect.top = testImage->getHeight();
+    dstRect.width = testImage->getWidth();
+    dstRect.height = testImage->getHeight();
+
+    spriteBatch->renderImage(*testImage , srcRect , dstRect);
+    spriteBatch->end();
 }
 
 

@@ -16,7 +16,7 @@
 #include <GLFW/glfw3.h>
 #endif
 
-#include "Application.hpp"
+#include "application.hpp"
 
 class MacApplication : public Application{
 };

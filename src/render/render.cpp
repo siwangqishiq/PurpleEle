@@ -58,6 +58,9 @@ void RenderEngine::init(){
     
     shapeBatch_ = std::make_shared<ShapeBatch>(this);//std::shared_ptr<RenderEngine>(this)
     shapeBatch_->init();
+
+    spriteBatch_ = std::make_shared<SpriteBatch>(this);
+    spriteBatch_->init();
 }
 
 void RenderEngine::loadTextRenderResource(){
@@ -287,4 +290,9 @@ void RenderEngine::renderOval(Rect &rectangle ,Paint &paint){
 //绘制圆角矩形
 void RenderEngine::renderRoundRect(Rect &rectangle ,float radius , Paint &paint){
     
+}
+
+//精灵类批量渲染
+std::shared_ptr<SpriteBatch> RenderEngine::getSpriteBatch(){
+    return spriteBatch_;
 }

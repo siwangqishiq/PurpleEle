@@ -29,6 +29,7 @@ compile: build_dir \
 		${BUILD_DIR}/asset_manager.o \
 		${BUILD_DIR}/texture.o \
 		${BUILD_DIR}/timer.o \
+		${BUILD_DIR}/sprite.o \
 		${BUILD_DIR}/test_demo.o \
 		${BUILD_DIR}/audio_manager.o \
 		${BUILD_DIR}/audio_impl.o
@@ -71,6 +72,9 @@ ${BUILD_DIR}/render_batch.o:${SRC_DIR}/render/render_batch.cpp \
 
 ${BUILD_DIR}/texture.o:${SRC_DIR}/render/texture.cpp ${SRC_DIR}/render/texture.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/texture.cpp -o ${BUILD_DIR}/texture.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
+
+${BUILD_DIR}/sprite.o:${SRC_DIR}/render/sprite.cpp ${SRC_DIR}/render/sprite.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/sprite.cpp -o ${BUILD_DIR}/sprite.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
 ${BUILD_DIR}/asset_manager.o:${SRC_DIR}/resource/asset_manager.cpp ${SRC_DIR}/resource/asset_manager.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/resource/asset_manager.cpp -o ${BUILD_DIR}/asset_manager.o -I ${INCLUDE_DIR} -I ${SRC_DIR}

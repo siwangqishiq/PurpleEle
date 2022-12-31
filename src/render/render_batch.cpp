@@ -1,6 +1,7 @@
 #include "render_batch.hpp"
 #include "log.hpp"
 #include "render.hpp"
+#include "sprite.hpp"
 
 // int Batch::vertexSize(){
 //     return DEFAULT_VERTEX_SIZE;
@@ -9,6 +10,17 @@
 // Batch::~Batch(){
 //     Logi("Batch" , "~batch deconstructor");
 // }
+
+void Batch::allocatorMemory(){
+    int requestSize = vertexMaxCount_ * attrCountPerVertex_ * sizeof(float);
+    vramManager_ = std::make_shared<VRamManager>();
+
+    vertexBuffer_ = std::vector<float>(vertexMaxCount_ * attrCountPerVertex_);
+
+    int requestSizeResult = 0;
+    vramManager_->fetchVideoMemory(requestSize , vbo_ ,vao_, vboOffset_ , requestSizeResult);
+    Logi("ShapeBatch" , "fetch video memoroy size : %d" , requestSizeResult);
+}
 
 ShapeBatch::ShapeBatch(RenderEngine *renderEngine){
     renderEngine_ = renderEngine;
@@ -19,14 +31,7 @@ ShapeBatch::ShapeBatch(RenderEngine *renderEngine){
 }
 
 void ShapeBatch::init(){
-    int requestSize = vertexMaxCount_ * attrCountPerVertex_ * sizeof(float);
-    vramManager_ = std::make_shared<VRamManager>();
-
-    vertexBuffer_ = std::vector<float>(vertexMaxCount_ * attrCountPerVertex_);
-
-    int requestSizeResult = 0;
-    vramManager_->fetchVideoMemory(requestSize , vbo_ ,vao_, vboOffset_ , requestSizeResult);
-    Logi("ShapeBatch" , "fetch video memoroy size : %d" , requestSizeResult);
+    allocatorMemory();
 
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
@@ -182,4 +187,43 @@ void ShapeBatch::putVertexAttribute(int vertexIndex
     vertexBuffer_[offset + 12] = rect.top;
     vertexBuffer_[offset + 13] = rect.width;
     vertexBuffer_[offset + 14] = rect.height;
+}
+
+SpriteBatch::SpriteBatch(RenderEngine *engine){
+    renderEngine_ = engine;
+
+    isDrawing_ = false;
+
+    vertexMaxCount_ = 2 * 1024; //2K
+    attrCountPerVertex_ = 3 + 2;//pos + uv
+}
+
+void SpriteBatch::init(){
+    allocatorMemory();
+    
+}
+
+void SpriteBatch::begin(){
+    isDrawing_ = true;
+    index_ = 0;
+}
+
+void SpriteBatch::end(){
+    
+}
+
+void SpriteBatch::dispose(){
+
+}
+
+void SpriteBatch::flush(){
+
+}
+
+void SpriteBatch::executeGlCommands(){
+
+}
+
+void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect){
+    //
 }
