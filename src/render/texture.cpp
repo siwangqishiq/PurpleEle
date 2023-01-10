@@ -23,11 +23,11 @@ void TextureManager::clear(){
 }
 
 //将纹理传送至GPU
-std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFilePath){
+std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFilePath , bool needFlip){
     Logi(TAG , "load texture %s" , textureFilePath.c_str());
     
     TextureFileConfig fileConfig;
-    std::unique_ptr<uint8_t> data = AssetManager::getInstance()->readTextureFile(textureFilePath ,fileConfig);
+    std::unique_ptr<uint8_t> data = AssetManager::getInstance()->readTextureFile(textureFilePath ,fileConfig , needFlip);
 
     int format = TEXTURE_FILE_CHANNEL_UNKNOW;
     if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGB){
@@ -78,11 +78,11 @@ std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFile
     return textureInfo;
 }
 
-std::shared_ptr<TextureInfo> TextureManager::acquireTexture(std::string textureFilePath){
+std::shared_ptr<TextureInfo> TextureManager::acquireTexture(std::string textureFilePath , bool needFlip){
     if(textureBank_.find(textureFilePath) != textureBank_.end()){
         return textureBank_[textureFilePath];
     }
-    return loadTexture(textureFilePath);
+    return loadTexture(textureFilePath , needFlip);
 }
 
 std::string TextureManager::allTextureInfos(){

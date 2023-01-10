@@ -26,11 +26,14 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/render/triangle.cpp
         ${SRC_DIR}/render/render.cpp
         ${SRC_DIR}/render/render_batch.cpp
+        ${SRC_DIR}/render/sprite.cpp
         ${SRC_DIR}/render/command.cpp
         ${SRC_DIR}/render/vram.cpp
         ${SRC_DIR}/resource/asset_manager.cpp
         ${SRC_DIR}/render/texture.cpp
         ${SRC_DIR}/widget/timer.cpp
+        ${SRC_DIR}/audio/audio.cpp
+        ${SRC_DIR}/audio/audio_android.cpp
         ${SRC_DIR}/game/test_demo.cpp
         )
 

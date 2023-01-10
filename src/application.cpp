@@ -151,17 +151,13 @@ void Application::onTick(){
 }
 
 void Application::updateSence(){
-    // testRender1();
-//    testRender2();
-//    testRender3();
-    // testRender4();
-//    testRenderRoundRect();
-    // testRenderTableTennis();
     testDemo_->tick();
 
     if(showNumber){
         TextPaint p4;
-        p4.textColor = glm::vec4(1.0f ,0.0f , 0.0f , 1.0f);
+        p4.textColor = showFps >=60
+            ? glm::vec4(0.0f ,1.0f , 0.0f , 1.0f)
+            : glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
         std::wstring name = L"帧率:";
         renderEngine_->renderText(name + std::to_wstring(showFps) , screenWidth_ - 220.0f, 
             screenHeight_ - 80.0f, p4);

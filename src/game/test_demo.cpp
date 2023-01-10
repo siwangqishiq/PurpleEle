@@ -14,6 +14,7 @@ void TestDemo::init(){
 
     testAudio();
     testImage = BuildImageByAsset("lan.jpg");
+    // testImage = BuildImageByAsset("test.jpeg");
 
     Logi("testDemo" , "testImage w : %d , h : %d" , 
         testImage->getWidth(),testImage->getHeight());
@@ -25,7 +26,7 @@ void TestDemo::tick(){
     // testRender3();
     // testRender4();
     // testRenderRoundRect();
-    // testRenderTableTennis();
+    testRenderTableTennis();
     testRenderSprite1();
 }
 
@@ -45,9 +46,10 @@ void TestDemo::testRenderSprite1(){
 
     Rect dstRect;
     dstRect.left = 0.0f;
-    dstRect.top = testImage->getHeight();
-    dstRect.width = testImage->getWidth();
-    dstRect.height = testImage->getHeight();
+    dstRect.top = viewHeight_;
+    float scale = 1.0f / 2.0f;
+    dstRect.width = testImage->getWidth() * scale;
+    dstRect.height = testImage->getHeight() * scale;
 
     spriteBatch->renderImage(*testImage , srcRect , dstRect);
     spriteBatch->end();

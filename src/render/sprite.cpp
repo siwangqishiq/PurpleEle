@@ -2,7 +2,7 @@
 #include "texture.hpp"
 
 std::shared_ptr<TextureImage> BuildImageByAsset(std::string path){
-    std::shared_ptr<TextureInfo> info = TextureManager::getInstance()->acquireTexture(path);
+    std::shared_ptr<TextureInfo> info = TextureManager::getInstance()->acquireTexture(path , true);
     return std::make_shared<TextureImage>(info);
 }
 
@@ -19,5 +19,5 @@ int TextureImage::getHeight(){
 }
 
 unsigned int TextureImage::getTextureId(){
-    return textureInfo_ != nullptr? textureInfo_->width : 0;
+    return textureInfo_ != nullptr? textureInfo_->textureId : 0;
 }

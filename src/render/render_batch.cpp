@@ -194,13 +194,26 @@ SpriteBatch::SpriteBatch(RenderEngine *engine){
 
     isDrawing_ = false;
 
-    vertexMaxCount_ = 2 * 1024; //2K
+    vertexMaxCount_ = 4 * 1024; //4K
     attrCountPerVertex_ = 3 + 2;//pos + uv
 }
 
 void SpriteBatch::init(){
     allocatorMemory();
     
+    glBindVertexArray(vao_);
+    glBindBuffer(GL_ARRAY_BUFFER , vbo_);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 
+        attrCountPerVertex_ * sizeof(float) ,reinterpret_cast<void *>(vboOffset_ + 0));
+    glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , 
+        attrCountPerVertex_ * sizeof(float) ,reinterpret_cast<void *>(vboOffset_ + 3* sizeof(float)));
+
+    glBindVertexArray(0);
+
+    shader_ = ShaderManager::getInstance()->loadAssetShader("sprite_batch_render",
+                    "shader/sprite_batch_vertex.glsl", "shader/sprite_batch_frag.glsl");
 }
 
 void SpriteBatch::begin(){
@@ -209,21 +222,117 @@ void SpriteBatch::begin(){
 }
 
 void SpriteBatch::end(){
-    
+    flush();
+
+    isDrawing_ = false;
+    index_ = 0;
+    vertexCount_ = 0;
 }
 
 void SpriteBatch::dispose(){
-
+    Logi("SpriteBatch" , "dispose");
+    if(vramManager_ != nullptr){
+        vramManager_->clear();
+    }
 }
 
 void SpriteBatch::flush(){
-
+    executeGlCommands();
 }
 
 void SpriteBatch::executeGlCommands(){
+    if(index_ <= 0){
+        return;
+    }
 
+    glBindBuffer(GL_ARRAY_BUFFER , vbo_);
+    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
+                    index_ * sizeof(float) , vertexBuffer_.data());
+    glBindBuffer(GL_ARRAY_BUFFER , 0);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+
+    shader_.useShader();
+    shader_.setUniformMat3("transMat" , renderEngine_->normalMatrix_);
+
+    glBindVertexArray(vao_);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D , currentTextureId_);
+    glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
+    shader_.setUniformInt("uTex",0);
+    
+    glBindTexture(GL_TEXTURE_2D , 0);
+    glBindVertexArray(0);
 }
 
 void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect){
-    //
+    if(!isDrawing_){
+        Logi("SpriteBatch" , "batch is not call begin()");
+        return;
+    }
+
+    if(image.getTextureId() != currentTextureId_){
+        end();
+        currentTextureId_ = image.getTextureId();
+        begin();
+    }
+
+    int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
+    if(index_ + addedSize >= vertexBuffer_.size()){
+        end();
+        begin();
+    }
+
+    updateVertexData(image , srcRect , dstRect);
+}
+
+void SpriteBatch::updateVertexData(Image &image ,Rect &srcRect , Rect &dstRect){
+    //v1
+    putVertexAttribute(0 , 
+        dstRect.left , dstRect.getBottom(), 
+        srcRect.left / (float)image.getWidth() , 
+        srcRect.getBottom() / (float)image.getHeight());
+
+    //v2
+    putVertexAttribute(1, dstRect.getRight() , dstRect.getBottom(), 
+        srcRect.getRight() / (float)image.getWidth() , 
+        srcRect.getBottom() / (float)image.getHeight());
+
+    //v3
+    putVertexAttribute(2, dstRect.getRight() , dstRect.top, 
+        srcRect.getRight() / (float)image.getWidth() , 
+        srcRect.top / (float)image.getHeight());
+
+    //v4
+    putVertexAttribute(3, dstRect.left , dstRect.getBottom(), 
+        srcRect.left / (float)image.getWidth() , 
+        srcRect.getBottom() / (float)image.getHeight());
+
+    //v5
+    putVertexAttribute(4, dstRect.getRight() , dstRect.top, 
+        srcRect.getRight() / (float)image.getWidth() , 
+        srcRect.top / (float)image.getHeight());
+
+    //v6
+    putVertexAttribute(5, dstRect.left , dstRect.top, 
+        srcRect.left / (float)image.getWidth() ,
+        srcRect.top / (float)image.getHeight());
+
+    index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
+    vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
+}
+
+void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y , 
+        float u , float v){
+    const int offset = index_ + vertexIndex * attrCountPerVertex_;
+
+    //position
+    vertexBuffer_[offset + 0] = x;
+    vertexBuffer_[offset + 1] = y;
+    vertexBuffer_[offset + 2] = 1.0f;
+
+    //uv
+    vertexBuffer_[offset + 3] = u;
+    vertexBuffer_[offset + 4] = v;
 }

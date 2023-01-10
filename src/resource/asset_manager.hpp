@@ -39,7 +39,7 @@ public:
 
     // read png file 
     virtual std::unique_ptr<uint8_t> readTextureFile(std::string path ,
-                TextureFileConfig &fileConfig);
+                TextureFileConfig &fileConfig , bool needFlip = false);
     
     inline std::string readTextFileAsString(std::string path){
         return toByteString(readTextFile(path));
@@ -94,12 +94,12 @@ public:
     virtual std::wstring readTextFile(std::string path);
 
     virtual std::unique_ptr<uint8_t> readTextureFile(std::string path ,
-                                                      TextureFileConfig &fileConfig);
+                                                      TextureFileConfig &fileConfig , bool needFlip = false);
 
 private:
-    std::unique_ptr<uint8_t> readTextureFileByImageDecoder(std::string path ,TextureFileConfig &fileConfig);
+//    std::unique_ptr<uint8_t> readTextureFileByImageDecoder(std::string path ,TextureFileConfig &fileConfig);
 
-    std::unique_ptr<uint8_t> readTextureFileByStbi(std::string path ,TextureFileConfig &fileConfig);
+    std::unique_ptr<uint8_t> readTextureFileByStbi(std::string path ,TextureFileConfig &fileConfig , bool needFlip = false);
 };
 
 #endif

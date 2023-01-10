@@ -13,6 +13,8 @@ class VRamManager;
 // 
 class Batch{
 public:
+    const int VERTEX_COUNT_PER_PERMITIVE = 6;//每个图元包含的顶点数量
+
     virtual void begin() = 0;
 
     virtual void end() = 0;
@@ -43,10 +45,6 @@ protected:
 
 class ShapeBatch : public Batch{
 public:
-    const int VERTEX_COUNT_PER_PERMITIVE = 6;//每个图元包含的顶点数量
-
-    // ShapeBatch(std::shared_ptr<RenderEngine> renderEngine);
-
     ShapeBatch(RenderEngine *renderEngine);
 
     ~ShapeBatch(){
@@ -112,6 +110,13 @@ public:
     }
 private:
     int status;
+
+    unsigned int currentTextureId_ = -1;
+
+    void updateVertexData(Image &image ,Rect &srcRect , Rect &dstRect);
+
+    void putVertexAttribute(int vertexIndex ,float x , float y , 
+        float u , float v);
 };
 
 

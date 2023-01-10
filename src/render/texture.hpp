@@ -34,9 +34,9 @@ public:
     
     void clear();
 
-    std::shared_ptr<TextureInfo> acquireTexture(std::string textureFilePath);
+    std::shared_ptr<TextureInfo> acquireTexture(std::string textureFilePath , bool needFlip = false);
 
-    std::shared_ptr<TextureInfo> loadTexture(std::string textureFilePath);
+    std::shared_ptr<TextureInfo> loadTexture(std::string textureFilePath ,bool needFlip = false);
 
     std::string allTextureInfos();
 private:
