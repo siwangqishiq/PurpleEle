@@ -28,6 +28,10 @@ private:
     float mRadius = 1.0f;
 
     std::shared_ptr<Image> testImage;
+    std::shared_ptr<Image> testGakkiImage;
+    std::shared_ptr<Image> wallpaperImage;
+
+    float srcTop_ = 0.0f;
 
     void testAudio();
     
@@ -39,4 +43,7 @@ private:
     void testRenderTableTennis();
 
     void testRenderSprite1();
+    void testRenderSprite2();
+    void testRenderSprite3();
+    void testRenderSprite4();
 };

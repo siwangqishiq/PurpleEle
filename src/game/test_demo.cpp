@@ -14,7 +14,8 @@ void TestDemo::init(){
 
     testAudio();
     testImage = BuildImageByAsset("lan.jpg");
-    // testImage = BuildImageByAsset("test.jpeg");
+    testGakkiImage = BuildImageByAsset("test.jpeg");
+    wallpaperImage = BuildImageByAsset("bizhi.jpg");
 
     Logi("testDemo" , "testImage w : %d , h : %d" , 
         testImage->getWidth(),testImage->getHeight());
@@ -26,8 +27,11 @@ void TestDemo::tick(){
     // testRender3();
     // testRender4();
     // testRenderRoundRect();
-    testRenderTableTennis();
-    testRenderSprite1();
+    // testRenderTableTennis();
+    // testRenderSprite1();
+    // testRenderSprite2();
+    // testRenderSprite3();
+    testRenderSprite4();
 }
 
 void TestDemo::dispose(){
@@ -53,6 +57,103 @@ void TestDemo::testRenderSprite1(){
 
     spriteBatch->renderImage(*testImage , srcRect , dstRect);
     spriteBatch->end();
+}
+
+void TestDemo::testRenderSprite2(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+
+    Rect srcRect1;
+    srcRect1.left = 0.0f;
+    srcRect1.top = testGakkiImage->getHeight();
+    srcRect1.height = testGakkiImage->getHeight();
+    srcRect1.width = testGakkiImage->getWidth();
+
+    float scale = 1.0f / 2.0f;
+    Rect dstRect1;
+    dstRect1.left = 0.0f;
+    dstRect1.top = viewHeight_;
+    dstRect1.width = testGakkiImage->getWidth() * scale;
+    dstRect1.height = testGakkiImage->getHeight() * scale;
+
+    Rect srcRect2;
+    srcRect2.left = 0.0f;
+    srcRect2.top = testImage->getHeight();
+    srcRect2.height = testImage->getHeight();
+    srcRect2.width = testImage->getWidth();
+
+    Rect dstRect2;
+    dstRect2.left = dstRect1.getRight();
+    dstRect2.top = viewHeight_;
+    dstRect2.width = testImage->getWidth() * scale;
+    dstRect2.height = testImage->getHeight() * scale;
+
+    spriteBatch->renderImage(*testGakkiImage , srcRect1 , dstRect1);
+    spriteBatch->renderImage(*testImage , srcRect2 , dstRect2);
+
+    spriteBatch->end();
+}
+
+void TestDemo::testRenderSprite4(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    Rect srcRect;
+    srcRect.left = 0.0f;
+    srcRect.top = wallpaperImage->getHeight();
+    srcRect.height = wallpaperImage->getHeight();
+    srcRect.width = wallpaperImage->getWidth();
+
+    Rect dstRect;
+    dstRect.left = 0.0f;
+    dstRect.top = viewHeight_;
+    dstRect.width = viewWidth_;
+    dstRect.height = viewHeight_;
+    
+    spriteBatch->begin();
+    spriteBatch->renderImage(*wallpaperImage , srcRect , dstRect);
+    spriteBatch->end();
+}
+
+void TestDemo::testRenderSprite3(){
+    std::shared_ptr<SpriteBatch> spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+
+    auto curImage = testGakkiImage;
+    
+    Rect srcRect;
+    srcRect.left = 0.0f;
+    srcRect.top = curImage->getHeight() - srcTop_;
+    srcRect.width = curImage->getWidth();
+    srcRect.height = 300.0f;
+
+    Rect dstRect;
+    dstRect.left = 0.0f;
+    dstRect.top = viewHeight_;
+    dstRect.width = curImage->getWidth();
+    dstRect.height = 300.0f;
+
+    spriteBatch->renderImage(*curImage , srcRect , dstRect);
+
+    Rect originSrcRect;
+    originSrcRect.left = 0.0f;
+    originSrcRect.top = curImage->getHeight();
+    originSrcRect.width = curImage->getWidth();
+    originSrcRect.height = curImage->getHeight();
+
+    Rect originDstRect;
+    originDstRect.left = dstRect.getRight() + 32.0f;
+    originDstRect.top = viewHeight_;
+    originDstRect.width = curImage->getWidth();
+    originDstRect.height = curImage->getHeight();
+    
+    spriteBatch->renderImage(*curImage , originSrcRect , originDstRect
+);
+
+    spriteBatch->end();
+
+    srcTop_ += 1.0f;
+    if(srcTop_ + 300.0f >= curImage->getHeight()){
+        srcTop_ = 0.0f;
+    }
 }
 
 

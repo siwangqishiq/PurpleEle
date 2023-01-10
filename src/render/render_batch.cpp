@@ -261,7 +261,7 @@ void SpriteBatch::executeGlCommands(){
     glBindTexture(GL_TEXTURE_2D , currentTextureId_);
     glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
     shader_.setUniformInt("uTex",0);
-    
+
     glBindTexture(GL_TEXTURE_2D , 0);
     glBindVertexArray(0);
 }
@@ -275,6 +275,7 @@ void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect){
     if(image.getTextureId() != currentTextureId_){
         end();
         currentTextureId_ = image.getTextureId();
+        // Logi("SpriteBatch" , "switch texture %d" , currentTextureId_);
         begin();
     }
 
