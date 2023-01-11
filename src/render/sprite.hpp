@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 // class Image{
 // public:
@@ -59,6 +60,18 @@ private:
     float height_;
     float texWidth_;
     float texHeight_;
+};
+
+//动画
+class TextureImageAnimation{
+private:
+    std::vector<std::shared_ptr<TextureImageRegion>> imageRegionList_;
+    int currentFrame_ = 0;
+    long duration_ = 200;
+public:
+    TextureImageAnimation();
+
+    ~TextureImageAnimation();
 };
 
 //从asset目录中加载纹理图片资源

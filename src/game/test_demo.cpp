@@ -45,8 +45,8 @@ void TestDemo::tick(){
     // testRenderSprite1();
     // testRenderSprite2();
     // testRenderSprite3();
-    // testRenderSprite4();
-    // testRenderSprite5Rotate();
+    testRenderSprite4();
+    testRenderSprite5Rotate();
     testRenderSprite6ImageRegion();
 
 }
@@ -60,14 +60,19 @@ void TestDemo::testRenderSprite6ImageRegion(){
     spriteBatch->begin();
 
     Rect dstRect;
-    dstRect.width = 320.0f;
-    dstRect.height = 480.0f;
-    dstRect.left = viewWidth_ / 2.0f - dstRect.width / 2.0f;
+    dstRect.width = 160.0f;
+    dstRect.height = 240.0f;
+    dstRect.left = 0.0f;
     dstRect.top = viewHeight_ / 2.0f + dstRect.height / 2.0f;
 
     // Logi("testDemo" , "walkIndex = %d" , appContext->walkIndex);
-    auto regionImage = walkingImage->createImageRegion(32 * walkIndex , 48 * 2, 32 , 48);
+    auto regionImage = walkingImage->createImageRegion(32 * walkIndex , 48 * 4, 32 , 48);
     spriteBatch->renderRegionImage(*regionImage , dstRect);
+
+    Rect dstRect2 = dstRect;
+    dstRect2.left = dstRect.getRight();
+    dstRect2.top = viewHeight_ / 2.0f + dstRect.height / 2.0f;
+    spriteBatch->renderRegionImage(*regionImage , dstRect2);
     spriteBatch->end();
 }
 
