@@ -33,6 +33,8 @@ private:
 
     float srcTop_ = 0.0f;
 
+    float rotateAngle = 0.0f;
+
     void testAudio();
     
     void testRender1();
@@ -46,4 +48,5 @@ private:
     void testRenderSprite2();
     void testRenderSprite3();
     void testRenderSprite4();
+    void testRenderSprite5Rotate();
 };

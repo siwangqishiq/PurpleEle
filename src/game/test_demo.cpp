@@ -5,6 +5,7 @@
 #include "render/render_batch.hpp"
 #include "audio/audio.hpp"
 #include "render/sprite.hpp"
+#include <cmath>
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -16,7 +17,7 @@ void TestDemo::init(){
     testImage = BuildImageByAsset("lan.jpg");
     testGakkiImage = BuildImageByAsset("test.jpeg");
     wallpaperImage = BuildImageByAsset("bizhi.jpg");
-
+    
     Logi("testDemo" , "testImage w : %d , h : %d" , 
         testImage->getWidth(),testImage->getHeight());
 }
@@ -32,10 +33,35 @@ void TestDemo::tick(){
     // testRenderSprite2();
     // testRenderSprite3();
     testRenderSprite4();
+    testRenderSprite5Rotate();
 }
 
 void TestDemo::dispose(){
 
+}
+
+void TestDemo::testRenderSprite5Rotate(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+
+    Rect srcRect;
+    srcRect.left = 0.0f;
+    srcRect.top = testImage->getHeight();
+    srcRect.height = testImage->getHeight();
+    srcRect.width = testImage->getWidth();
+
+    Rect dstRect;
+    dstRect.width = 300.0f;
+    dstRect.height = 300.0f;
+    dstRect.left = viewWidth_ / 2.0f - dstRect.width / 2.0f;
+    dstRect.top = viewHeight_ / 2.0f + dstRect.height / 2.0f;
+
+    auto center = dstRect.center();
+    spriteBatch->renderImage(*testImage , srcRect , dstRect , 
+        center.x , center.y , rotateAngle);
+    spriteBatch->end();
+
+    rotateAngle -= PI / 180.0f;
 }
 
 void TestDemo::testRenderSprite1(){
@@ -107,7 +133,7 @@ void TestDemo::testRenderSprite4(){
     dstRect.top = viewHeight_;
     dstRect.width = viewWidth_;
     dstRect.height = viewHeight_;
-    
+
     spriteBatch->begin();
     spriteBatch->renderImage(*wallpaperImage , srcRect , dstRect);
     spriteBatch->end();

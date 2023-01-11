@@ -15,7 +15,7 @@ class TextureInfo;
 class TextureImage : public Image{
 public:
     TextureImage(std::shared_ptr<TextureInfo> textureInfo);
-
+    
     virtual int getWidth();
     virtual int getHeight();
     virtual unsigned int getTextureId();

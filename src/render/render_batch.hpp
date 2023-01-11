@@ -101,9 +101,10 @@ public:
 
     void flush();
 
-    void executeGlCommands();
-
     void renderImage(Image &image , Rect &srcRect , Rect &dstRect);
+    
+    void renderImage(Image &image , Rect &srcRect , Rect &dstRect ,
+            float cx , float cy , float angle);
 
     ~SpriteBatch(){
         Logi("SpriteBatch" , "~SpriteBatch descon");
@@ -113,10 +114,14 @@ private:
 
     unsigned int currentTextureId_ = -1;
 
-    void updateVertexData(Image &image ,Rect &srcRect , Rect &dstRect);
+    void executeGlCommands();
+
+    void updateVertexData(Image &image , 
+        Rect &srcRect , Rect &dstRect , 
+        float rotateOriginX , float rotateOriginY , float rotateAngle);
 
     void putVertexAttribute(int vertexIndex ,float x , float y , 
-        float u , float v);
+        float u , float v ,float cx , float cy , float angle);
 };
 
 
