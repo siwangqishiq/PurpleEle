@@ -85,7 +85,8 @@ protected:
             ,Rect &rect ,Paint &paint , float extra);
 };
 
-class Image;
+class TextureImage;
+class TextureImageRegion;
 
 class SpriteBatch : public Batch{
 public:
@@ -101,10 +102,12 @@ public:
 
     void flush();
 
-    void renderImage(Image &image , Rect &srcRect , Rect &dstRect);
-    
-    void renderImage(Image &image , Rect &srcRect , Rect &dstRect ,
+    void renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect);
+
+    void renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect ,
             float cx , float cy , float angle);
+    
+    void renderRegionImage(TextureImageRegion &imageRegion , Rect &dstRect);
 
     ~SpriteBatch(){
         Logi("SpriteBatch" , "~SpriteBatch descon");
@@ -116,7 +119,11 @@ private:
 
     void executeGlCommands();
 
-    void updateVertexData(Image &image , 
+    void doRender(unsigned int texId , float texWidth , float texHeight , 
+            Rect &srcRect , Rect &dstRect,
+            float cx , float cy , float angle);
+
+    void updateVertexData(float texWidth , float texHeight, 
         Rect &srcRect , Rect &dstRect , 
         float rotateOriginX , float rotateOriginY , float rotateAngle);
 

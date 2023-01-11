@@ -68,9 +68,9 @@ protected:
 private:
     //for -----------test---------------------
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
-
     std::shared_ptr<TestDemo> testDemo_ = nullptr;
 
     bool showNumber = false;
     int showFps = 0;
+
 };

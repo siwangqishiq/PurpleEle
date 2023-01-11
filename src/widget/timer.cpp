@@ -50,7 +50,7 @@ std::shared_ptr<TimerTask> Timer::buildTimerTask(std::function<void(Application 
     auto timeTask = std::make_shared<TimerTask>();
 
     timeTask->taskId = genTaskId();
-    timeTask->shuldRunTime = currentTimeMillis() + delay;
+    timeTask->shouldRunTime = currentTimeMillis() + delay;
     timeTask->delayTime = delay;
     timeTask->runnable = runnable;
     timeTask->type = taskType;
@@ -67,14 +67,14 @@ void Timer::trick(Application *app){
     auto iter = taskList_.begin();
     while(iter != taskList_.end()){
         std::shared_ptr<TimerTask> task = *iter;
-        if(time_ >= task->shuldRunTime){
+        if(time_ >= task->shouldRunTime){
             // Logi("timer" , "task id %d time tasktime %lld cur %lld" ,
-            // task->taskId , task->shuldRunTime , time_);
+            // task->taskId , task->shouldRunTime , time_);
             task->runnable(app);
             if(task->type == Once){
                 removeList.push_back(iter);
             }else if(task->type == FixedRate){
-                task->shuldRunTime = currentTimeMillis() + task->delayTime;
+                task->shouldRunTime = currentTimeMillis() + task->delayTime;
             }
             // taskList_.erase(iter);
         }

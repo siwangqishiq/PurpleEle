@@ -3,7 +3,7 @@
 #include "application.hpp"
 
 class RenderEngine;
-class Image;
+class TextureImage;
 
 class TestDemo{
 public:
@@ -17,6 +17,7 @@ public:
 
     void dispose();
 
+    bool isInited = false;
 private:
     Application *appContext;
 
@@ -27,13 +28,16 @@ private:
 
     float mRadius = 1.0f;
 
-    std::shared_ptr<Image> testImage;
-    std::shared_ptr<Image> testGakkiImage;
-    std::shared_ptr<Image> wallpaperImage;
+    std::shared_ptr<TextureImage> testImage;
+    std::shared_ptr<TextureImage> testGakkiImage;
+    std::shared_ptr<TextureImage> wallpaperImage;
+    std::shared_ptr<TextureImage> walkingImage;
 
     float srcTop_ = 0.0f;
 
     float rotateAngle = 0.0f;
+
+    int walkIndex = 0;
 
     void testAudio();
     
@@ -49,4 +53,6 @@ private:
     void testRenderSprite3();
     void testRenderSprite4();
     void testRenderSprite5Rotate();
+
+    void testRenderSprite6ImageRegion();
 };

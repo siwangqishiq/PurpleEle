@@ -266,20 +266,30 @@ void SpriteBatch::executeGlCommands(){
     glBindVertexArray(0);
 }
 
-void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect){
+void SpriteBatch::renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect){
     return renderImage(image , srcRect , dstRect , 0.0f , 0.0f , 0.0f);
 }
 
-void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect ,
+
+void SpriteBatch::renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect ,
+            float cx , float cy , float angle){
+    return doRender(image.getTextureId() , 
+        (float)image.getWidth() , 
+        (float)image.getHeight() , 
+        srcRect , dstRect , cx , cy , angle);
+}
+
+void SpriteBatch::doRender(unsigned int texId , float texWidth , float texHeight , 
+            Rect &srcRect , Rect &dstRect,
             float cx , float cy , float angle){
     if(!isDrawing_){
         Logi("SpriteBatch" , "batch is not call begin()");
         return;
     }
 
-    if(image.getTextureId() != currentTextureId_){
+    if(texId != currentTextureId_){
         end();
-        currentTextureId_ = image.getTextureId();
+        currentTextureId_ = texId;
         // Logi("SpriteBatch" , "switch texture %d" , currentTextureId_);
         begin();
     }
@@ -290,46 +300,49 @@ void SpriteBatch::renderImage(Image &image , Rect &srcRect , Rect &dstRect ,
         begin();
     }
     
-    updateVertexData(image , srcRect , dstRect , cx , cy , angle);
+    updateVertexData(texWidth, texHeight, 
+        srcRect , dstRect , cx , cy , angle);            
 }
 
-void SpriteBatch::updateVertexData(Image &image ,Rect &srcRect , Rect &dstRect,
+
+void SpriteBatch::updateVertexData(float texWidth , float texHeight ,
+        Rect &srcRect , Rect &dstRect,
         float rotateOriginX , float rotateOriginY , float rotateAngle){
     //v1
     putVertexAttribute(0 , 
         dstRect.left , dstRect.getBottom(), 
-        srcRect.left / (float)image.getWidth() , 
-        srcRect.getBottom() / (float)image.getHeight(),
+        srcRect.left / texWidth , 
+        srcRect.getBottom() / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     //v2
     putVertexAttribute(1, dstRect.getRight() , dstRect.getBottom(), 
-        srcRect.getRight() / (float)image.getWidth() , 
-        srcRect.getBottom() / (float)image.getHeight(),
+        srcRect.getRight() / texWidth, 
+        srcRect.getBottom() / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     //v3
     putVertexAttribute(2, dstRect.getRight() , dstRect.top, 
-        srcRect.getRight() / (float)image.getWidth() , 
-        srcRect.top / (float)image.getHeight(),
+        srcRect.getRight() / texWidth, 
+        srcRect.top / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     //v4
     putVertexAttribute(3, dstRect.left , dstRect.getBottom(), 
-        srcRect.left / (float)image.getWidth() , 
-        srcRect.getBottom() / (float)image.getHeight(),
+        srcRect.left / texWidth, 
+        srcRect.getBottom() / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     //v5
     putVertexAttribute(4, dstRect.getRight() , dstRect.top, 
-        srcRect.getRight() / (float)image.getWidth() , 
-        srcRect.top / (float)image.getHeight(),
+        srcRect.getRight() / texWidth, 
+        srcRect.top / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     //v6
     putVertexAttribute(5, dstRect.left , dstRect.top, 
-        srcRect.left / (float)image.getWidth() ,
-        srcRect.top / (float)image.getHeight(),
+        srcRect.left / texWidth,
+        srcRect.top / texHeight,
         rotateOriginX , rotateOriginY , rotateAngle);
 
     index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
@@ -343,7 +356,7 @@ void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y ,
     //rotate transform
     Point point(x , y);
     point.rotate(cx , cy , angle);
-
+    
     //position
     vertexBuffer_[offset + 0] = point.x;
     vertexBuffer_[offset + 1] = point.y;
@@ -352,4 +365,16 @@ void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y ,
     //uv
     vertexBuffer_[offset + 3] = u;
     vertexBuffer_[offset + 4] = v;
+}
+
+void SpriteBatch::renderRegionImage(TextureImageRegion &imageRegion , Rect &dstRect){
+    Rect srcRect;
+    auto offset = imageRegion.getOffset();
+    srcRect.left = offset.x;
+    srcRect.top = offset.y;
+    srcRect.width = imageRegion.getWidth();
+    srcRect.height = imageRegion.getHeight();
+
+    doRender(imageRegion.getTextureId() , imageRegion.getTexWidth() ,
+        imageRegion.getTexHeight() , srcRect , dstRect , 0.0f , 0.0f , 0.0f);
 }

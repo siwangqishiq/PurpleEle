@@ -6,6 +6,7 @@
 #include "audio/audio.hpp"
 #include "render/sprite.hpp"
 #include <cmath>
+#include "widget/timer.hpp"
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -17,9 +18,21 @@ void TestDemo::init(){
     testImage = BuildImageByAsset("lan.jpg");
     testGakkiImage = BuildImageByAsset("test.jpeg");
     wallpaperImage = BuildImageByAsset("bizhi.jpg");
+    walkingImage = BuildImageByAsset("sprite/walk.png");//32 x 48
     
     Logi("testDemo" , "testImage w : %d , h : %d" , 
         testImage->getWidth(),testImage->getHeight());
+
+    if(isInited){
+        return;
+    }
+    isInited = true;
+    appContext->getTimer()->scheduleAtFixedRate([this](Application *app){
+        walkIndex++;
+        if(walkIndex >= 4){
+            walkIndex = 0;
+        }
+    } , 100L);
 }
 
 void TestDemo::tick(){
@@ -32,12 +45,30 @@ void TestDemo::tick(){
     // testRenderSprite1();
     // testRenderSprite2();
     // testRenderSprite3();
-    testRenderSprite4();
-    testRenderSprite5Rotate();
+    // testRenderSprite4();
+    // testRenderSprite5Rotate();
+    testRenderSprite6ImageRegion();
+
 }
 
 void TestDemo::dispose(){
+    
+}
 
+void TestDemo::testRenderSprite6ImageRegion(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+
+    Rect dstRect;
+    dstRect.width = 320.0f;
+    dstRect.height = 480.0f;
+    dstRect.left = viewWidth_ / 2.0f - dstRect.width / 2.0f;
+    dstRect.top = viewHeight_ / 2.0f + dstRect.height / 2.0f;
+
+    // Logi("testDemo" , "walkIndex = %d" , appContext->walkIndex);
+    auto regionImage = walkingImage->createImageRegion(32 * walkIndex , 48 * 2, 32 , 48);
+    spriteBatch->renderRegionImage(*regionImage , dstRect);
+    spriteBatch->end();
 }
 
 void TestDemo::testRenderSprite5Rotate(){

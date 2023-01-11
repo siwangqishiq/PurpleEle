@@ -14,7 +14,7 @@ enum TimerTaskType{
 
 struct TimerTask{
     int taskId;
-    long long shuldRunTime = 0;
+    long long shouldRunTime = 0;
     long long delayTime = 0;
     std::function<void(Application *)> runnable;
     TimerTaskType type = Once;
