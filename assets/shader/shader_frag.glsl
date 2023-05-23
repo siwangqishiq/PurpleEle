@@ -13,7 +13,8 @@ vec4 renderCircle(vec2 pos) {
         discard;
     }
 
-    return vec4(1.0f , 0.0 , 0.0 , smoothstep(distance(pos , center) , radius , radius - radius/4.0f));
+    return vec4(0.0f , 0.0 , 0.0 , 
+        0.7f * smoothstep(distance(pos , center) , radius , radius - radius/4.0f));
 }
 
 void main(){
