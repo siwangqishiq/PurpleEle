@@ -7,6 +7,7 @@
 #include "common.hpp"
 #include <vector>
 #include "shader.hpp"
+#include <functional>
 
 class RenderEngine;
 struct CharInfo;
@@ -87,6 +88,8 @@ public:
     }
 
     void putParams(Shader shader, Rect &rect);
+
+    void setPreRenderCallback(std::function<void(void)> callback);
     
     virtual void runCommands();
     
@@ -95,6 +98,8 @@ public:
 protected:
     Shader shader_;
     Rect rect_;
+
+    std::function<void(void)> preRenderCallback_ = nullptr;
 
     void buildGlCommands(std::vector<float> &buf);
 };

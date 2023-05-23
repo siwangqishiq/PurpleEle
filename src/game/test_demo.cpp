@@ -45,10 +45,10 @@ void TestDemo::tick(){
     // testRenderSprite1();
     // testRenderSprite2();
     // testRenderSprite3();
-    testRenderSprite4();
-    testRenderSprite5Rotate();
-    testRenderSprite6ImageRegion();
-
+    // testRenderSprite4();
+    // testRenderSprite5Rotate();
+    // testRenderSprite6ImageRegion();
+    testRenderShader();
 }
 
 void TestDemo::dispose(){
@@ -453,4 +453,8 @@ void TestDemo::testAudio(){
     AudioManager::getInstance()->playMusic("musicA");
     
     AudioManager::getInstance()->dispose();
+}
+
+void TestDemo::testRenderShader(){
+
 }

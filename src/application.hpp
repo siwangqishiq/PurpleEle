@@ -11,6 +11,7 @@
 class RenderEngine;
 class Timer;
 class TestDemo;
+class ShaderDemo;
 
 /**
  * @brief  应用入口
@@ -69,6 +70,7 @@ private:
     //for -----------test---------------------
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
     std::shared_ptr<TestDemo> testDemo_ = nullptr;
+    std::shared_ptr<ShaderDemo> shaderDemo_ = nullptr;
 
     bool showNumber = false;
     int showFps = 0;

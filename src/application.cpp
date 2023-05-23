@@ -11,11 +11,16 @@
 #include "render/render_batch.hpp"
 #include "utils.hpp"
 #include "game/test_demo.hpp"
+#include "game/shader_demo.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
     if(testDemo_ != nullptr){
         testDemo_->dispose();
+    }
+
+    if(shaderDemo_ != nullptr){
+        shaderDemo_->dispose();
     }
 
     if(timer_ != nullptr){
@@ -114,6 +119,9 @@ void Application::onCreate(){
     startTime_ = static_cast<long>(currentTimeMillis());
 
     testDemo_->init();
+
+    shaderDemo_ = std::make_shared<ShaderDemo>(this);
+    shaderDemo_->init();
 }
 
 void Application::onTick(){
@@ -152,6 +160,7 @@ void Application::onTick(){
 
 void Application::updateSence(){
     testDemo_->tick();
+    shaderDemo_->tick();
 
     if(showNumber){
         TextPaint p4;

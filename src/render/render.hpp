@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include "common.hpp"
 #include "log.hpp"
+#include <functional>
 
 
 class Application;
@@ -39,7 +40,7 @@ public:
     }
 
     ~RenderEngine(){
-        Logi("RenderEngine" , "~RenderEngine Engine decon");
+        Logi("RenderEngine" , "~RenderEngine Engine deconstruct");
     }
 
     Application *appContext_;
@@ -70,7 +71,8 @@ public:
     void renderText(std::wstring text , Rect &showRect , TextPaint &paint);
 
     //在指定矩形区域内绘制自定义shader
-    void renderShader(Shader &shader , Rect &showRect);
+    void renderShader(Shader &shader , Rect &showRect , 
+            std::function<void(void)> preRenderCallback);
 
     //绘制圆形
     void renderCircle(float cx , float cy , float radius , Paint &paint);

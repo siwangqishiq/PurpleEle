@@ -293,6 +293,10 @@ void TextRenderCommand::fillTextVertData(std::wstring &text , float left , float
     }//end for i;
 }
 
+void ShaderRenderCommand::setPreRenderCallback(std::function<void(void)> callback){
+    preRenderCallback_ = callback;
+}
+
 void ShaderRenderCommand::putParams(Shader shader , Rect &rect){
     shader_ = shader;
     rect_ = rect;
@@ -341,7 +345,9 @@ void ShaderRenderCommand::buildGlCommands(std::vector<float> &buf){
 }
 
 void ShaderRenderCommand::fillShader(){
-    //do nothing
+    if(preRenderCallback_ != nullptr){
+        preRenderCallback_();
+    }
 }
 
 void ShaderRenderCommand::runCommands(){

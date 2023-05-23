@@ -107,9 +107,12 @@ void RenderEngine::submitRenderCommand(std::shared_ptr<RenderCommand> cmd){
 }
 
 //绘制自定义shader
-void RenderEngine::renderShader(Shader &shader , Rect &showRect){
+void RenderEngine::renderShader(Shader &shader , 
+                                Rect &showRect , 
+                                std::function<void(void)> preRenderCallback){
     auto cmd = fetchShaderRenderCommand(this);
     cmd->putParams(shader ,showRect);
+    cmd->setPreRenderCallback(preRenderCallback);
     submitRenderCommand(cmd);
 }
 
