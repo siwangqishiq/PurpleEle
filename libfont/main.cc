@@ -56,18 +56,18 @@ int exportFonts(){
 
     const int fontSize = FONT_DEFAULT_SIZE;
 
-    FT_Set_Pixel_Sizes(face , fontSize, fontSize);
+    FT_Set_Pixel_Sizes(face , 0, fontSize);
 
     auto outputJson = JsonObject::create();
     auto charListArray = JsonArray::create();
     outputJson->putJsonArray("list" , charListArray);
 
-    std::wstring content = ReadTextFileAsWstring("chars.txt");
+    std::wstring content = ReadTextFileAsWstring("all_char.txt");
     // std::wstring content = L"abc";
     std::cout << "char file size : " << content.length() << std::endl;
 
-    const int outTexWidth = 2048;
-    const int outTexHeight = 4 * 2048;
+    const int outTexWidth = 8 * 1024;
+    const int outTexHeight = 16 * 1024;
 
     uint32_t *textureDst = new uint32_t[outTexWidth * outTexHeight];
 
@@ -119,6 +119,8 @@ int exportFonts(){
         charInfoJson->putString("value" , value);
         charInfoJson->putInt("width" , fontWidth);
         charInfoJson->putInt("height" , fontHeight);
+        charInfoJson->putInt("bearingX" , glyph->bitmap_left);
+        charInfoJson->putInt("bearingY" , glyph->bitmap_top);
         charInfoJson->putString("texture" , ToWideString(currentTexFileName));
         //纹理坐标计算
         float texLeft = (float)left / (float)outTexWidth;
@@ -174,14 +176,23 @@ int exportFonts(){
     return 0;
 }
 
-int printChar(FT_Library *ftLib , wchar_t wChar){
+int printChar(wchar_t wChar){
+    FT_Library ftLib;
+
+    if (FT_Init_FreeType(&ftLib)){
+        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+        return -1;
+    }//
+
     FT_Face face;
-    if (FT_New_Face(*ftLib, "songti.ttc", 0, &face)){
+    if (FT_New_Face(ftLib, "yahei.ttc", 0, &face)){
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         return -1;
     }
     
-    FT_Set_Pixel_Sizes(face , 0 , 32);
+    const int fontHeight = 16;
+
+    FT_Set_Pixel_Sizes(face , 0 , fontHeight);
 
     if (FT_Load_Char(face, wChar, FT_LOAD_RENDER)){
         std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
@@ -190,18 +201,60 @@ int printChar(FT_Library *ftLib , wchar_t wChar){
 
     std::cout << "width = " << face->glyph->bitmap.width << std::endl;
     std::cout << "height = " << face->glyph->bitmap.rows << std::endl;
+    std::cout << "advance  = " << (face->glyph->advance.x / 64) << 
+            " , " << (face->glyph->advance.y / 64)  << std::endl;
     std::cout << "pitch  = " << face->glyph->bitmap.pitch << std::endl;
-    std::cout << "left = " << face->glyph->bitmap_left << std::endl;
-    std::cout << "top  = " << face->glyph->bitmap_top << std::endl;
-    
-    std::cout << "advance  = " << face->glyph->advance.x / 64 << 
-        " , " << face->glyph->advance.y << std::endl;
+    std::cout << "bearingX = " << face->glyph->bitmap_left << std::endl;
+    std::cout << "bearingY = " << face->glyph->bitmap_top << std::endl;
 
+    int outputWidth = face->glyph->advance.x / 64;
+    int outputHeight = fontHeight;
+
+    std::cout << "outWidth = " << outputWidth << std::endl;
+    std::cout << "outHeight = " << outputHeight << std::endl;
+
+    auto metrics = face->glyph->metrics;
+    float ratio = static_cast<float>(face->glyph->bitmap.width) / metrics.width;
+    int baseLineY = ratio * metrics.horiBearingY;
+    std::cout << "baseLineY = " << baseLineY << std::endl;
+
+    int *outputBit = new int[outputWidth * outputHeight];
+    //init;
+    for(int i = outputHeight - 1 ; i >= 0; i--){
+        for(int j = 0; j < outputWidth;j++){
+            outputBit[outputWidth * i + j] = 0;
+        }//end for j
+    }//end for i
+    
     FT_Bitmap fontBit = face->glyph->bitmap;
 
+    int offset_x = (outputWidth - fontBit.pitch) / 2.0;
+    if(offset_x < 0){
+        offset_x = 0;
+    }
+    
+    int offset_y = outputHeight - face->glyph->bitmap_top;
+    if(offset_y + face->glyph->bitmap.rows > outputHeight){
+        offset_y = outputHeight - face->glyph->bitmap.rows;
+    }
+
+    std::cout << "offset_x : " << offset_x 
+        << " offset_y : " << offset_y 
+        << " " << offset_y + face->glyph->bitmap.rows <<std::endl;
+
     for(int i = 0 ;  i < fontBit.rows ; i++ ){
-        for(int j = 0 ; j < fontBit.width ; j++){
-            std::cout << ((fontBit.buffer[i * fontBit.pitch + j] == 0)?" ":"+");
+        for(int j = 0 ; j < fontBit.pitch ; j++){
+            if(fontBit.buffer[i * fontBit.pitch + j] != 0){
+                outputBit[(i + offset_y) * outputWidth + j + offset_x] = 1;
+            }
+        }
+    }
+
+
+    //print on console
+    for(int i = 0 ; i < outputHeight;i++){
+        for(int j = 0; j < outputWidth;j++){
+            std::cout << outputBit[i * outputWidth + j];
         }
         std::cout<< std::endl;
     }
@@ -211,7 +264,14 @@ int printChar(FT_Library *ftLib , wchar_t wChar){
     return 0;
 }
 
+
 int main(){
-    exportFonts();
+    // exportFonts();
+
+    std::wstring str = L"j@";
+    for(auto &ch : str){
+        printChar(ch);
+    }//end for 
+    
     return 0;
 }
