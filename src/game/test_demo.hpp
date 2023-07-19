@@ -59,4 +59,6 @@ private:
     void testRenderShader();
 
     void testRenderSprite6ImageRegion();
+
+    void testRenderText();
 };

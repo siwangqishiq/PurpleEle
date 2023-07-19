@@ -14,10 +14,10 @@
 #include <codecvt>
 
 const int TEXTURE_FILE_CHANNEL_UNKNOW = -1;
+const int TEXTURE_FILE_CHANNEL_R = 1;
 const int TEXTURE_FILE_CHANNEL_RGB = 3;
 const int TEXTURE_FILE_CHANNEL_ARGB = 4;
 const int TEXTURE_FILE_CHANNEL_RGBA = 5;
-
 
 struct TextureFileConfig{
     int width = 0;

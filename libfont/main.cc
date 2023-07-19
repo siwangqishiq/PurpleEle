@@ -16,8 +16,9 @@ struct CharData{
     int outHeight;
     int offsetX;
     int offsetY;
+    int bearingX;
     int bearingY;
-    int *pData;
+    uint8_t *pData;
 };
 
 const float FONT_DEFAULT_SIZE = 64.0f;
@@ -37,15 +38,15 @@ void blit(unsigned char *src , uint32_t *dst , int x , int y , int width , int h
     }
 }
 
-void blit2(int *src , uint32_t *dst , int x , int y , int width , int height ,
+void blit2(uint8_t *src , uint8_t *dst , int x , int y , int width , int height ,
             int strideWidth){
     for(int i = 0 ; i < height ;i++){
         for(int j = 0 ; j < width ;j++){
             if(src[i * width + j] == 0){
-                dst[(y + i) * strideWidth + x + j] = 0xffff0000;
+                dst[(y + i) * strideWidth + x + j] = 0x00;
             }else{
                 //abgr
-                dst[(y + i) * strideWidth + x + j] = 0xffffffff;
+                dst[(y + i) * strideWidth + x + j] = 0xff;
             }
         }//end for j
     }
@@ -218,9 +219,11 @@ int buildWcharTexture(wchar_t wChar , FT_Face &face , int fontHeight , CharData 
     charData.outWidth = std::max(static_cast<int>(face->glyph->advance.x / 64) , 
         charData.fontWidth);
     charData.outHeight = std::max(fontHeight , charData.fontHeight);
+
+    charData.bearingX = face->glyph->bitmap_left;
     charData.bearingY = face->glyph->bitmap_top;
 
-    charData.pData = new int[charData.outWidth * charData.outHeight];
+    charData.pData = new uint8_t[charData.outWidth * charData.outHeight];
     
     //init;
     for(int i = charData.outHeight - 1 ; i >= 0; i--){
@@ -229,30 +232,20 @@ int buildWcharTexture(wchar_t wChar , FT_Face &face , int fontHeight , CharData 
         }//end for j
     }//end for i
 
+    int offset_x = std::max(0 , (charData.outWidth - charData.fontWidth) / 2);
+    int offset_y = 0;
 
-    int offset_x = (charData.outWidth - fontBit.pitch) / 2.0;
-    if(offset_x < 0){
-        offset_x = 0;
-    }
     charData.offsetX = offset_x;
-
-    int offset_y = (charData.outHeight - face->glyph->bitmap_top);
-    if(offset_y + face->glyph->bitmap.rows > charData.outHeight){
-        offset_y = charData.outHeight - face->glyph->bitmap.rows;
-    }
-    if(offset_y < 0){
-        offset_y = 0;
-    }
     charData.offsetY = offset_y;
 
-
-    std::cout << "outWidth   :" << charData.outWidth << std::endl;
-    std::cout << "outHeight  :" << charData.outHeight << std::endl;
-    std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
-    std::cout << "fontHeight :" << charData.fontHeight << std::endl;
-    std::cout << "offsetx    :" << charData.offsetX << std::endl;
-    std::cout << "offsety    :" << charData.offsetY << std::endl;
-    std::cout << "bearingY   :" << charData.bearingY << std::endl;
+    // std::cout << "outWidth   :" << charData.outWidth << std::endl;
+    // std::cout << "outHeight  :" << charData.outHeight << std::endl;
+    // std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
+    // std::cout << "fontHeight :" << charData.fontHeight << std::endl;
+    // std::cout << "offsetx    :" << charData.offsetX << std::endl;
+    // std::cout << "offsety    :" << charData.offsetY << std::endl;
+    // std::cout << "bearingX   :" << charData.bearingX << std::endl;
+    // std::cout << "bearingY   :" << charData.bearingY << std::endl;
 
     for(int i = 0 ;  i < fontBit.rows ; i++ ){
         for(int j = 0 ; j < fontBit.pitch ; j++){
@@ -370,7 +363,7 @@ int exportFonts2(){
         return -1;
     }
 
-    const int fontSize = 32;
+    const int fontSize = 64;
 
     FT_Set_Pixel_Sizes(face , 0, fontSize);
 
@@ -378,14 +371,13 @@ int exportFonts2(){
     auto charListArray = JsonArray::create();
     outputJson->putJsonArray("list" , charListArray);
 
-    std::wstring content = ReadTextFileAsWstring("test.txt");
-    // std::wstring content = L"abc";
+    std::wstring content = ReadTextFileAsWstring("all_char.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
-    const int outTexWidth = 1024;
-    const int outTexHeight = 1024;
+    const int outTexWidth = 16 * 1024;
+    const int outTexHeight = 16 * 1024;
 
-    uint32_t *textureDst = new uint32_t[outTexWidth * outTexHeight];
+    uint8_t *textureDst = new uint8_t[outTexWidth * outTexHeight];
 
     int left = 0;
     int top = 0;
@@ -412,14 +404,17 @@ int exportFonts2(){
         }
 
         //print on console
-        for(int i = 0 ; i < charData.outHeight;i++){
-            for(int j = 0; j < charData.outWidth;j++){
-                std::cout << charData.pData[i * charData.outWidth + j];
-            }
-            std::cout<< std::endl;
-        }
-
-        std::cout << "left " << left << " top " << top << std::endl; 
+        // for(int i = 0 ; i < charData.outHeight;i++){
+        //     for(int j = 0; j < charData.outWidth;j++){
+        //         if(charData.pData[i * charData.outWidth + j] != 0){
+        //             std::cout << "*";
+        //         }else{
+        //             std::cout << "0";
+        //         }
+        //     }//end for j
+        //     std::cout<< std::endl;
+        // }//end for i
+        // std::cout << "left " << left << " top " << top << std::endl; 
 
         if(left + charData.outWidth >= outTexWidth){
             left = 0.0;
@@ -428,7 +423,32 @@ int exportFonts2(){
 
         blit2(charData.pData , textureDst , left , top, 
             charData.outWidth , charData.outHeight , outTexWidth);
+
+        //write meta json data
+        auto jsonObject = JsonObject::create();
+        std::wstring str = L"";
+        str += ch;
+        jsonObject->putString("value" , std::wstring(str));
+
+        jsonObject->putInt("width" , charData.fontWidth);
+        jsonObject->putInt("height" , charData.fontHeight);
+        jsonObject->putInt("bearingX" , charData.bearingX);
+        jsonObject->putInt("bearingY" , charData.bearingY);
         
+        float texLeft = static_cast<float>(left + charData.offsetX) / static_cast<float>(outTexWidth);
+        float texTop = static_cast<float>(top + charData.offsetY) / static_cast<float>(outTexHeight);
+        float texWidth = static_cast<float>(charData.fontWidth) / static_cast<float>(outTexWidth);
+        float texHeight = static_cast<float>(charData.fontHeight) / static_cast<float>(outTexHeight);
+
+        auto texCoords = JsonArray::create();
+        texCoords->pushFloat(texLeft);
+        texCoords->pushFloat(texTop);
+        texCoords->pushFloat(texLeft + texWidth);
+        texCoords->pushFloat(texTop + texHeight);
+        jsonObject->putJsonArray("texCoords" , texCoords);
+
+        jsonObject->putString("texture" , ToWideString(currentTexFileName));
+
         if(left + charData.outWidth >= outTexWidth){
             left = 0.0;
             top += charData.outHeight;
@@ -438,12 +458,13 @@ int exportFonts2(){
 
         delete charData.pData;
 
-
+        charListArray->pushJsonObject(jsonObject);
     }//end for each
 
     FT_Done_Face(face);
+    
+    stbi_write_png(currentTexFileName.c_str() , outTexWidth, outTexHeight, 1 , textureDst , 0);
 
-    stbi_write_png(currentTexFileName.c_str() , outTexWidth, outTexHeight, 4 , textureDst , 0);
     delete []textureDst;
 
     WriteStringToFile("char_config.json", outputJson->toJsonString());

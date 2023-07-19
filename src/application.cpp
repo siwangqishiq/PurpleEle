@@ -120,8 +120,8 @@ void Application::onCreate(){
 
     testDemo_->init();
 
-    shaderDemo_ = std::make_shared<ShaderDemo>(this);
-    shaderDemo_->init();
+    // shaderDemo_ = std::make_shared<ShaderDemo>(this);
+    // shaderDemo_->init();
 }
 
 void Application::onTick(){
@@ -160,7 +160,7 @@ void Application::onTick(){
 
 void Application::updateSence(){
     testDemo_->tick();
-    shaderDemo_->tick();
+    // shaderDemo_->tick();
 
     if(showNumber){
         TextPaint p4;

@@ -27,7 +27,7 @@ protected:
     unsigned int vao_;
 
     int vboOffset_;
-
+    
     int vertexCount_;
     int attrCount_;
 };

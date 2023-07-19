@@ -118,6 +118,8 @@ struct CharInfo{
     std::wstring value; 
     float width;
     float height;
+    float bearingX;
+    float bearingY;
     float textureCoords[4];
     unsigned int textureId;
 };

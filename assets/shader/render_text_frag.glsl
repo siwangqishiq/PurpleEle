@@ -8,7 +8,7 @@ uniform vec4 textColor;
 
 void main(){
     vec4 originColor = texture(fontTexture , vUv);
-    float colorMask = originColor.a;
+    float colorMask = originColor.r;
     outColor = colorMask * textColor;
     // outColor = vec4(1.0f , 0.0f , 0.0f , 1.0f);
 }

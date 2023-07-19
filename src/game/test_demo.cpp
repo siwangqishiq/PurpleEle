@@ -33,6 +33,10 @@ void TestDemo::init(){
             walkIndex = 0;
         }
     } , 100L);
+
+    GLint size = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE , &size);
+    Logi("testDemo" , "max texture size = %d"  ,size);
 }
 
 void TestDemo::tick(){
@@ -46,13 +50,23 @@ void TestDemo::tick(){
     // testRenderSprite2();
     // testRenderSprite3();
     // testRenderSprite4();
-    // testRenderSprite5Rotate();
+
+    testRenderText();
+    testRenderSprite5Rotate();
     // testRenderSprite6ImageRegion();
-    testRenderShader();
+    // testRenderShader();
+   
 }
 
 void TestDemo::dispose(){
     
+}
+
+void TestDemo::testRenderText(){
+    TextPaint paint;
+    paint.setTextSize(64.0f);
+    renderEngine_->renderText(L"窜梁鸿于海曲，岂乏明时？所赖君子见机，达人知命。老当益壮，宁移白首之心？穷且益坚，不坠青云之志。酌贪泉而觉爽" , 
+        100.0, 200.0 , paint);
 }
 
 void TestDemo::testRenderSprite6ImageRegion(){

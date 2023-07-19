@@ -183,6 +183,8 @@ void TextRenderHelper::buildTextCharConfig(){
         info->value = itemJson->getString("value");
         info->width = itemJson->getInt("width");
         info->height = itemJson->getInt("height");
+        info->bearingX = itemJson->getInt("bearingX");
+        info->bearingY = itemJson->getInt("bearingY");
         auto texCoordsArray = itemJson->getJsonArray("texCoords");
         for(int i = 0 ; i < 4; i++){
             info->textureCoords[i] = texCoordsArray->getFloat(i);

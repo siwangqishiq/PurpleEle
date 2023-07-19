@@ -87,11 +87,14 @@ void TextRenderCommand::putParams(std::wstring text
         wchar_t ch = text[i];
         auto charInfoPtr = textRenderHelper->findCharInfo(ch);
         if(charInfoPtr == nullptr){
+            Logi("TextRenderCommand" , "not found char info");
             continue;
         }
         
+        // Logi("TextRenderCommand" , "%f %f" 
+        //     , charInfoPtr->textureCoords[2],charInfoPtr->textureCoords[3]);
         putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
-        x += charInfoPtr->width * paint.textSizeScale + paint.gapSize;
+        x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
     }//end for i
     // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
     //     , vertexCount_
@@ -170,8 +173,8 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     float texBottom = charInfoPtr->textureCoords[3];
 
     //eg: 一 need a offset in y ax
-    float offsetY = calOffsetY(charInfoPtr , sizeScale);
     float offsetX = 0.0f;
+    float offsetY = (charInfoPtr->bearingY - charInfoPtr->height) * sizeScale;
 
     int offset = index * attrPerChar;
     //v1
