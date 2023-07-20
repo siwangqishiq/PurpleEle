@@ -120,7 +120,7 @@ struct CharInfo{
     float height;
     float bearingX;
     float bearingY;
-    float textureCoords[4];
+    float textureCoords[5];
     unsigned int textureId;
 };
 

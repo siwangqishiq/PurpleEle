@@ -345,6 +345,23 @@ int printChar(wchar_t wChar){
     return 0;
 }
 
+void clearTextureData(uint8_t *data , int width , int height){
+    for(int i = 0 ; i< height ;i++){
+        for(int j = 0 ; j< width ;j++){
+            data[i * width + j] = 0;
+        }
+    }
+}
+
+bool checkHasStr(JsonArray &list , std::string &str){
+    for(int i = 0 ; i < list.size() ; i++){
+        auto itemStr = ToByteString(list.getString(i));
+        if(itemStr == str){
+            return true;
+        }
+    }
+    return false;
+}
 
 int exportFonts2(){
     std::string fontName = "yahei";
@@ -363,7 +380,7 @@ int exportFonts2(){
         return -1;
     }
 
-    const int fontSize = 64;
+    const int fontSize = 128;
 
     FT_Set_Pixel_Sizes(face , 0, fontSize);
 
@@ -374,16 +391,20 @@ int exportFonts2(){
     std::wstring content = ReadTextFileAsWstring("all_char.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
-    const int outTexWidth = 16 * 1024;
-    const int outTexHeight = 16 * 1024;
-
-    uint8_t *textureDst = new uint8_t[outTexWidth * outTexHeight];
+    const int outTexWidth = 8 * 1024;
+    const int outTexHeight = 8 * 1024;
 
     int left = 0;
     int top = 0;
     int progress = 0;
     int currentFileIndex = 0;
     std::string currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
+    uint8_t *textureDst = new uint8_t[outTexWidth * outTexHeight];
+    clearTextureData(textureDst , outTexWidth , outTexHeight);
+
+    auto textureFiles = JsonArray::create();
+    textureFiles->pushString(ToWideString(currentTexFileName));
+    outputJson->putJsonArray("textureFiles" , textureFiles);
 
     for(wchar_t ch : content){
         progress++;
@@ -419,7 +440,22 @@ int exportFonts2(){
         if(left + charData.outWidth >= outTexWidth){
             left = 0.0;
             top += charData.outHeight;
+
+            if(top >= outTexHeight){//chang a new texture
+                left = 0.0f;
+                top = 0.0;
+
+                if(!checkHasStr(*textureFiles , currentTexFileName)){
+                    textureFiles->pushString(ToWideString(currentTexFileName));
+                }
+                stbi_write_png(currentTexFileName.c_str() , outTexWidth, outTexHeight, 1 , textureDst , 0);
+
+                currentFileIndex++;
+                currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
+                clearTextureData(textureDst , outTexWidth , outTexHeight);
+            }
         }
+        
 
         blit2(charData.pData , textureDst , left , top, 
             charData.outWidth , charData.outHeight , outTexWidth);
@@ -445,6 +481,7 @@ int exportFonts2(){
         texCoords->pushFloat(texTop);
         texCoords->pushFloat(texLeft + texWidth);
         texCoords->pushFloat(texTop + texHeight);
+        texCoords->pushFloat(static_cast<float>(currentFileIndex));
         jsonObject->putJsonArray("texCoords" , texCoords);
 
         jsonObject->putString("texture" , ToWideString(currentTexFileName));
@@ -452,6 +489,21 @@ int exportFonts2(){
         if(left + charData.outWidth >= outTexWidth){
             left = 0.0;
             top += charData.outHeight;
+
+            if(top >= outTexHeight){//chang a new texture
+                left = 0.0f;
+                top = 0.0;
+
+                if(!checkHasStr(*textureFiles , currentTexFileName)){
+                    textureFiles->pushString(ToWideString(currentTexFileName));
+                }
+                stbi_write_png(currentTexFileName.c_str() , 
+                    outTexWidth, outTexHeight, 1 , textureDst , 0);
+
+                currentFileIndex++;
+                currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
+                clearTextureData(textureDst , outTexWidth , outTexHeight);
+            }
         }else{
             left += charData.outWidth;
         }
@@ -463,7 +515,8 @@ int exportFonts2(){
 
     FT_Done_Face(face);
     
-    stbi_write_png(currentTexFileName.c_str() , outTexWidth, outTexHeight, 1 , textureDst , 0);
+    stbi_write_png(currentTexFileName.c_str() , 
+        outTexWidth, outTexHeight, 1 , textureDst , 0);
 
     delete []textureDst;
 

@@ -3,7 +3,7 @@
 #include "glm/vec4.hpp"
 #include <cmath>
 
-const float FONT_DEFAULT_SIZE = 64.0f;
+const float FONT_DEFAULT_SIZE = 128.0f;
 
 //
 struct Point{
@@ -97,7 +97,7 @@ struct Rect{
 //文本绘制 配置
 struct TextPaint{
     float textSizeScale = 1.0f;
-    float gapSize = 4.0f;
+    float gapSize = 8.0f;
     glm::vec4 textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
     TextStyle textStyle = normal;
     TextGravity textGravity = left;

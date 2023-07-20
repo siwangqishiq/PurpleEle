@@ -64,8 +64,8 @@ void TestDemo::dispose(){
 
 void TestDemo::testRenderText(){
     TextPaint paint;
-    paint.setTextSize(64.0f);
-    renderEngine_->renderText(L"窜梁鸿于海曲，岂乏明时？所赖君子见机，达人知命。老当益壮，宁移白首之心？穷且益坚，不坠青云之志。酌贪泉而觉爽" , 
+    paint.setTextSize(32.0f);
+    renderEngine_->renderText(L"Hello World! Thank    you quit?" , 
         100.0, 200.0 , paint);
 }
 

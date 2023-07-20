@@ -171,6 +171,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     float texTop = charInfoPtr->textureCoords[1];
     float texRight = charInfoPtr->textureCoords[2];
     float texBottom = charInfoPtr->textureCoords[3];
+    float texW = charInfoPtr->textureCoords[4];
 
     //eg: 一 need a offset in y ax
     float offsetX = 0.0f;
@@ -183,41 +184,47 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     buf[offset + 2] = 1.0f;
     buf[offset + 3] = texLeft;
     buf[offset + 4] = texBottom;
+    buf[offset + 5] = texW;
     
     //v2
-    buf[offset + 5] = x + charRealWidth + offsetX;
-    buf[offset + 6] = y + offsetY;
-    buf[offset + 7] = 1.0f;
-    buf[offset + 8] = texRight;
-    buf[offset + 9] = texBottom;
+    buf[offset + 6] = x + charRealWidth + offsetX;
+    buf[offset + 7] = y + offsetY;
+    buf[offset + 8] = 1.0f;
+    buf[offset + 9] = texRight;
+    buf[offset + 10] = texBottom;
+    buf[offset + 11] = texW;
 
     //v3
-    buf[offset + 10] = x + charRealWidth + offsetX + italicOffset;
-    buf[offset + 11] = y + offsetY + charRealHeight;
-    buf[offset + 12] = 1.0f;
-    buf[offset + 13] = texRight;
-    buf[offset + 14] = texTop;
+    buf[offset + 12] = x + charRealWidth + offsetX + italicOffset;
+    buf[offset + 13] = y + offsetY + charRealHeight;
+    buf[offset + 14] = 1.0f;
+    buf[offset + 15] = texRight;
+    buf[offset + 16] = texTop;
+    buf[offset + 17] = texW;
     
     //v4
-    buf[offset + 15] = x + offsetX;
-    buf[offset + 16] = y + offsetY;
-    buf[offset + 17] = 1.0f;
-    buf[offset + 18] = texLeft;
-    buf[offset + 19] = texBottom;
+    buf[offset + 18] = x + offsetX;
+    buf[offset + 19] = y + offsetY;
+    buf[offset + 20] = 1.0f;
+    buf[offset + 21] = texLeft;
+    buf[offset + 22] = texBottom;
+    buf[offset + 23] = texW;
 
     //v5
-    buf[offset + 20] = x + charRealWidth + offsetX + italicOffset;
-    buf[offset + 21] = y + offsetY + charRealHeight;
-    buf[offset + 22] = 1.0f;
-    buf[offset + 23] = texRight;
-    buf[offset + 24] = texTop;
+    buf[offset + 24] = x + charRealWidth + offsetX + italicOffset;
+    buf[offset + 25] = y + offsetY + charRealHeight;
+    buf[offset + 26] = 1.0f;
+    buf[offset + 27] = texRight;
+    buf[offset + 28] = texTop;
+    buf[offset + 29] = texW;
 
     //v6
-    buf[offset + 25] = x + offsetX + italicOffset;
-    buf[offset + 26] = y + offsetY + charRealHeight;
-    buf[offset + 27] = 1.0f;
-    buf[offset + 28] = texLeft;
-    buf[offset + 29] = texTop;
+    buf[offset + 30] = x + offsetX + italicOffset;
+    buf[offset + 31] = y + offsetY + charRealHeight;
+    buf[offset + 32] = 1.0f;
+    buf[offset + 33] = texLeft;
+    buf[offset + 34] = texTop;
+    buf[offset + 35] = texW;
 }
 
 
@@ -229,9 +236,9 @@ void TextRenderCommand::buildGlCommands(std::vector<float> &buf){
         buf.size() * sizeof(float) , buf.data());
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , 
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
         reinterpret_cast<void *>(vboOffset_));
-    glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , 
+    glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
         reinterpret_cast<void *>(vboOffset_ + 3 * sizeof(float)));
     glBindBuffer(GL_ARRAY_BUFFER , 0);
     glBindVertexArray(0);
@@ -257,17 +264,18 @@ void TextRenderCommand::runCommands(){
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fontTextureId_);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, fontTextureId_);
     shader.setUniformInt("fontTexture" , 0);
     
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , 
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
         reinterpret_cast<void *>(vboOffset_));
-    glVertexAttribPointer(1 , 2 , GL_FLOAT , GL_FALSE , 5 * sizeof(float) , 
+    glVertexAttribPointer(1 , 3 , GL_FLOAT , GL_FALSE , 6 * sizeof(float) , 
         reinterpret_cast<void *>(vboOffset_ + 3 * sizeof(float)));
     glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
 
+    glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
     glBindBuffer(GL_ARRAY_BUFFER , 0);
     glBindVertexArray(0);
 }

@@ -57,7 +57,7 @@ private:
     glm::vec4 textColor_;
 
     const int vertCountPerChar_ = 6;//一个字符由几个顶点确定
-    const int attrCount_ = 3 + 2; //每个顶点包含的属性长度     位置 postion 3 + 纹理坐标 uv 2
+    const int attrCount_ = 3 + 3; //每个顶点包含的属性长度     位置 postion 3 + 纹理坐标 uvw 3
     
     unsigned int fontTextureId_ = -1;
 

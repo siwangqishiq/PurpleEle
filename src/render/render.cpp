@@ -174,9 +174,31 @@ void TextRenderHelper::buildTextCharConfig(){
     auto configJson = parser.parseJsonObject(charConfigStr);
     auto charJsonList = configJson->getJsonArray("list");
     Logi("text_render" , "charJsonList size : %d" , charJsonList->size());
+    
+    //load texture
+    auto textureFileList = configJson->getJsonArray("textureFiles");
+    std::vector<std::string> filelist;
+    for(int i = 0 ; i < textureFileList->size() ;i++){
+        std::string filename = ToByteString(textureFileList->getString(i));
+        Logi("debug" , "filename: %s" , filename.c_str());
+        filelist.push_back("text/"+filename);
+    }//end for i
+    // auto textureInfo = TextureManager::getInstance()->acquireTexture("text/" + textureName);
+    
+    auto textureInfo = TextureManager::getInstance()->loadTextureArray(filelist);
+    if(textureInfo != nullptr){
+        mainTextureId_ = textureInfo->textureId;
+    }else{
+        Logi("TextRenderHelper" , "error to load textureInfo");
+        return;
+    }
+
+    Logi("TextRenderHelper" , "load texture name : %s , width : %d , height : %d" , 
+        textureInfo->name.c_str(),
+        textureInfo->width,
+        textureInfo->height);
 
     charInfoMaps_.clear();
-
     for(int i = 0 ;  i< charJsonList->size();i++){
         auto itemJson = charJsonList->getJsonObject(i);
         std::shared_ptr<CharInfo> info = std::make_shared<CharInfo>();
@@ -186,22 +208,19 @@ void TextRenderHelper::buildTextCharConfig(){
         info->bearingX = itemJson->getInt("bearingX");
         info->bearingY = itemJson->getInt("bearingY");
         auto texCoordsArray = itemJson->getJsonArray("texCoords");
-        for(int i = 0 ; i < 4; i++){
+        for(int i = 0 ; i < texCoordsArray->size(); i++){
             info->textureCoords[i] = texCoordsArray->getFloat(i);
         }//end for i
 
         //load texture
         // auto textureName = itemJson->getString("texture");
-        std::string textureName = ToByteString(itemJson->getString("texture"));
+        // std::string textureName = ToByteString(itemJson->getString("texture"));
         // Logi("text_render" , "textureName coord: %f , %f , %f , %f" , 
         //     info->textureCoords[0] ,info->textureCoords[1],
         //     info->textureCoords[2] ,info->textureCoords[3] );
         // Logi("text_render" , "texture value size %d" , info->value.size());
         // Logi("text_render" , "texture name  %s" , textureName.c_str());
-        auto textureInfo = TextureManager::getInstance()->acquireTexture("text/" + textureName);
-        info->textureId = textureInfo->textureId;
-
-        mainTextureId_ = info->textureId;
+        // mainTextureId_ = info->textureId;
         // // Logi("text_render" , "textureId : %d" , info->textureId);
         charInfoMaps_.insert(std::make_pair<>(info->value[0] , info));
     }//end for i
