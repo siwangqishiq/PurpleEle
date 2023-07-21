@@ -381,7 +381,7 @@ int exportFonts2(){
     }
 
     const int fontSize = 128;
-
+    
     FT_Set_Pixel_Sizes(face , 0, fontSize);
 
     auto outputJson = JsonObject::create();
@@ -391,8 +391,8 @@ int exportFonts2(){
     std::wstring content = ReadTextFileAsWstring("all_char.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
-    const int outTexWidth = 8 * 1024;
-    const int outTexHeight = 8 * 1024;
+    const int outTexWidth = 2 * 1024;
+    const int outTexHeight = 2 * 1024;
 
     int left = 0;
     int top = 0;
@@ -515,6 +515,10 @@ int exportFonts2(){
 
     FT_Done_Face(face);
     
+
+    if(!checkHasStr(*textureFiles , currentTexFileName)){
+        textureFiles->pushString(ToWideString(currentTexFileName));
+    }
     stbi_write_png(currentTexFileName.c_str() , 
         outTexWidth, outTexHeight, 1 , textureDst , 0);
 

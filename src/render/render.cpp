@@ -184,8 +184,8 @@ void TextRenderHelper::buildTextCharConfig(){
         filelist.push_back("text/"+filename);
     }//end for i
     // auto textureInfo = TextureManager::getInstance()->acquireTexture("text/" + textureName);
-    
     auto textureInfo = TextureManager::getInstance()->loadTextureArray(filelist);
+    Logi("debug" , "load texture %d" , glGetError());
     if(textureInfo != nullptr){
         mainTextureId_ = textureInfo->textureId;
     }else{

@@ -2,6 +2,19 @@
 #include "glheader.hpp"
 #include "resource/asset_manager.hpp"
 
+GLint convertChanelToInternalFormat(int format){
+    GLint  internalFormat = GL_RGBA;
+    switch (format) {
+        case GL_RED:
+            internalFormat = GL_R8;
+            break;
+        case GL_RGB:
+            internalFormat = GL_RGB;
+            break;
+    }//end switch
+    return internalFormat;
+}
+
 std::shared_ptr<TextureManager> TextureManager::getInstance(){
     static std::shared_ptr<TextureManager> instance_;
     if(instance_ == nullptr){
@@ -28,7 +41,7 @@ std::unique_ptr<uint8_t> TextureManager::readTextureFile(std::string &path,
     std::unique_ptr<uint8_t> data = AssetManager::getInstance()
         ->readTextureFile(path ,fileConfig,needFlip);
 
-    format = TEXTURE_FILE_CHANNEL_UNKNOW;
+    format = GL_RGBA;
     if(fileConfig.channel == TEXTURE_FILE_CHANNEL_RGB){
         format = GL_RGB;
     }else if(fileConfig.channel == TEXTURE_FILE_CHANNEL_ARGB){
@@ -59,28 +72,27 @@ std::shared_ptr<TextureInfo> TextureManager::loadTextureArray(
     }
 
     std::string firstFilePath = textureFiles[0];
-    int format = TEXTURE_FILE_CHANNEL_UNKNOW;
+    int format = GL_RGBA;
     int texWidth = 0;
     int texHeight = 0;
     std::unique_ptr<uint8_t> data = readTextureFile(firstFilePath , 
         needFlip , format, 
         texWidth , texHeight);
     
-    if(format == TEXTURE_FILE_CHANNEL_UNKNOW){
-        return nullptr;
-    }
-
     glBindTexture(GL_TEXTURE_2D_ARRAY , textureId);
-    glPixelStorei(GL_UNPACK_ALIGNMENT , 1);
+    // glPixelStorei(GL_UNPACK_ALIGNMENT , 4);
     glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MIN_FILTER , GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D_ARRAY , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
+    // Logi("debug" , "22222load texture before %d" , glGetError());
 
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, 
-        format, texWidth,
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0,
+                 convertChanelToInternalFormat(format),
+                 texWidth,
         texHeight, textureFiles.size(),
         0,format, GL_UNSIGNED_BYTE , nullptr);
+    Logi("debug" , "3333load texture before %d" , glGetError());
 
     for(int i = 0 ; i < textureFiles.size() ;i++){
         std::unique_ptr<uint8_t> pTexData = nullptr;
@@ -96,7 +108,7 @@ std::shared_ptr<TextureInfo> TextureManager::loadTextureArray(
     }//end for i
 
     glBindTexture(GL_TEXTURE_2D_ARRAY , 0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+   //  glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
     auto textureInfo = std::make_shared<TextureInfo>();
     textureInfo->name = firstFilePath;
@@ -115,15 +127,12 @@ std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFile
     bool needFlip){
     Logi(TAG , "load texture %s" , textureFilePath.c_str());
     
-    int format = TEXTURE_FILE_CHANNEL_UNKNOW;
+    int format = GL_RGBA;
     int texWidth;
     int texHeight;
     auto data = readTextureFile(textureFilePath , needFlip , format , 
         texWidth, texHeight);    
-    if(format == TEXTURE_FILE_CHANNEL_UNKNOW){
-        return nullptr;
-    }
-
+    
     unsigned int tId = -1;
     glGenTextures(1 , &tId);
     if(tId <= 0 ){
@@ -136,7 +145,8 @@ std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFile
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, 
+    glTexImage2D(GL_TEXTURE_2D, 0, 
+        convertChanelToInternalFormat(format),
         texWidth, 
         texHeight, 0, 
         format, GL_UNSIGNED_BYTE, data.get());

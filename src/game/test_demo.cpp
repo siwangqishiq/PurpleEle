@@ -34,9 +34,17 @@ void TestDemo::init(){
         }
     } , 100L);
 
+    //some gl config message debug
     GLint size = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE , &size);
     Logi("testDemo" , "max texture size = %d"  ,size);
+    GLint max3dTextureSize = 0;
+    glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE , &max3dTextureSize);
+    Logi("testDemo" , "max 3d texture size = %d"  ,max3dTextureSize);
+
+    int maxTextureImageUnits[2];
+    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTextureImageUnits);
+    Logi("testDemo" , "max texture image units = %d"  ,maxTextureImageUnits[0]);
 }
 
 void TestDemo::tick(){

@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "log.hpp"
 #include <vector>
+#include "glheader.hpp"
 
 enum TextureType{
     TEXTURE_2D,
@@ -23,6 +24,8 @@ struct TextureInfo{
     TextureType type = TEXTURE_2D;
     int depth;
 };
+
+static GLint convertChanelToInternalFormat(int channelFormat);
 
 //纹理管理
 class TextureManager{
