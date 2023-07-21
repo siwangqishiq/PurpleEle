@@ -381,14 +381,14 @@ int exportFonts2(){
     }
 
     const int fontSize = 128;
-    
+
     FT_Set_Pixel_Sizes(face , 0, fontSize);
 
     auto outputJson = JsonObject::create();
     auto charListArray = JsonArray::create();
     outputJson->putJsonArray("list" , charListArray);
 
-    std::wstring content = ReadTextFileAsWstring("all_char.txt");
+    std::wstring content = ReadTextFileAsWstring("chars.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
     const int outTexWidth = 2 * 1024;
