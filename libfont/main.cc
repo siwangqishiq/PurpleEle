@@ -39,14 +39,19 @@ void blit(unsigned char *src , uint32_t *dst , int x , int y , int width , int h
 }
 
 void blit2(uint8_t *src , uint8_t *dst , int x , int y , int width , int height ,
-            int strideWidth){
+            int strideWidth , int dstHeight){
     for(int i = 0 ; i < height ;i++){
         for(int j = 0 ; j < width ;j++){
+            auto offset = (y + i) * strideWidth + x + j;
+            // if(offset >= strideWidth * dstHeight){
+            //     continue;
+            // }
+
             if(src[i * width + j] == 0){
-                dst[(y + i) * strideWidth + x + j] = 0x00;
+                dst[offset] = 0x00;
             }else{
                 //abgr
-                dst[(y + i) * strideWidth + x + j] = 0xff;
+                dst[offset] = 0xff;
             }
         }//end for j
     }
@@ -218,9 +223,10 @@ int buildWcharTexture(wchar_t wChar , FT_Face &face , int fontHeight , CharData 
 
     charData.outWidth = std::max(static_cast<int>(face->glyph->advance.x / 64) , 
         charData.fontWidth);
-    charData.outHeight = std::max(fontHeight , charData.fontHeight);
+    charData.outHeight = fontHeight;
 
     charData.bearingX = face->glyph->bitmap_left;
+    
     charData.bearingY = face->glyph->bitmap_top;
 
     charData.pData = new uint8_t[charData.outWidth * charData.outHeight];
@@ -238,19 +244,21 @@ int buildWcharTexture(wchar_t wChar , FT_Face &face , int fontHeight , CharData 
     charData.offsetX = offset_x;
     charData.offsetY = offset_y;
 
-    // std::cout << "outWidth   :" << charData.outWidth << std::endl;
-    // std::cout << "outHeight  :" << charData.outHeight << std::endl;
-    // std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
-    // std::cout << "fontHeight :" << charData.fontHeight << std::endl;
-    // std::cout << "offsetx    :" << charData.offsetX << std::endl;
-    // std::cout << "offsety    :" << charData.offsetY << std::endl;
-    // std::cout << "bearingX   :" << charData.bearingX << std::endl;
-    // std::cout << "bearingY   :" << charData.bearingY << std::endl;
+    std::cout << "outWidth   :" << charData.outWidth << std::endl;
+    std::cout << "outHeight  :" << charData.outHeight << std::endl;
+    std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
+    std::cout << "fontHeight :" << charData.fontHeight << std::endl;
+    std::cout << "offsetx    :" << charData.offsetX << std::endl;
+    std::cout << "offsety    :" << charData.offsetY << std::endl;
+    std::cout << "bearingX   :" << charData.bearingX << std::endl;
+    std::cout << "bearingY   :" << charData.bearingY << std::endl;
 
     for(int i = 0 ;  i < fontBit.rows ; i++ ){
         for(int j = 0 ; j < fontBit.pitch ; j++){
             if(fontBit.buffer[i * fontBit.pitch + j] != 0){
-                charData.pData[(i + offset_y) * charData.outWidth + j + offset_x] = 1;
+                if((i + offset_y) * charData.outWidth + j + offset_x < charData.outWidth * charData.outHeight){
+                    charData.pData[(i + offset_y) * charData.outWidth + j + offset_x] = 1;
+                }
             }
         }
     }
@@ -374,13 +382,15 @@ int exportFonts2(){
     }
 
     FT_Face face;
-    std::string fontPath = fontName + ".ttc";
+    //std::string fontPath = fontName + ".ttc";
+    std::string fontPath = "shufa.ttf";
     if (FT_New_Face(ftLib, fontPath.c_str(), 0, &face)){
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         return -1;
     }
 
     const int fontSize = 128;
+    const int fontRowGapSize = 16;
 
     FT_Set_Pixel_Sizes(face , 0, fontSize);
 
@@ -394,8 +404,8 @@ int exportFonts2(){
     const int outTexWidth = 2 * 1024;
     const int outTexHeight = 2 * 1024;
 
-    int left = 0;
-    int top = 0;
+    float left = 0;
+    float top = 0;
     int progress = 0;
     int currentFileIndex = 0;
     std::string currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
@@ -424,7 +434,8 @@ int exportFonts2(){
             continue;
         }
 
-        //print on console
+        // std::cout << "buildWcharTexture ended!" << std::endl;
+        // print on console
         // for(int i = 0 ; i < charData.outHeight;i++){
         //     for(int j = 0; j < charData.outWidth;j++){
         //         if(charData.pData[i * charData.outWidth + j] != 0){
@@ -435,30 +446,15 @@ int exportFonts2(){
         //     }//end for j
         //     std::cout<< std::endl;
         // }//end for i
-        // std::cout << "left " << left << " top " << top << std::endl; 
 
-        if(left + charData.outWidth >= outTexWidth){
-            left = 0.0;
-            top += charData.outHeight;
-
-            if(top >= outTexHeight){//chang a new texture
-                left = 0.0f;
-                top = 0.0;
-
-                if(!checkHasStr(*textureFiles , currentTexFileName)){
-                    textureFiles->pushString(ToWideString(currentTexFileName));
-                }
-                stbi_write_png(currentTexFileName.c_str() , outTexWidth, outTexHeight, 1 , textureDst , 0);
-
-                currentFileIndex++;
-                currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
-                clearTextureData(textureDst , outTexWidth , outTexHeight);
-            }
-        }
+        std::cout << "left " << left << " top " << top 
+            << " dstW = " << outTexWidth 
+            << " dstH = " << outTexHeight <<  std::endl; 
         
 
+        std::cout << "start blit2" << std::endl;
         blit2(charData.pData , textureDst , left , top, 
-            charData.outWidth , charData.outHeight , outTexWidth);
+            charData.outWidth , charData.outHeight , outTexWidth , outTexHeight);
 
         //write meta json data
         auto jsonObject = JsonObject::create();
@@ -486,11 +482,11 @@ int exportFonts2(){
 
         jsonObject->putString("texture" , ToWideString(currentTexFileName));
 
-        if(left + charData.outWidth >= outTexWidth){
+        if(left + fontSize >= outTexWidth){
             left = 0.0;
-            top += charData.outHeight;
+            top += (fontSize + fontRowGapSize);
 
-            if(top >= outTexHeight){//chang a new texture
+            if(top > outTexHeight - fontSize){//chang a new texture
                 left = 0.0f;
                 top = 0.0;
 
@@ -505,7 +501,7 @@ int exportFonts2(){
                 clearTextureData(textureDst , outTexWidth , outTexHeight);
             }
         }else{
-            left += charData.outWidth;
+            left += fontSize;
         }
 
         delete charData.pData;

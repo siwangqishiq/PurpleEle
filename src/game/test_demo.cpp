@@ -42,7 +42,7 @@ void TestDemo::init(){
     glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE , &max3dTextureSize);
     Logi("testDemo" , "max 3d texture size = %d"  ,max3dTextureSize);
 
-    int maxTextureImageUnits[2];
+    int maxTextureImageUnits[1];
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTextureImageUnits);
     Logi("testDemo" , "max texture image units = %d"  ,maxTextureImageUnits[0]);
 }
@@ -71,10 +71,16 @@ void TestDemo::dispose(){
 }
 
 void TestDemo::testRenderText(){
+    static float y=10;
     TextPaint paint;
-    paint.setTextSize(32.0f);
-    renderEngine_->renderText(L"Hello World! Thank    you quit?" , 
-        100.0, 200.0 , paint);
+    paint.setTextSize(64.0f);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 1.0);
+    renderEngine_->renderText(L"滕王高阁临江渚，佩玉鸣鸾罢歌舞  Thank you" ,
+        0.0, y , paint);
+    y = (y + 2.0f);
+    if(y > viewHeight_){
+        y = 0.0f;
+    }
 }
 
 void TestDemo::testRenderSprite6ImageRegion(){

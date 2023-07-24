@@ -123,6 +123,12 @@ void RenderEngine::renderText(std::wstring text ,
     submitRenderCommand(cmd);
 }
 
+void RenderEngine::renderTextWithRect(std::wstring text , Rect &showRect , TextPaint &paint){
+    auto cmd = fetchTextRenderCommand(this);
+    cmd->putTextParamsByRectLimit(text , showRect , paint);
+    submitRenderCommand(cmd);
+}
+
 void RenderEngine::renderText(std::wstring text , Rect &showRect , TextPaint &paint){
     if(text.empty()){
         return;

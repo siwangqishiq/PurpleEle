@@ -87,8 +87,10 @@ void TextRenderCommand::putParams(std::wstring text
         wchar_t ch = text[i];
         auto charInfoPtr = textRenderHelper->findCharInfo(ch);
         if(charInfoPtr == nullptr){
-            Logi("TextRenderCommand" , "not found char info");
-            continue;
+            //Logi("TextRenderCommand" , "not found char info");
+            // continue;
+            wchar_t x = L'*';
+            charInfoPtr = textRenderHelper->findCharInfo(x);
         }
         
         // Logi("TextRenderCommand" , "%f %f" 
@@ -110,45 +112,11 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
     if(text.empty()){
         return;
     }
+
     paint_ = paint;
-    limitRect_ = limitRect;
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
-    allocatorVRamForText(text.length());
-    
-    long long t2 = currentTimeMicro();
-
-    auto textRenderHelper = engine_->textRenderHelper_;
-    //todo 文本排版
-    const float limitWidth = limitRect.width;
-    const float sizeScale = paint_.textSizeScale;
-    const float charMaxHeight = CHAR_DEFAULT_HEIGHT * sizeScale;
-
-    int pos = 0;
-
-    float x = limitRect.left;
-    float y = limitRect.top - charMaxHeight;
-    float thisLineLeft = 0.0f;
-
     std::vector<float> buf(vertexCount_ * attrCount_);
-    while(pos < text.size()){
-        auto ch = text[pos];
-        auto charInfoPtr = textRenderHelper->findCharInfo(ch);
-        if(charInfoPtr != nullptr){
-            float charRealWidth = charInfoPtr->width * sizeScale;
-            if(x + (charRealWidth + paint.gapSize) > limitRect.left + limitWidth){
-                x = limitRect.left;
-                y -= (charMaxHeight + paint.gapSize);
-            }
-            putVertexDataToBuf(buf , pos , x , y , charInfoPtr , paint);
-            x += (charRealWidth + paint.gapSize);
-        }
-        pos++;
-    }//end while
 
-    // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
-    //     , vertexCount_
-    //     , (currentTimeMicro() - t2));
-    
     buildGlCommands(buf);
 }
 

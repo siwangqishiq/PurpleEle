@@ -67,6 +67,8 @@ public:
     //绘制文字
     void renderText(std::wstring text , float left , float bottom , TextPaint &paint); //文本
 
+    void renderTextWithRect(std::wstring text , Rect &showRect , TextPaint &paint);//
+
     //将文本包裹在一个矩形内渲染
     void renderText(std::wstring text , Rect &showRect , TextPaint &paint);
 
