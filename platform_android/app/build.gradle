@@ -7,6 +7,7 @@ android {
 
     defaultConfig {
         applicationId "panyi.xyz.textrender"
+        namespace 'panyi.xyz.textrender'
         minSdk 23
         targetSdk 32
         versionCode 1
@@ -33,7 +34,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
-            version '3.18.1'
+            version '3.22.1'
         }
     }
     buildFeatures {

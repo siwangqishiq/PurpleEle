@@ -75,8 +75,14 @@ void TestDemo::testRenderText(){
     TextPaint paint;
     paint.setTextSize(64.0f);
     paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 1.0);
-    renderEngine_->renderText(L"滕王高阁临江渚，佩玉鸣鸾罢歌舞  Thank you" ,
+    renderEngine_->renderText(L"滕王高阁临江渚，佩玉鸣鸾罢歌舞" ,
         0.0, y , paint);
+    renderEngine_->renderText(L"画栋朝飞南浦云,珠帘暮卷西山雨" ,
+        0.0, y - 64.0f , paint);
+    renderEngine_->renderText(L"闲云潭雨日悠悠,物换星移几度秋" ,
+        0.0, y - 2 * 64.0f , paint);
+    renderEngine_->renderText(L"阁中帝子今何在？槛外长江空自流" ,
+        0.0, y - 3 * 64.0f , paint);
     y = (y + 2.0f);
     if(y > viewHeight_){
         y = 0.0f;
