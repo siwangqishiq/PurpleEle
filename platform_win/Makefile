@@ -1,10 +1,5 @@
 include ../module.mk
 
-${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_windows.cpp \
-				${SRC_DIR}/audio/audio_windows.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio_windows.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_impl.o 
-
-
 ${BUILD_DIR}/main.o:main.cpp
 	${CC} -std=${STD} ${OPTPARAMS} -c main.cpp -o ${BUILD_DIR}/main.o -I ${INCLUDE_DIR} -I ../ -I ${SRC_DIR}
 	

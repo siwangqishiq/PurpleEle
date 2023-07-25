@@ -89,3 +89,7 @@ ${BUILD_DIR}/test_demo.o:${SRC_DIR}/game/test_demo.cpp ${SRC_DIR}/game/test_demo
 
 ${BUILD_DIR}/shader_demo.o:${SRC_DIR}/game/shader_demo.cpp ${SRC_DIR}/game/shader_demo.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/shader_demo.cpp -o ${BUILD_DIR}/shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
+
+${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \
+				${SRC_DIR}/audio/audio_impl.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio_impl.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_impl.o 
