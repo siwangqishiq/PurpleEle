@@ -244,14 +244,14 @@ int buildWcharTexture(wchar_t wChar , FT_Face &face , int fontHeight , CharData 
     charData.offsetX = offset_x;
     charData.offsetY = offset_y;
 
-    std::cout << "outWidth   :" << charData.outWidth << std::endl;
-    std::cout << "outHeight  :" << charData.outHeight << std::endl;
-    std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
-    std::cout << "fontHeight :" << charData.fontHeight << std::endl;
-    std::cout << "offsetx    :" << charData.offsetX << std::endl;
-    std::cout << "offsety    :" << charData.offsetY << std::endl;
-    std::cout << "bearingX   :" << charData.bearingX << std::endl;
-    std::cout << "bearingY   :" << charData.bearingY << std::endl;
+    // std::cout << "outWidth   :" << charData.outWidth << std::endl;
+    // std::cout << "outHeight  :" << charData.outHeight << std::endl;
+    // std::cout << "fontWidth  :" << charData.fontWidth << std::endl;
+    // std::cout << "fontHeight :" << charData.fontHeight << std::endl;
+    // std::cout << "offsetx    :" << charData.offsetX << std::endl;
+    // std::cout << "offsety    :" << charData.offsetY << std::endl;
+    // std::cout << "bearingX   :" << charData.bearingX << std::endl;
+    // std::cout << "bearingY   :" << charData.bearingY << std::endl;
 
     for(int i = 0 ;  i < fontBit.rows ; i++ ){
         for(int j = 0 ; j < fontBit.pitch ; j++){
@@ -371,6 +371,13 @@ bool checkHasStr(JsonArray &list , std::string &str){
     return false;
 }
 
+void saveImageToFile(std::string filename , 
+        int outTexWidth , int outTexHeight , 
+        uint8_t *outDst){
+    stbi_write_png(filename.c_str() , outTexWidth, outTexHeight, 1 , outDst , 0);
+    // stbi_write_jpg(filename.c_str() , outTexWidth, outTexHeight, 1 , outDst , 1);
+}
+
 int exportFonts2(){
     std::string fontName = "yahei";
     
@@ -382,8 +389,8 @@ int exportFonts2(){
     }
 
     FT_Face face;
-    //std::string fontPath = fontName + ".ttc";
-    std::string fontPath = "shufa.ttf";
+    // std::string fontPath = fontName + ".ttc";
+    std::string fontPath = "shouxie.ttf";
     if (FT_New_Face(ftLib, fontPath.c_str(), 0, &face)){
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         return -1;
@@ -398,7 +405,7 @@ int exportFonts2(){
     auto charListArray = JsonArray::create();
     outputJson->putJsonArray("list" , charListArray);
 
-    std::wstring content = ReadTextFileAsWstring("chars.txt");
+    std::wstring content = ReadTextFileAsWstring("all_char.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
     const int outTexWidth = 2 * 1024;
@@ -493,8 +500,10 @@ int exportFonts2(){
                 if(!checkHasStr(*textureFiles , currentTexFileName)){
                     textureFiles->pushString(ToWideString(currentTexFileName));
                 }
-                stbi_write_png(currentTexFileName.c_str() , 
-                    outTexWidth, outTexHeight, 1 , textureDst , 0);
+
+                saveImageToFile(currentTexFileName , 
+                                outTexWidth , outTexHeight, 
+                                textureDst);
 
                 currentFileIndex++;
                 currentTexFileName = "font_texture_"+std::to_string(currentFileIndex)+".png";
@@ -515,8 +524,7 @@ int exportFonts2(){
     if(!checkHasStr(*textureFiles , currentTexFileName)){
         textureFiles->pushString(ToWideString(currentTexFileName));
     }
-    stbi_write_png(currentTexFileName.c_str() , 
-        outTexWidth, outTexHeight, 1 , textureDst , 0);
+    saveImageToFile(currentTexFileName , outTexWidth , outTexHeight , textureDst);
 
     delete []textureDst;
 

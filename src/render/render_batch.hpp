@@ -104,6 +104,8 @@ public:
 
     void renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect);
 
+    void renderImage(std::shared_ptr<TextureImage> pImage, Rect &srcRect , Rect &dstRect);
+
     void renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect ,
             float cx , float cy , float angle);
     

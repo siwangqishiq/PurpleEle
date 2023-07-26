@@ -266,6 +266,11 @@ void SpriteBatch::executeGlCommands(){
     glBindVertexArray(0);
 }
 
+void SpriteBatch::renderImage(std::shared_ptr<TextureImage> pImage, 
+        Rect &srcRect , Rect &dstRect){
+    renderImage(*pImage , srcRect , dstRect);
+}
+
 void SpriteBatch::renderImage(TextureImage &image , Rect &srcRect , Rect &dstRect){
     return renderImage(image , srcRect , dstRect , 0.0f , 0.0f , 0.0f);
 }
