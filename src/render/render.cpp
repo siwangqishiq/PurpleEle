@@ -116,27 +116,27 @@ void RenderEngine::renderShader(Shader &shader ,
     submitRenderCommand(cmd);
 }
 
-void RenderEngine::renderText(std::wstring text , 
+void RenderEngine::renderText(std::wstring &text , 
         float left , float bottom , TextPaint &paint){
     auto cmd = fetchTextRenderCommand(this);
     cmd->putParams(text , left , bottom , paint);
     submitRenderCommand(cmd);
 }
 
-void RenderEngine::renderTextWithRect(std::wstring text , Rect &showRect , TextPaint &paint){
+void RenderEngine::renderTextWithRect(std::wstring &text , Rect &showRect , 
+        TextPaint &paint, Rect *wrapContentRect){
     auto cmd = fetchTextRenderCommand(this);
-    cmd->putTextParamsByRectLimit(text , showRect , paint);
+    cmd->putTextParamsByRectLimit(text , showRect ,wrapContentRect , paint);
     submitRenderCommand(cmd);
 }
 
-void RenderEngine::renderText(std::wstring text , Rect &showRect , TextPaint &paint){
-    if(text.empty()){
-        return;
-    }
-
-    auto cmd = fetchTextRenderCommand(this);
-    cmd->putTextParamsByRectLimit(text , showRect , paint);
-    submitRenderCommand(cmd);
+void RenderEngine::renderText(std::wstring &text , Rect &showRect , TextPaint &paint){
+    // if(text.empty()){
+    //     return;
+    // }
+    // auto cmd = fetchTextRenderCommand(this);
+    // cmd->putTextParamsByRectLimit(text , showRect , paint);
+    // submitRenderCommand(cmd);
 }
 
 std::shared_ptr<TextRenderCommand> RenderEngine::fetchTextRenderCommand(RenderEngine *engine){
@@ -168,7 +168,11 @@ void TextRenderHelper::loadRes(RenderEngine &engine){
 }
 
 std::shared_ptr<CharInfo> TextRenderHelper::findCharInfo(wchar_t &ch){
-    return charInfoMaps_[ch];
+    auto result = charInfoMaps_[ch];
+    if(result == nullptr){
+        result = charInfoMaps_[L'*'];
+    }
+    return result;
 }
 
 //读取字符配置
@@ -325,4 +329,55 @@ void RenderEngine::renderRoundRect(Rect &rectangle ,float radius , Paint &paint)
 //精灵类批量渲染
 std::shared_ptr<SpriteBatch> RenderEngine::getSpriteBatch(){
     return spriteBatch_;
+}
+
+// text layout calculate
+// 
+void TextRenderHelper::layoutText(std::wstring &content , 
+        Rect &limitRect, 
+        TextPaint &paint , 
+        Rect &outRect,
+        std::vector<float> &buf){
+    
+    float limitWidth = limitRect.width;
+
+    float baselineLeft = 0.0f;
+    float baselineTop = 0.0f;
+    float curLineWidth = 0.0f;
+    float currLineHeight = 0.0f;
+
+    float gapVert = paint.gapSize * paint.textSizeScale;
+
+    int realRenderLength = 0;
+    for(int i = 0 ; i < content.length() ;i++){
+        wchar_t ch = content[i];
+        auto charInfoPtr = findCharInfo(ch);
+
+        float addedWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
+        if(baselineLeft + addedWidth > limitWidth){// need create a new line
+            curLineWidth = 0.0f;
+            
+            if(outRect.height + (currLineHeight + gapVert) > limitRect.height){
+                break;
+            }
+
+            outRect.height += (currLineHeight + gapVert);
+            currLineHeight = 0.0f;
+        }
+
+        curLineWidth += addedWidth;
+        if(outRect.width < curLineWidth){
+            outRect.width = curLineWidth;
+        }
+        currLineHeight = std::max(currLineHeight , charInfoPtr->height);
+    }//end for i
+
+    if(currLineHeight > 0.0f){
+        outRect.height += (currLineHeight + gapVert);
+    }
+
+    //out rect coordinate transform
+    // outRect.top = outRect.height;
+    outRect.left = limitRect.left;
+    outRect.top = limitRect.top;
 }

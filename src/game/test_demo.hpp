@@ -61,4 +61,5 @@ private:
     void testRenderSprite6ImageRegion();
 
     void testRenderText();
+    void testRenderTextWithRect();
 };

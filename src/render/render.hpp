@@ -65,12 +65,27 @@ public:
     //render api 
 
     //绘制文字
-    void renderText(std::wstring text , float left , float bottom , TextPaint &paint); //文本
+    void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
 
-    void renderTextWithRect(std::wstring text , Rect &showRect , TextPaint &paint);//
+    void renderText(const wchar_t *text , float left , float bottom , TextPaint &paint){
+        auto str = std::wstring(text);
+        renderText(str, left , bottom , paint);
+    }
+
+    //绘制文字  但是将文字限定在一个矩形框内 放不下的文字 直接舍弃 
+    void renderTextWithRect(std::wstring &text , Rect &showRect , 
+            TextPaint &paint , 
+            Rect *wrapContentRect);//
+
+    void renderTextWithRect(const wchar_t *text , Rect &showRect , 
+            TextPaint &paint ,
+            Rect *wrapContentRect){
+        auto str = std::wstring(text);
+        renderTextWithRect(text , showRect , paint ,wrapContentRect);
+    }
 
     //将文本包裹在一个矩形内渲染
-    void renderText(std::wstring text , Rect &showRect , TextPaint &paint);
+    void renderText(std::wstring &text , Rect &showRect , TextPaint &paint);
 
     //在指定矩形区域内绘制自定义shader
     void renderShader(Shader &shader , Rect &showRect , 
@@ -95,7 +110,7 @@ private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 
     void loadTextRenderResource();
-
+    
     void loadShapeShader();
 
     void resetNormalMat(float w , float h);
@@ -137,6 +152,12 @@ public:
     Shader textRenderShader_;
 
     std::shared_ptr<CharInfo> findCharInfo(wchar_t &ch);
+
+    void layoutText(std::wstring &content , 
+            Rect &limitRect, 
+            TextPaint &paint , 
+            Rect &outRect,
+            std::vector<float> &buf);
 
     unsigned int mainTextureId_;
 

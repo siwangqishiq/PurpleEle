@@ -59,14 +59,35 @@ void TestDemo::tick(){
     // testRenderSprite3();
     // testRenderSprite4();
 
-    testRenderText();
     // testRenderSprite5Rotate();
     // testRenderSprite6ImageRegion();
     // testRenderShader();
-   
+    
+    testRenderText();
+    testRenderTextWithRect();
 }
 
 void TestDemo::dispose(){
+    
+}
+
+void TestDemo::testRenderTextWithRect(){
+    Rect limitRect;
+    limitRect.left = 0;
+    limitRect.top = viewHeight_;
+    limitRect.width = viewWidth_;
+    limitRect.height = viewHeight_;
+
+    TextPaint paint;
+    float fontSize = 100.0f;
+    paint.setTextSize(fontSize);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 1.0f);
+
+    Rect outRect;
+    // renderEngine_->renderTextWithRect(L"Hello pear, Thank you" , 
+    //     limitRect ,
+    //     paint ,
+    //     &outRect);
     
 }
 
@@ -91,7 +112,7 @@ void TestDemo::testRenderText(){
     TextPaint paint;
     float fontSize = 100.0f;
     paint.setTextSize(fontSize);
-    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 0.8f);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 1.0f);
     float offsetX = 100.0f;
     renderEngine_->renderText(L"滕王高阁临江渚，佩玉鸣鸾罢歌舞" ,
         offsetX, y , paint);
@@ -107,6 +128,7 @@ void TestDemo::testRenderText(){
         y = 0.0f;
     }
 }
+
 
 void TestDemo::testRenderSprite6ImageRegion(){
     auto spriteBatch = renderEngine_->getSpriteBatch();

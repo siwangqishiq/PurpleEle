@@ -65,7 +65,7 @@ int VRamAllcator::fetchVideoMemory(int requestSize ,
         currentBufferIdIndex_ = allocatedList_.size() - 1;
         mInfo = allocatedList_[currentBufferIdIndex_];
     }
-
+    
     bufferId = mInfo->bufferId;
     vao = mInfo->vao;
     offset = mInfo->offset;

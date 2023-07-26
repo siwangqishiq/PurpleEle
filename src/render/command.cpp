@@ -108,6 +108,7 @@ void TextRenderCommand::putParams(std::wstring text
 }
 
 void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limitRect, 
+            Rect *wrapContentRect,
             TextPaint &paint){
     if(text.empty()){
         return;
@@ -116,7 +117,11 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
     paint_ = paint;
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
     std::vector<float> buf(vertexCount_ * attrCount_);
-
+    Rect outRect;
+    engine_->textRenderHelper_->layoutText(text , limitRect , paint , outRect , buf);
+    if(wrapContentRect != nullptr){
+        *wrapContentRect = outRect;
+    }
     buildGlCommands(buf);
 }
 
