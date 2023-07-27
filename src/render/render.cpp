@@ -40,6 +40,7 @@ void RenderEngine::free(){
 }
 
 void RenderEngine::clearRenderCommands(){
+    resetDepth();
     renderCommandList_.clear();
 }
 
@@ -113,21 +114,28 @@ void RenderEngine::renderShader(Shader &shader ,
     auto cmd = fetchShaderRenderCommand(this);
     cmd->putParams(shader ,showRect);
     cmd->setPreRenderCallback(preRenderCallback);
-    submitRenderCommand(cmd);
+
+    cmd->runCommands();
+    // submitRenderCommand(cmd);
 }
 
 void RenderEngine::renderText(std::wstring &text , 
         float left , float bottom , TextPaint &paint){
     auto cmd = fetchTextRenderCommand(this);
     cmd->putParams(text , left , bottom , paint);
-    submitRenderCommand(cmd);
+    cmd->runCommands();
+    // submitRenderCommand(cmd);
 }
 
 void RenderEngine::renderTextWithRect(std::wstring &text , Rect &showRect , 
         TextPaint &paint, Rect *wrapContentRect){
     auto cmd = fetchTextRenderCommand(this);
+    cmd->limitRect_ = showRect;
+
     cmd->putTextParamsByRectLimit(text , showRect ,wrapContentRect , paint);
-    submitRenderCommand(cmd);
+    cmd->runCommands();
+    
+    // submitRenderCommand(cmd);
 }
 
 void RenderEngine::renderText(std::wstring &text , Rect &showRect , TextPaint &paint){
@@ -293,91 +301,112 @@ std::shared_ptr<ShapeRenderCommand> RenderEngine::fetchShaderShapeRenderCommand(
 }
 
 
-//绘制圆形
-void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &paint){
-    Rect rect;
-    rect.left = cx - radius;
-    rect.top = cy + radius;
-    rect.width = 2 * radius;
-    rect.height = 2 * radius;
+////绘制圆形
+//void RenderEngine::renderCircle(float cx , float cy , float radius , Paint &paint){
+//    Rect rect;
+//    rect.left = cx - radius;
+//    rect.top = cy + radius;
+//    rect.width = 2 * radius;
+//    rect.height = 2 * radius;
+//
+//    long long t1 = currentTimeMicro();
+//    auto cmd = fetchShaderShapeRenderCommand(this);
+//    cmd->putParams(rect , paint, ShapeType::ShapeCircle);
+//    long long t2 = currentTimeMicro();
+//     // Logi("renderCircle" , "put params time: %lld", (t2 - t1));
+//    submitRenderCommand(cmd);
+//}
 
-    long long t1 = currentTimeMicro();
-    auto cmd = fetchShaderShapeRenderCommand(this);
-    cmd->putParams(rect , paint, ShapeType::ShapeCircle);
-    long long t2 = currentTimeMicro();
-     // Logi("renderCircle" , "put params time: %lld", (t2 - t1));
-    submitRenderCommand(cmd);
-}
-
-//绘制矩形
-void RenderEngine::renderRect(Rect &rectangle ,Paint &paint){
-    auto cmd = fetchShaderShapeRenderCommand(this);
-    cmd->putParams(rectangle , paint, ShapeType::ShapeRect);
-    submitRenderCommand(cmd);
-}
-
-//绘制椭圆
-void RenderEngine::renderOval(Rect &rectangle ,Paint &paint){
-
-}
-
-//绘制圆角矩形
-void RenderEngine::renderRoundRect(Rect &rectangle ,float radius , Paint &paint){
-    
-}
+////绘制矩形
+//void RenderEngine::renderRect(Rect &rectangle ,Paint &paint){
+//    auto cmd = fetchShaderShapeRenderCommand(this);
+//    cmd->putParams(rectangle , paint, ShapeType::ShapeRect);
+//    submitRenderCommand(cmd);
+//}
 
 //精灵类批量渲染
 std::shared_ptr<SpriteBatch> RenderEngine::getSpriteBatch(){
     return spriteBatch_;
 }
 
-// text layout calculate
-// 
+float RenderEngine::getAndChangeDepthValue(){
+    float result = depthValue;
+    depthValue -= 0.0001f;
+    return result;    
+}
+
+void RenderEngine::resetDepth(){
+    depthValue = 1.0f;
+}
+
+/**
+ * @brief  text layout calculate
+ * 
+ * @param content 
+ * @param renderCmd 
+ * @param outRect 
+ * @param buf 
+ */
 void TextRenderHelper::layoutText(std::wstring &content , 
-        Rect &limitRect, 
-        TextPaint &paint , 
+        TextRenderCommand *renderCmd,
         Rect &outRect,
         std::vector<float> &buf){
     
-    float limitWidth = limitRect.width;
+    TextPaint paint = renderCmd->paint_;
+    Rect limitRect = renderCmd->limitRect_;
+    
+    float x = limitRect.left;
+    float y = limitRect.top;
 
-    float baselineLeft = 0.0f;
-    float baselineTop = 0.0f;
-    float curLineWidth = 0.0f;
-    float currLineHeight = 0.0f;
-
-    float gapVert = paint.gapSize * paint.textSizeScale;
-
-    int realRenderLength = 0;
     for(int i = 0 ; i < content.length() ;i++){
         wchar_t ch = content[i];
         auto charInfoPtr = findCharInfo(ch);
-
-        float addedWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
-        if(baselineLeft + addedWidth > limitWidth){// need create a new line
-            curLineWidth = 0.0f;
-            
-            if(outRect.height + (currLineHeight + gapVert) > limitRect.height){
-                break;
-            }
-
-            outRect.height += (currLineHeight + gapVert);
-            currLineHeight = 0.0f;
-        }
-
-        curLineWidth += addedWidth;
-        if(outRect.width < curLineWidth){
-            outRect.width = curLineWidth;
-        }
-        currLineHeight = std::max(currLineHeight , charInfoPtr->height);
+        renderCmd->putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
+        x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
     }//end for i
 
-    if(currLineHeight > 0.0f){
-        outRect.height += (currLineHeight + gapVert);
-    }
+    // Rect limitRect = renderCmd->limitRect_;
+    // float limitWidth = limitRect.width;
 
-    //out rect coordinate transform
-    // outRect.top = outRect.height;
-    outRect.left = limitRect.left;
-    outRect.top = limitRect.top;
+    // float baselineLeft = 0.0f;
+    // float baselineTop = 0.0f;
+    // float curLineWidth = 0.0f;
+    // float currLineHeight = 0.0f;
+
+    // TextPaint paint = renderCmd->paint_;
+
+    // float gapVert = paint.gapSize * paint.textSizeScale;
+
+    // int realRenderLength = 0;
+    // for(int i = 0 ; i < content.length() ;i++){
+    //     wchar_t ch = content[i];
+    //     auto charInfoPtr = findCharInfo(ch);
+
+    //     float addedWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
+    //     if(baselineLeft + addedWidth > limitWidth){// need create a new line
+    //         curLineWidth = 0.0f;
+            
+    //         if(outRect.height + (currLineHeight + gapVert) > limitRect.height){
+    //             break;
+    //         }
+
+    //         outRect.height += (currLineHeight + gapVert);
+    //         currLineHeight = 0.0f;
+    //     }
+
+    //     curLineWidth += addedWidth;
+    //     if(outRect.width < curLineWidth){
+    //         outRect.width = curLineWidth;
+    //     }
+    //     currLineHeight = std::max(currLineHeight , charInfoPtr->height);
+    // }//end for i
+
+    // if(currLineHeight > 0.0f){
+    //     outRect.height += (currLineHeight + gapVert);
+    // }
+
+    // //out rect coordinate transform
+    // // outRect.top = outRect.height;
+    // outRect.left = limitRect.left;
+    // outRect.top = limitRect.top;
 }

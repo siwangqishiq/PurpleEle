@@ -19,6 +19,9 @@ void TestDemo::init(){
     testGakkiImage = BuildImageByAsset("test.jpeg");
     wallpaperImage = BuildImageByAsset("bg.jpg");
     walkingImage = BuildImageByAsset("sprite/walk.png");//32 x 48
+    customRenderShader = ShaderManager::getInstance()->loadAssetShader("custom" ,
+                                                                       "shader/shader_vert.glsl" ,
+                                                                        "shader/shader_frag.glsl");
     
     Logi("testDemo" , "testImage w : %d , h : %d" , 
         testImage->getWidth(),testImage->getHeight());
@@ -61,10 +64,13 @@ void TestDemo::tick(){
 
     // testRenderSprite5Rotate();
     // testRenderSprite6ImageRegion();
-    // testRenderShader();
+    //
     
+    testRenderShader();
     testRenderText();
     testRenderTextWithRect();
+
+    testRenderShader();
 }
 
 void TestDemo::dispose(){
@@ -74,21 +80,27 @@ void TestDemo::dispose(){
 void TestDemo::testRenderTextWithRect(){
     Rect limitRect;
     limitRect.left = 0;
-    limitRect.top = viewHeight_;
-    limitRect.width = viewWidth_;
-    limitRect.height = viewHeight_;
+    limitRect.top = viewHeight_ / 2.0f;
+    limitRect.width = viewWidth_ - 20.0f;
+    limitRect.height = viewHeight_ / 2.0f;
 
     TextPaint paint;
     float fontSize = 100.0f;
     paint.setTextSize(fontSize);
-    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0 , 1.0f);
+    paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
 
     Rect outRect;
-    // renderEngine_->renderTextWithRect(L"Hello pear, Thank you" , 
-    //     limitRect ,
-    //     paint ,
-    //     &outRect);
-    
+    renderEngine_->renderTextWithRect(L"Hello pear, Thank you 滕王阁序" , 
+        limitRect ,
+        paint ,
+        &outRect);
+
+    auto shapeBatch = renderEngine_->getShapeBatch();
+    shapeBatch->begin();
+    Paint rectPaint;
+    rectPaint.color = glm::vec4(0.0 , 0.0 , 1.0f , 0.5f);
+    shapeBatch->renderRect(limitRect , rectPaint);
+    shapeBatch->end();
 }
 
 void TestDemo::testRenderText(){
@@ -531,5 +543,21 @@ void TestDemo::testAudio(){
 }
 
 void TestDemo::testRenderShader(){
+    Rect viewRect;
+    viewRect.left = 0.0f;
+    viewRect.top = viewHeight_;
+    viewRect.width = viewWidth_;
+    viewRect.height = viewHeight_;
 
+//    Paint paint;
+//    paint.color = glm::vec4 (1.0f , 0.0f , 0.0f ,0.3f);
+//    renderEngine_->getShapeBatch()->begin();
+//    renderEngine_->getShapeBatch()->renderRect(viewRect , paint);
+//    renderEngine_->getShapeBatch()->end();
+
+    // Logi("ShaderDemo" , "testRenderShader");
+    renderEngine_->renderShader(customRenderShader , viewRect, [this](){
+        customRenderShader.setUniformFloat("uViewWidth",viewWidth_);
+        customRenderShader.setUniformFloat("uViewHeight",viewHeight_);
+    });
 }

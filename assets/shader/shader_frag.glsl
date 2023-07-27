@@ -20,4 +20,5 @@ vec4 renderCircle(vec2 pos) {
 void main(){
     vec2 pos = gl_FragCoord.xy;
     FragColor = renderCircle(pos);
+//    FragColor = vec4(1.0f , 0.0f , 0.0f , 0.3f);
 }

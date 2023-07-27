@@ -76,13 +76,13 @@ void ShapeBatch::executeGlCommands(){
         return;
     }
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
                     index_ * sizeof(float) , vertexBuffer_.data());
     glBindBuffer(GL_ARRAY_BUFFER , 0);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
     // Logi("ShapeBatch" , "vertexBuffer_ vboOffset_ = %d" , vboOffset_);
     shader_.useShader();
@@ -139,23 +139,31 @@ void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint , float 
 }
 
 void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint , float extra){
+
+    float depth = renderEngine_->getAndChangeDepthValue();
     //v1
-    putVertexAttribute(0 , type, rect.left , rect.getBottom() , rect, paint , extra);
+    putVertexAttribute(0 , type, rect.left , rect.getBottom() , 
+        rect, paint , extra , depth);
 
     //v2
-    putVertexAttribute(1 ,type, rect.getRight() , rect.getBottom(), rect , paint ,extra);
+    putVertexAttribute(1 ,type, rect.getRight() , rect.getBottom(), 
+        rect , paint ,extra, depth);
 
     //v3
-    putVertexAttribute(2 ,type , rect.getRight() , rect.top, rect , paint , extra);
+    putVertexAttribute(2 ,type , rect.getRight() , rect.top, 
+        rect , paint , extra , depth);
 
     //v4
-    putVertexAttribute(3 ,type , rect.left , rect.getBottom(), rect , paint , extra);
+    putVertexAttribute(3 ,type , rect.left , rect.getBottom(), 
+        rect , paint , extra, depth);
 
     //v5
-    putVertexAttribute(4 ,type , rect.getRight() , rect.top, rect , paint , extra);
+    putVertexAttribute(4 ,type , rect.getRight() , rect.top, 
+        rect , paint , extra, depth);
 
     //v6
-    putVertexAttribute(5 ,type , rect.left , rect.top, rect , paint , extra);
+    putVertexAttribute(5 ,type , rect.left , rect.top, 
+        rect , paint , extra , depth);
 
     index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
     vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
@@ -163,12 +171,12 @@ void ShapeBatch::updateVertexData(ShapeType type ,Rect &rect ,Paint &paint , flo
 
 void ShapeBatch::putVertexAttribute(int vertexIndex 
             ,ShapeType type ,float x , float y 
-            ,Rect &rect ,Paint &paint , float extra){
+            ,Rect &rect ,Paint &paint , float extra , float depth){
     const int offset = index_ + vertexIndex * attrCountPerVertex_;
     //position
     vertexBuffer_[offset + 0] = x;
     vertexBuffer_[offset + 1] = y;
-    vertexBuffer_[offset + 2] = 1.0f;
+    vertexBuffer_[offset + 2] = depth;
 
     //color
     vertexBuffer_[offset + 3] = paint.color.r;
@@ -245,13 +253,13 @@ void SpriteBatch::executeGlCommands(){
         return;
     }
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
                     index_ * sizeof(float) , vertexBuffer_.data());
     glBindBuffer(GL_ARRAY_BUFFER , 0);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
     shader_.useShader();
     shader_.setUniformMat3("transMat" , renderEngine_->normalMatrix_);
@@ -312,50 +320,54 @@ void SpriteBatch::doRender(unsigned int texId , float texWidth , float texHeight
 
 void SpriteBatch::updateVertexData(float texWidth , float texHeight ,
         Rect &srcRect , Rect &dstRect,
-        float rotateOriginX , float rotateOriginY , float rotateAngle){
+        float rotateOriginX , float rotateOriginY ,
+        float rotateAngle){
+    float depth = renderEngine_->getAndChangeDepthValue();
+
     //v1
     putVertexAttribute(0 , 
         dstRect.left , dstRect.getBottom(), 
         srcRect.left / texWidth , 
         srcRect.getBottom() / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     //v2
     putVertexAttribute(1, dstRect.getRight() , dstRect.getBottom(), 
         srcRect.getRight() / texWidth, 
         srcRect.getBottom() / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     //v3
     putVertexAttribute(2, dstRect.getRight() , dstRect.top, 
         srcRect.getRight() / texWidth, 
         srcRect.top / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     //v4
     putVertexAttribute(3, dstRect.left , dstRect.getBottom(), 
         srcRect.left / texWidth, 
         srcRect.getBottom() / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     //v5
     putVertexAttribute(4, dstRect.getRight() , dstRect.top, 
         srcRect.getRight() / texWidth, 
         srcRect.top / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     //v6
     putVertexAttribute(5, dstRect.left , dstRect.top, 
         srcRect.left / texWidth,
         srcRect.top / texHeight,
-        rotateOriginX , rotateOriginY , rotateAngle);
+        rotateOriginX , rotateOriginY , rotateAngle , depth);
 
     index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
     vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
 }
 
 void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y , 
-        float u , float v , float cx , float cy , float angle){
+        float u , float v , float cx , float cy , 
+        float angle , float depthValue){
     const int offset = index_ + vertexIndex * attrCountPerVertex_;
 
     //rotate transform
@@ -365,7 +377,7 @@ void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y ,
     //position
     vertexBuffer_[offset + 0] = point.x;
     vertexBuffer_[offset + 1] = point.y;
-    vertexBuffer_[offset + 2] = 1.0f;
+    vertexBuffer_[offset + 2] = depthValue;
 
     //uv
     vertexBuffer_[offset + 3] = u;

@@ -81,31 +81,23 @@ public:
             TextPaint &paint ,
             Rect *wrapContentRect){
         auto str = std::wstring(text);
-        renderTextWithRect(text , showRect , paint ,wrapContentRect);
+        renderTextWithRect(str , showRect , paint ,wrapContentRect);
     }
 
     //将文本包裹在一个矩形内渲染
     void renderText(std::wstring &text , Rect &showRect , TextPaint &paint);
-
+    
     //在指定矩形区域内绘制自定义shader
     void renderShader(Shader &shader , Rect &showRect , 
             std::function<void(void)> preRenderCallback);
 
-    //绘制圆形
-    void renderCircle(float cx , float cy , float radius , Paint &paint);
-
-    //绘制矩形
-    void renderRect(Rect &rectangle ,Paint &paint);
-
-    //绘制椭圆
-    void renderOval(Rect &rectangle ,Paint &paint);
-
-    //绘制圆角矩形
-    void renderRoundRect(Rect &rectangle ,float radius , Paint &paint);
-
     std::shared_ptr<ShapeBatch> getShapeBatch();
 
     std::shared_ptr<SpriteBatch> getSpriteBatch();
+
+    float getAndChangeDepthValue();
+
+    void resetDepth();
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 
@@ -128,6 +120,8 @@ private:
     std::shared_ptr<ShapeBatch> shapeBatch_;
 
     std::shared_ptr<SpriteBatch> spriteBatch_;
+
+    float depthValue = 1.0f;
 };
 
 //字符信息
@@ -154,10 +148,9 @@ public:
     std::shared_ptr<CharInfo> findCharInfo(wchar_t &ch);
 
     void layoutText(std::wstring &content , 
-            Rect &limitRect, 
-            TextPaint &paint , 
-            Rect &outRect,
-            std::vector<float> &buf);
+        TextRenderCommand *renderCmd,
+        Rect &outRect,
+        std::vector<float> &buf);
 
     unsigned int mainTextureId_;
 

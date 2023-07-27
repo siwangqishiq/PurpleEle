@@ -86,13 +86,6 @@ void TextRenderCommand::putParams(std::wstring text
     for(int i = 0 ; i < text.length() ;i++){
         wchar_t ch = text[i];
         auto charInfoPtr = textRenderHelper->findCharInfo(ch);
-        if(charInfoPtr == nullptr){
-            //Logi("TextRenderCommand" , "not found char info");
-            // continue;
-            wchar_t x = L'*';
-            charInfoPtr = textRenderHelper->findCharInfo(x);
-        }
-        
         // Logi("TextRenderCommand" , "%f %f" 
         //     , charInfoPtr->textureCoords[2],charInfoPtr->textureCoords[3]);
         putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
@@ -114,11 +107,15 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         return;
     }
 
+    allocatorVRamForText(text.length());
+
     paint_ = paint;
     fontTextureId_ = engine_->textRenderHelper_->mainTextureId_;
+
+    // Logi("debug" , "vertexCount = %d , attrCound = %d" , vertexCount_ , attrCount_);
     std::vector<float> buf(vertexCount_ * attrCount_);
     Rect outRect;
-    engine_->textRenderHelper_->layoutText(text , limitRect , paint , outRect , buf);
+    engine_->textRenderHelper_->layoutText(text , this, outRect, buf);
     if(wrapContentRect != nullptr){
         *wrapContentRect = outRect;
     }
@@ -151,10 +148,12 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     float offsetY = (charInfoPtr->bearingY - charInfoPtr->height) * sizeScale;
 
     int offset = index * attrPerChar;
+
+    float depthValue = engine_->getAndChangeDepthValue();
     //v1
     buf[offset + 0] = x + offsetX;
     buf[offset + 1] = y + offsetY;
-    buf[offset + 2] = 1.0f;
+    buf[offset + 2] = depthValue;
     buf[offset + 3] = texLeft;
     buf[offset + 4] = texBottom;
     buf[offset + 5] = texW;
@@ -162,7 +161,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     //v2
     buf[offset + 6] = x + charRealWidth + offsetX;
     buf[offset + 7] = y + offsetY;
-    buf[offset + 8] = 1.0f;
+    buf[offset + 8] = depthValue;
     buf[offset + 9] = texRight;
     buf[offset + 10] = texBottom;
     buf[offset + 11] = texW;
@@ -170,7 +169,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     //v3
     buf[offset + 12] = x + charRealWidth + offsetX + italicOffset;
     buf[offset + 13] = y + offsetY + charRealHeight;
-    buf[offset + 14] = 1.0f;
+    buf[offset + 14] = depthValue;
     buf[offset + 15] = texRight;
     buf[offset + 16] = texTop;
     buf[offset + 17] = texW;
@@ -178,7 +177,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     //v4
     buf[offset + 18] = x + offsetX;
     buf[offset + 19] = y + offsetY;
-    buf[offset + 20] = 1.0f;
+    buf[offset + 20] = depthValue;
     buf[offset + 21] = texLeft;
     buf[offset + 22] = texBottom;
     buf[offset + 23] = texW;
@@ -186,7 +185,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     //v5
     buf[offset + 24] = x + charRealWidth + offsetX + italicOffset;
     buf[offset + 25] = y + offsetY + charRealHeight;
-    buf[offset + 26] = 1.0f;
+    buf[offset + 26] = depthValue;
     buf[offset + 27] = texRight;
     buf[offset + 28] = texTop;
     buf[offset + 29] = texW;
@@ -194,7 +193,7 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
     //v6
     buf[offset + 30] = x + offsetX + italicOffset;
     buf[offset + 31] = y + offsetY + charRealHeight;
-    buf[offset + 32] = 1.0f;
+    buf[offset + 32] = depthValue;
     buf[offset + 33] = texLeft;
     buf[offset + 34] = texTop;
     buf[offset + 35] = texW;
@@ -288,6 +287,8 @@ void ShaderRenderCommand::putParams(Shader shader , Rect &rect){
     vertexCount_ = 4; //4个顶点
     attrCount_ = 3;//每个顶点3个属性长度
 
+    float depth = engine_->getAndChangeDepthValue();
+
     int requestSize = vertexCount_ * attrCount_ * sizeof(float);
     int allocateSize = 0;
     allocatorVRam(requestSize , allocateSize);
@@ -296,22 +297,22 @@ void ShaderRenderCommand::putParams(Shader shader , Rect &rect){
     //v1
     buf[0 * 3 + 0] = rect.left;
     buf[0 * 3 + 1] = rect.top - rect.height;
-    buf[0 * 3 + 2] = 1.0f;
+    buf[0 * 3 + 2] = depth;
 
     //v2
     buf[1 * 3 + 0] = rect.left + rect.width;
     buf[1 * 3 + 1] = rect.top - rect.height;
-    buf[1 * 3 + 2] = 1.0f;
+    buf[1 * 3 + 2] = depth;
 
     //v3
     buf[2 * 3 + 0] = rect.left + rect.width;
     buf[2 * 3 + 1] = rect.top;
-    buf[2 * 3 + 2] = 1.0f;
+    buf[2 * 3 + 2] = depth;
 
     //v4
     buf[3 * 3 + 0] = rect.left;
     buf[3 * 3 + 1] = rect.top;
-    buf[3 * 3 + 2] = 1.0f;
+    buf[3 * 3 + 2] = depth;
 
     buildGlCommands(buf);
 }

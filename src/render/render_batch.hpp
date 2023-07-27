@@ -52,7 +52,7 @@ public:
     }
     
     void init();
-
+    
     virtual void begin();
 
     virtual void end();
@@ -82,7 +82,7 @@ protected:
     void updateVertexData(ShapeType type , Rect &rect ,Paint &paint , float extra = 0.0f);
 
     void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
-            ,Rect &rect ,Paint &paint , float extra);
+            ,Rect &rect ,Paint &paint , float extra , float depth);
 };
 
 class TextureImage;
@@ -127,10 +127,11 @@ private:
 
     void updateVertexData(float texWidth , float texHeight, 
         Rect &srcRect , Rect &dstRect , 
-        float rotateOriginX , float rotateOriginY , float rotateAngle);
+        float rotateOriginX , float rotateOriginY , 
+        float rotateAngle);
 
     void putVertexAttribute(int vertexIndex ,float x , float y , 
-        float u , float v ,float cx , float cy , float angle);
+        float u , float v ,float cx , float cy , float angle , float depthValue);
 };
 
 

@@ -5,6 +5,7 @@ uniform mat3 transMat;
 out vec3 vUvw;
 
 void main(){
-    gl_Position = vec4(transMat * a_position ,1.0f);
+    vec3 pos = transMat * vec3(a_position.xy , 1.0f);
+    gl_Position = vec4(pos.xy , a_position.z ,1.0f);
     vUvw = a_texture;
 }

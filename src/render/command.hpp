@@ -52,9 +52,18 @@ public:
     void setPaint(TextPaint &paint){
         paint_ = paint;
     }
-private:
+
     TextPaint paint_;
+
     Rect limitRect_;
+
+    void putVertexDataToBuf(std::vector<float> &buf, int index, 
+                            float x ,float y,
+                            std::shared_ptr<CharInfo> charInfo ,
+                            TextPaint &paint);
+    
+private:
+    
     glm::vec4 textColor_;
 
     const int vertCountPerChar_ = 6;//一个字符由几个顶点确定
@@ -77,11 +86,6 @@ private:
     float calTextStyleItalicOffset(std::shared_ptr<CharInfo> charInfo , TextPaint &paint);
 
     unsigned int allocatorVRamForText(int textLength);
-
-    void putVertexDataToBuf(std::vector<float> &buf, int index, 
-                            float x ,float y,
-                            std::shared_ptr<CharInfo> charInfo ,
-                            TextPaint &paint);
 };
 
 //自定义shader渲染命令
@@ -120,6 +124,4 @@ private:
     ShapeType shapeType_ = ShapeRect;
     Paint paint_;
 };
-
-
 
