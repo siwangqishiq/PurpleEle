@@ -138,15 +138,6 @@ void RenderEngine::renderTextWithRect(std::wstring &text , Rect &showRect ,
     // submitRenderCommand(cmd);
 }
 
-void RenderEngine::renderText(std::wstring &text , Rect &showRect , TextPaint &paint){
-    // if(text.empty()){
-    //     return;
-    // }
-    // auto cmd = fetchTextRenderCommand(this);
-    // cmd->putTextParamsByRectLimit(text , showRect , paint);
-    // submitRenderCommand(cmd);
-}
-
 std::shared_ptr<TextRenderCommand> RenderEngine::fetchTextRenderCommand(RenderEngine *engine){
     // new a new instace 
     // later use pool to reuse
@@ -263,18 +254,29 @@ void TextRenderHelper::addSpecialTextCharInfo(){
     blankCharInfo->textureCoords[3] = 0.0f;
     charInfoMaps_.insert(std::make_pair<>(blankCharInfo->value[0] , blankCharInfo));
 
-    //中文逗号
-    auto chineseCommaChar = std::make_shared<CharInfo>();
-    auto engCommaChar = charInfoMaps_[L','];
-    chineseCommaChar->textureId = engCommaChar->textureId;
-    chineseCommaChar->value = L"，";
-    chineseCommaChar->width = engCommaChar->width;
-    chineseCommaChar->height = engCommaChar->height;
-    chineseCommaChar->textureCoords[0] = engCommaChar->textureCoords[0];
-    chineseCommaChar->textureCoords[1] = engCommaChar->textureCoords[1];
-    chineseCommaChar->textureCoords[2] = engCommaChar->textureCoords[2];
-    chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
-    charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
+    auto tabCharInfo = std::make_shared<CharInfo>();
+    tabCharInfo->textureId = 0;
+    tabCharInfo->value = L"\t";
+    tabCharInfo->width = 4*SPACE_WIDTH;
+    tabCharInfo->height = 0.0f;
+    tabCharInfo->textureCoords[0] = 0.0f;
+    tabCharInfo->textureCoords[1] = 0.0f;
+    tabCharInfo->textureCoords[2] = 0.0f;
+    tabCharInfo->textureCoords[3] = 0.0f;
+    charInfoMaps_.insert(std::make_pair<>(tabCharInfo->value[0] , tabCharInfo));
+
+    // //中文逗号
+    // auto chineseCommaChar = std::make_shared<CharInfo>();
+    // auto engCommaChar = charInfoMaps_[L','];
+    // chineseCommaChar->textureId = engCommaChar->textureId;
+    // chineseCommaChar->value = L"，";
+    // chineseCommaChar->width = engCommaChar->width;
+    // chineseCommaChar->height = engCommaChar->height;
+    // chineseCommaChar->textureCoords[0] = engCommaChar->textureCoords[0];
+    // chineseCommaChar->textureCoords[1] = engCommaChar->textureCoords[1];
+    // chineseCommaChar->textureCoords[2] = engCommaChar->textureCoords[2];
+    // chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
+    // charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
 }
 
 void TextRenderHelper::loadSymbolMap(){
@@ -353,34 +355,120 @@ void TextRenderHelper::layoutText(std::wstring &content,
         std::vector<float> &buf){
     
     TextPaint paint = renderCmd->paint_;
-    const Rect limitRect = renderCmd->limitRect_;
+    Rect limitRect = renderCmd->limitRect_;
     
-    float x = limitRect.left;
-    float y = limitRect.top;
-
     outRect.left = limitRect.left;
     outRect.top = limitRect.top;
-    outRect.width = limitRect.width;
+    outRect.width = 0.0f;
     outRect.height =(FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
 
     float maxBaselineY = 0.0f;
-    float maxHeight = 0.0f;
-    for(int i = 0 ; i < content.length() ;i++){
-        wchar_t ch = content[i];
+    float lineWidth = 0.0f;
+    bool isFirstLine = true;
+
+    float x = limitRect.left;
+    float y = limitRect.top;
+    float depthValue = renderCmd->engine_->getAndChangeDepthValue();
+
+    int index = 0;
+    int realRenderCharCount = 0;
+    const int size = content.length();
+    while(index < size){
+        wchar_t ch = content[index];
+
         auto charInfoPtr = findCharInfo(ch);
-        float bearingY = charInfoPtr->bearingY * paint.textSizeScale;
-        if(maxBaselineY <= bearingY){
-            maxBaselineY = bearingY;
+
+        if(isFirstLine){
+            float bearingY = charInfoPtr->bearingY * paint.textSizeScale;
+            if(maxBaselineY <= bearingY){
+                maxBaselineY = bearingY;
+            }
         }
-        
-        renderCmd->putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
-        x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
-    }//end for i
-    // outRect.top += maxBaselineY;
+
+        float charRealWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
+
+        if(x + charRealWidth <= limitRect.getRight() && ch != L'\n'){
+            renderCmd->putVertexDataToBuf(buf , index , x , y ,depthValue,
+                charInfoPtr , paint);
+            
+            x += charRealWidth;
+            lineWidth += charRealWidth;
+            if(outRect.width < lineWidth){
+                outRect.width = lineWidth;
+            }
+            index++;
+            realRenderCharCount = index;
+        }else{// change a new line
+            isFirstLine = false;
+
+            x = limitRect.left;
+            y -= (FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+            if(y - maxBaselineY < limitRect.getBottom()){
+                break;
+            }
+
+            outRect.height += (FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+            lineWidth = 0.0f;
+
+            if(ch == L'\n'){
+                index++;
+            }
+        }
+    }//end while
+
+    // if(realRenderCharCount < content.size()){
+    //     buf.resize(realRenderCharCount * renderCmd->vertCountPerChar_);
+    // }
 
     float translateX = limitRect.left - outRect.left;
     float translateY = -maxBaselineY;
-    for(int i = 0 ; i < content.length() ;i++){
+
+    switch(paint.textGravity){
+        case TopLeft:
+            break;
+        case TopCenter:
+            translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+            outRect.left += translateX;
+            break;
+        case TopRight:
+            translateX += (limitRect.width - outRect.width);
+            outRect.left += translateX;
+            break;
+        case BottomLeft:
+            translateY -= (limitRect.height - outRect.height);
+            outRect.top += translateY + maxBaselineY;
+            break;
+        case BottomCenter:
+            translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+            outRect.left += translateX;
+            translateY -= (limitRect.height - outRect.height);
+            outRect.top += translateY + maxBaselineY;
+            break;
+        case BottomRight:
+            translateX += (limitRect.width - outRect.width);
+            outRect.left += translateX;
+            translateY -= (limitRect.height - outRect.height);
+            outRect.top += translateY + maxBaselineY;
+            break;
+        case CenterLeft:
+            translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+            outRect.top += translateY + maxBaselineY;
+            break;
+        case CenterRight:
+            translateX += (limitRect.width - outRect.width);
+            outRect.left += translateX;
+            translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+            outRect.top += translateY + maxBaselineY;
+            break;
+        case Center:
+            translateX += (limitRect.width / 2.0f - outRect.width / 2.0f);
+            outRect.left += translateX;
+            translateY -= (limitRect.height / 2.0f - outRect.height / 2.0f);
+            outRect.top += translateY + maxBaselineY;
+            break;
+    }//end switch
+
+    for(int i = 0 ; i < realRenderCharCount ;i++){
         renderCmd->updateVertexPositionData(buf , i , translateX , translateY);
     }//end for i
 }

@@ -68,11 +68,99 @@ void TestDemo::tick(){
     //testRenderShader();
 
     // testRenderText();
-    testRenderTextWithRect();
+    // testRenderTextWithRect();
+    testRenderTextGravity();
 }
 
 void TestDemo::dispose(){
     
+}
+
+void TestDemo::testRenderTextGravity(){
+    auto batch = renderEngine_->getSpriteBatch();
+    Rect srcRect;
+    srcRect.left = 0.0;
+    srcRect.top = wallpaperImage->getHeight();
+    srcRect.width = wallpaperImage->getWidth();
+    srcRect.height = wallpaperImage->getHeight();
+    Rect dstRect;
+    dstRect.left = 0;
+    dstRect.top = viewHeight_;
+    dstRect.width = viewWidth_;
+    dstRect.height = viewHeight_;
+
+    batch->begin();
+    batch->renderImage(wallpaperImage, srcRect , dstRect);
+    batch->end();
+
+
+    Rect limitRect;
+    limitRect.left = 0.0;
+    limitRect.top = viewHeight_;
+    limitRect.width = viewWidth_;
+    limitRect.height = viewHeight_;
+
+    TextPaint paint;
+    float fontSize = 64.0f;
+    paint.setTextSize(fontSize);
+    paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
+    paint.textGravity = TopLeft;
+
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = TopCenter;
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = TopRight;
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = BottomLeft;
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = BottomCenter;
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = BottomRight;
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = CenterLeft;
+    paint.textColor = glm::vec4(1.0f , 0.0f ,0.0f ,1.0f);
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = CenterRight;
+    paint.textColor = glm::vec4(1.0f , 1.0f ,0.0f ,1.0f);
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
+
+    paint.textGravity = Center;
+    paint.textColor = glm::vec4(0.0f , 1.0f ,0.0f ,1.0f);
+    renderEngine_->renderTextWithRect(L"你好世界" ,
+        limitRect ,
+        paint ,
+        nullptr);
 }
 
 void TestDemo::testRenderTextWithRect(){
@@ -94,13 +182,13 @@ void TestDemo::testRenderTextWithRect(){
 
 
     Rect limitRect;
-    limitRect.left = 100.0;
+    limitRect.left = 0.0;
     limitRect.top = viewHeight_;
-    limitRect.width = viewWidth_ / 2.0f - 20.0f;
-    limitRect.height = viewHeight_ / 2.0f;
+    limitRect.width = viewWidth_ / 2.0f;
+    limitRect.height = viewHeight_;
 
     TextPaint paint;
-    static float fSize=32.0f;
+    static float fSize= 32.0f;
     fSize += 0.1f;
     if(fSize >= 128.0){
         fSize = 32.0f;
@@ -108,9 +196,10 @@ void TestDemo::testRenderTextWithRect(){
     float fontSize = fSize;
     paint.setTextSize(fontSize);
     paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
+    paint.textGravity = BottomRight;
 
     Rect outRect;
-    renderEngine_->renderTextWithRect(L"你好世界 Hello pearq, Thank you 滕王阁序" ,
+    renderEngine_->renderTextWithRect(L"你好世界 \n一二三四五六 \tThank you! \n哈哈哈哈" ,
         limitRect ,
         paint ,
         &outRect);

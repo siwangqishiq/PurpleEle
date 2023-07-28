@@ -58,9 +58,15 @@ enum TextStyle{
 };
 
 enum TextGravity{
-    left,
-    center,
-    right
+    TopLeft,
+    TopCenter,
+    TopRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight,
+    CenterLeft,
+    CenterRight,
+    Center
 };
 
 enum FillStyle{
@@ -100,7 +106,7 @@ struct TextPaint{
     float gapSize = 8.0f;
     glm::vec4 textColor = glm::vec4(1.0f , 1.0f , 1.0f , 1.0f);
     TextStyle textStyle = normal;
-    TextGravity textGravity = left;
+    TextGravity textGravity = TopLeft;
 
     inline void setTextSize(float size){
         textSizeScale = (size / FONT_DEFAULT_SIZE);

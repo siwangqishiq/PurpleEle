@@ -62,4 +62,5 @@ private:
 
     void testRenderText();
     void testRenderTextWithRect();
+    void testRenderTextGravity();
 };

@@ -62,7 +62,7 @@ public:
     //归一化变换矩阵
     glm::mat3 normalMatrix_;
 
-    //render api 
+    //==============render api ================
 
     //绘制文字
     void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
@@ -84,9 +84,6 @@ public:
         renderTextWithRect(str , showRect , paint ,wrapContentRect);
     }
 
-    //将文本包裹在一个矩形内渲染
-    void renderText(std::wstring &text , Rect &showRect , TextPaint &paint);
-    
     //在指定矩形区域内绘制自定义shader
     void renderShader(Shader &shader , Rect &showRect , 
             std::function<void(void)> preRenderCallback);

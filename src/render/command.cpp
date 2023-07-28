@@ -83,12 +83,13 @@ void TextRenderCommand::putParams(std::wstring text
     auto textRenderHelper = engine_->textRenderHelper_;
     std::vector<float> buf(vertexCount_ * attrCount_);
 
+    float depth = engine_->getAndChangeDepthValue();
     for(int i = 0 ; i < text.length() ;i++){
         wchar_t ch = text[i];
         auto charInfoPtr = textRenderHelper->findCharInfo(ch);
         // Logi("TextRenderCommand" , "%f %f" 
         //     , charInfoPtr->textureCoords[2],charInfoPtr->textureCoords[3]);
-        putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
+        putVertexDataToBuf(buf , i , x , y ,depth, charInfoPtr , paint);
         x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
     }//end for i
     // Logi("TextRenderCommand" , "layout vertex vertexcount : %d , costtime =  %lld" 
@@ -127,7 +128,7 @@ void TextRenderCommand::updateVertexPositionData(std::vector<float> &buf,
         int index, float translateX,float translateY){
     const int attrPerChar = attrCount_ * vertCountPerChar_;
     int offset = index * attrPerChar;
-    
+
      //v1
     buf[offset + 0] += translateX;
     buf[offset + 1] += translateY;
@@ -154,8 +155,9 @@ void TextRenderCommand::updateVertexPositionData(std::vector<float> &buf,
 }
 
 void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf, 
-        int index,float x ,float y,
-        std::shared_ptr<CharInfo> charInfoPtr ,TextPaint &paint){
+        int index,float x ,float y,float depthValue,
+        std::shared_ptr<CharInfo> charInfoPtr ,
+        TextPaint &paint){
     const int attrPerChar = attrCount_ * vertCountPerChar_;
     const float sizeScale = paint_.textSizeScale;
     // Logi("text_render" , "size scale %f" , sizeScale);
@@ -180,7 +182,6 @@ void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf,
 
     int offset = index * attrPerChar;
 
-    float depthValue = engine_->getAndChangeDepthValue();
     //v1
     buf[offset + 0] = x + offsetX;
     buf[offset + 1] = y + offsetY;

@@ -22,19 +22,20 @@ public:
     bool used = false;
 
     unsigned int allocatorVRam(int acquireSize , int &allocateSize);
+
+    int vertexCount_;
+    int attrCount_;
 protected:
     unsigned int vbo_;
     unsigned int vao_;
 
     int vboOffset_;
-    
-    int vertexCount_;
-    int attrCount_;
 };
 
 // 文本渲染命令
 class TextRenderCommand : public RenderCommand{
 public:
+    const int vertCountPerChar_ = 6;//一个字符由几个顶点确定
     static TextPaint defaultTextPaint;
 
     TextRenderCommand(RenderEngine *engine) : RenderCommand(engine) {
@@ -58,7 +59,7 @@ public:
     Rect limitRect_;
 
     void putVertexDataToBuf(std::vector<float> &buf, int index, 
-                            float x ,float y,
+                            float x ,float y,float depth,
                             std::shared_ptr<CharInfo> charInfo ,
                             TextPaint &paint);
     
@@ -68,7 +69,6 @@ private:
     
     glm::vec4 textColor_;
 
-    const int vertCountPerChar_ = 6;//一个字符由几个顶点确定
 
     //每个顶点包含的属性长度 
     //位置 postion 3 + 纹理坐标 uvw 3
