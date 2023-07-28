@@ -41,6 +41,8 @@ private:
 
     int walkIndex = 0;
 
+    std::wstring code_;
+
     void testAudio();
     
     void testRender1();
@@ -63,4 +65,5 @@ private:
     void testRenderText();
     void testRenderTextWithRect();
     void testRenderTextGravity();
+    void testRenderTextCode();
 };

@@ -169,6 +169,7 @@ void TextRenderHelper::loadRes(RenderEngine &engine){
 std::shared_ptr<CharInfo> TextRenderHelper::findCharInfo(wchar_t &ch){
     auto result = charInfoMaps_[ch];
     if(result == nullptr){
+        Logi("debug" , "in charinfos  %d not found" , ch);
         result = charInfoMaps_[L'*'];
     }
     return result;
@@ -265,18 +266,27 @@ void TextRenderHelper::addSpecialTextCharInfo(){
     tabCharInfo->textureCoords[3] = 0.0f;
     charInfoMaps_.insert(std::make_pair<>(tabCharInfo->value[0] , tabCharInfo));
 
-    // //中文逗号
-    // auto chineseCommaChar = std::make_shared<CharInfo>();
-    // auto engCommaChar = charInfoMaps_[L','];
-    // chineseCommaChar->textureId = engCommaChar->textureId;
-    // chineseCommaChar->value = L"，";
-    // chineseCommaChar->width = engCommaChar->width;
-    // chineseCommaChar->height = engCommaChar->height;
-    // chineseCommaChar->textureCoords[0] = engCommaChar->textureCoords[0];
-    // chineseCommaChar->textureCoords[1] = engCommaChar->textureCoords[1];
-    // chineseCommaChar->textureCoords[2] = engCommaChar->textureCoords[2];
-    // chineseCommaChar->textureCoords[3] = engCommaChar->textureCoords[3];
-    // charInfoMaps_.insert(std::make_pair<>(chineseCommaChar->value[0] , chineseCommaChar));
+    auto rCharInfo = std::make_shared<CharInfo>();
+    rCharInfo->textureId = 0;
+    rCharInfo->value = L"\r";
+    rCharInfo->width = 0.0f;
+    rCharInfo->height = 0.0f;
+    rCharInfo->textureCoords[0] = 0.0f;
+    rCharInfo->textureCoords[1] = 0.0f;
+    rCharInfo->textureCoords[2] = 0.0f;
+    rCharInfo->textureCoords[3] = 0.0f;
+    charInfoMaps_.insert(std::make_pair<>(rCharInfo->value[0] , rCharInfo));
+
+    auto nCharInfo = std::make_shared<CharInfo>();
+    nCharInfo->textureId = 0;
+    nCharInfo->value = L"\n";
+    nCharInfo->width = 0.0f;
+    nCharInfo->height = 0.0f;
+    nCharInfo->textureCoords[0] = 0.0f;
+    nCharInfo->textureCoords[1] = 0.0f;
+    nCharInfo->textureCoords[2] = 0.0f;
+    nCharInfo->textureCoords[3] = 0.0f;
+    charInfoMaps_.insert(std::make_pair<>(nCharInfo->value[0] , nCharInfo));
 }
 
 void TextRenderHelper::loadSymbolMap(){

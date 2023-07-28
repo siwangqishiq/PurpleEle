@@ -7,6 +7,7 @@
 #include "render/sprite.hpp"
 #include <cmath>
 #include "widget/timer.hpp"
+#include "resource/asset_manager.hpp"
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -48,6 +49,9 @@ void TestDemo::init(){
     int maxTextureImageUnits[1];
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTextureImageUnits);
     Logi("testDemo" , "max texture image units = %d"  ,maxTextureImageUnits[0]);
+
+    code_ = AssetManager::getInstance()->readTextFile("shader/shader_vert.glsl");
+    Logi("debug" , "read code size %d" , code_.size());
 }
 
 void TestDemo::tick(){
@@ -70,10 +74,30 @@ void TestDemo::tick(){
     // testRenderText();
     // testRenderTextWithRect();
     testRenderTextGravity();
+    testRenderTextCode();
 }
 
 void TestDemo::dispose(){
     
+}
+
+void TestDemo::testRenderTextCode(){
+    Rect limitRect;
+    limitRect.left = 0.0;
+    limitRect.top = viewHeight_;
+    limitRect.width = viewWidth_;
+    limitRect.height = viewHeight_;
+
+    TextPaint paint;
+    float fontSize = 64.0f;
+    paint.setTextSize(fontSize);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0, 1.0f);
+    paint.textGravity = Center;
+
+    renderEngine_->renderTextWithRect(code_ ,
+        limitRect ,
+        paint ,
+        nullptr);
 }
 
 void TestDemo::testRenderTextGravity(){
@@ -106,58 +130,58 @@ void TestDemo::testRenderTextGravity(){
     paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
     paint.textGravity = TopLeft;
 
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界1" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = TopCenter;
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界2" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = TopRight;
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界3" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = BottomLeft;
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界4" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = BottomCenter;
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界5" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = BottomRight;
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界6" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = CenterLeft;
     paint.textColor = glm::vec4(1.0f , 0.0f ,0.0f ,1.0f);
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界7" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = CenterRight;
     paint.textColor = glm::vec4(1.0f , 1.0f ,0.0f ,1.0f);
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界8" ,
         limitRect ,
         paint ,
         nullptr);
 
     paint.textGravity = Center;
     paint.textColor = glm::vec4(0.0f , 1.0f ,0.0f ,1.0f);
-    renderEngine_->renderTextWithRect(L"你好世界" ,
+    renderEngine_->renderTextWithRect(L"你好世界9" ,
         limitRect ,
         paint ,
         nullptr);
