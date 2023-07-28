@@ -347,66 +347,40 @@ void RenderEngine::resetDepth(){
  * @param outRect 
  * @param buf 
  */
-void TextRenderHelper::layoutText(std::wstring &content , 
+void TextRenderHelper::layoutText(std::wstring &content, 
         TextRenderCommand *renderCmd,
         Rect &outRect,
         std::vector<float> &buf){
     
     TextPaint paint = renderCmd->paint_;
-    Rect limitRect = renderCmd->limitRect_;
+    const Rect limitRect = renderCmd->limitRect_;
     
     float x = limitRect.left;
     float y = limitRect.top;
 
+    outRect.left = limitRect.left;
+    outRect.top = limitRect.top;
+    outRect.width = limitRect.width;
+    outRect.height =(FONT_DEFAULT_SIZE + paint.gapSize) * paint.textSizeScale;
+
+    float maxBaselineY = 0.0f;
+    float maxHeight = 0.0f;
     for(int i = 0 ; i < content.length() ;i++){
         wchar_t ch = content[i];
         auto charInfoPtr = findCharInfo(ch);
+        float bearingY = charInfoPtr->bearingY * paint.textSizeScale;
+        if(maxBaselineY <= bearingY){
+            maxBaselineY = bearingY;
+        }
+        
         renderCmd->putVertexDataToBuf(buf , i , x , y , charInfoPtr , paint);
         x += (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
     }//end for i
+    // outRect.top += maxBaselineY;
 
-    // Rect limitRect = renderCmd->limitRect_;
-    // float limitWidth = limitRect.width;
-
-    // float baselineLeft = 0.0f;
-    // float baselineTop = 0.0f;
-    // float curLineWidth = 0.0f;
-    // float currLineHeight = 0.0f;
-
-    // TextPaint paint = renderCmd->paint_;
-
-    // float gapVert = paint.gapSize * paint.textSizeScale;
-
-    // int realRenderLength = 0;
-    // for(int i = 0 ; i < content.length() ;i++){
-    //     wchar_t ch = content[i];
-    //     auto charInfoPtr = findCharInfo(ch);
-
-    //     float addedWidth = (charInfoPtr->width + paint.gapSize) * paint.textSizeScale;
-    //     if(baselineLeft + addedWidth > limitWidth){// need create a new line
-    //         curLineWidth = 0.0f;
-            
-    //         if(outRect.height + (currLineHeight + gapVert) > limitRect.height){
-    //             break;
-    //         }
-
-    //         outRect.height += (currLineHeight + gapVert);
-    //         currLineHeight = 0.0f;
-    //     }
-
-    //     curLineWidth += addedWidth;
-    //     if(outRect.width < curLineWidth){
-    //         outRect.width = curLineWidth;
-    //     }
-    //     currLineHeight = std::max(currLineHeight , charInfoPtr->height);
-    // }//end for i
-
-    // if(currLineHeight > 0.0f){
-    //     outRect.height += (currLineHeight + gapVert);
-    // }
-
-    // //out rect coordinate transform
-    // // outRect.top = outRect.height;
-    // outRect.left = limitRect.left;
-    // outRect.top = limitRect.top;
+    float translateX = limitRect.left - outRect.left;
+    float translateY = -maxBaselineY;
+    for(int i = 0 ; i < content.length() ;i++){
+        renderCmd->updateVertexPositionData(buf , i , translateX , translateY);
+    }//end for i
 }

@@ -64,13 +64,11 @@ void TestDemo::tick(){
 
     // testRenderSprite5Rotate();
     // testRenderSprite6ImageRegion();
-    //
-    
-    testRenderShader();
-    testRenderText();
-    testRenderTextWithRect();
 
-    testRenderShader();
+    //testRenderShader();
+
+    // testRenderText();
+    testRenderTextWithRect();
 }
 
 void TestDemo::dispose(){
@@ -78,28 +76,56 @@ void TestDemo::dispose(){
 }
 
 void TestDemo::testRenderTextWithRect(){
+    auto batch = renderEngine_->getSpriteBatch();
+    Rect srcRect;
+    srcRect.left = 0.0;
+    srcRect.top = wallpaperImage->getHeight();
+    srcRect.width = wallpaperImage->getWidth();
+    srcRect.height = wallpaperImage->getHeight();
+    Rect dstRect;
+    dstRect.left = 0;
+    dstRect.top = viewHeight_;
+    dstRect.width = viewWidth_;
+    dstRect.height = viewHeight_;
+
+    batch->begin();
+    batch->renderImage(wallpaperImage, srcRect , dstRect);
+    batch->end();
+
+
     Rect limitRect;
-    limitRect.left = 0;
-    limitRect.top = viewHeight_ / 2.0f;
-    limitRect.width = viewWidth_ - 20.0f;
+    limitRect.left = 100.0;
+    limitRect.top = viewHeight_;
+    limitRect.width = viewWidth_ / 2.0f - 20.0f;
     limitRect.height = viewHeight_ / 2.0f;
 
     TextPaint paint;
-    float fontSize = 100.0f;
+    static float fSize=32.0f;
+    fSize += 0.1f;
+    if(fSize >= 128.0){
+        fSize = 32.0f;
+    }
+    float fontSize = fSize;
     paint.setTextSize(fontSize);
     paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
 
     Rect outRect;
-    renderEngine_->renderTextWithRect(L"Hello pear, Thank you 滕王阁序" , 
+    renderEngine_->renderTextWithRect(L"你好世界 Hello pearq, Thank you 滕王阁序" ,
         limitRect ,
         paint ,
         &outRect);
 
     auto shapeBatch = renderEngine_->getShapeBatch();
     shapeBatch->begin();
+    Paint limitRectPaint;
+    limitRectPaint.color = glm::vec4(1.0 , 0.0 , 1.0f , 1.0f);
+    limitRectPaint.stokenWidth = 4.0f;
+    limitRectPaint.fillStyle = Stroken; 
+    shapeBatch->renderRect(limitRect , limitRectPaint);
+
     Paint rectPaint;
-    rectPaint.color = glm::vec4(0.0 , 0.0 , 1.0f , 0.5f);
-    shapeBatch->renderRect(limitRect , rectPaint);
+    rectPaint.color = glm::vec4(0.0 , 0.0 , 1.0f , 0.2f);
+    shapeBatch->renderRect(outRect , rectPaint);
     shapeBatch->end();
 }
 

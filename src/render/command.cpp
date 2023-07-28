@@ -100,7 +100,8 @@ void TextRenderCommand::putParams(std::wstring text
     // Logi("TextRenderCommand" , "buildGlCommands time : %lld" , (currentTimeMillis() - t3));
 }
 
-void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limitRect, 
+void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , 
+        Rect &limitRect, 
             Rect *wrapContentRect,
             TextPaint &paint){
     if(text.empty()){
@@ -120,6 +121,36 @@ void TextRenderCommand::putTextParamsByRectLimit(std::wstring &text , Rect &limi
         *wrapContentRect = outRect;
     }
     buildGlCommands(buf);
+}
+
+void TextRenderCommand::updateVertexPositionData(std::vector<float> &buf, 
+        int index, float translateX,float translateY){
+    const int attrPerChar = attrCount_ * vertCountPerChar_;
+    int offset = index * attrPerChar;
+    
+     //v1
+    buf[offset + 0] += translateX;
+    buf[offset + 1] += translateY;
+
+    //v2
+    buf[offset + 6] += translateX;
+    buf[offset + 7] += translateY;
+
+    //v3
+    buf[offset + 12] += translateX;
+    buf[offset + 13] += translateY;
+    
+    //v4
+    buf[offset + 18] += translateX;
+    buf[offset + 19] += translateY;
+
+    //v5
+    buf[offset + 24] += translateX;
+    buf[offset + 25] += translateY;
+
+    //v6
+    buf[offset + 30] += translateX;
+    buf[offset + 31] += translateY;
 }
 
 void TextRenderCommand::putVertexDataToBuf(std::vector<float> &buf, 

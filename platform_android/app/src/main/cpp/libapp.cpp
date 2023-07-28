@@ -40,7 +40,7 @@ Java_panyi_xyz_textrender_NativeBridge_init(JNIEnv *env, jclass clazz) {
 extern "C"
 JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_trick(JNIEnv *env, jclass clazz) {
-    //LOGI("app trick");
+    //LOGI("app tick");
     app->update();
 }
 

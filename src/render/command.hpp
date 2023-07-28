@@ -62,6 +62,8 @@ public:
                             std::shared_ptr<CharInfo> charInfo ,
                             TextPaint &paint);
     
+    void updateVertexPositionData(std::vector<float> &buf, int index, 
+                            float x ,float y);
 private:
     
     glm::vec4 textColor_;
