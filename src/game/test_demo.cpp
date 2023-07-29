@@ -50,7 +50,7 @@ void TestDemo::init(){
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTextureImageUnits);
     Logi("testDemo" , "max texture image units = %d"  ,maxTextureImageUnits[0]);
 
-    code_ = AssetManager::getInstance()->readTextFile("shader/shader_vert.glsl");
+    code_ = AssetManager::getInstance()->readTextFile("shader/render_text_vert.glsl");
     Logi("debug" , "read code size %d" , code_.size());
 }
 
@@ -73,7 +73,7 @@ void TestDemo::tick(){
 
     // testRenderText();
     // testRenderTextWithRect();
-    testRenderTextGravity();
+    // testRenderTextGravity();
     testRenderTextCode();
 }
 
@@ -82,6 +82,23 @@ void TestDemo::dispose(){
 }
 
 void TestDemo::testRenderTextCode(){
+    auto batch = renderEngine_->getSpriteBatch();
+    Rect srcRect;
+    srcRect.left = 0.0;
+    srcRect.top = wallpaperImage->getHeight();
+    srcRect.width = wallpaperImage->getWidth();
+    srcRect.height = wallpaperImage->getHeight();
+    Rect dstRect;
+    dstRect.left = 0;
+    dstRect.top = viewHeight_;
+    dstRect.width = viewWidth_;
+    dstRect.height = viewHeight_;
+
+    batch->begin();
+    batch->renderImage(wallpaperImage, srcRect , dstRect);
+    batch->end();
+
+
     Rect limitRect;
     limitRect.left = 0.0;
     limitRect.top = viewHeight_;
@@ -91,7 +108,7 @@ void TestDemo::testRenderTextCode(){
     TextPaint paint;
     float fontSize = 64.0f;
     paint.setTextSize(fontSize);
-    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0, 1.0f);
+    paint.textColor = glm::vec4(1.0 ,0.0 ,0.0, 1.0f);
     paint.textGravity = Center;
 
     renderEngine_->renderTextWithRect(code_ ,

@@ -169,7 +169,7 @@ void TextRenderHelper::loadRes(RenderEngine &engine){
 std::shared_ptr<CharInfo> TextRenderHelper::findCharInfo(wchar_t &ch){
     auto result = charInfoMaps_[ch];
     if(result == nullptr){
-        Logi("debug" , "in charinfos  %d not found" , ch);
+        // Logi("debug" , "in charinfos  %d not found" , ch);
         result = charInfoMaps_[L'*'];
     }
     return result;
