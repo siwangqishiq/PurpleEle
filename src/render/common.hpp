@@ -3,7 +3,7 @@
 #include "glm/vec4.hpp"
 #include <cmath>
 
-const float FONT_DEFAULT_SIZE = 128.0f;
+const float FONT_DEFAULT_SIZE = 64.0f;
 
 //
 struct Point{

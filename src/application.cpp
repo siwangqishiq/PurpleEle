@@ -108,6 +108,10 @@ void Application::onInit(){
     onCreate();
 }
 
+ void Application::onEventAction(int event , float x , float y){
+    // Logi("action" , "tigger action: %d (%f, %f)" , event , x , y);
+ }
+
 void Application::onCreate(){
     getTimer()->scheduleAtFixedRate([this](Application *app){
         Logi("application" , "timer fps : %d" , frameCount_);

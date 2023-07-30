@@ -35,6 +35,8 @@ public:
 
     void onCreate();
 
+    void onEventAction(int event , float x , float y);
+
     virtual void updateSence();
     
     virtual void onResize(int width , int height);

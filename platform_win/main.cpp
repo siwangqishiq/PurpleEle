@@ -20,6 +20,7 @@
 #endif
 
 #include "application.hpp"
+#include "input/input_manager.hpp"
 
 //for windows application
 class WinApplication : public Application{
@@ -60,15 +61,29 @@ int main(int argc , char *argv[]){
     });
 
     glfwSetMouseButtonCallback(window , [](GLFWwindow* windows_,int button,int event,int mods){
-        // void* app_ = glfwGetWindowUserPointer(windows_);
-        // std::shared_ptr<WinApplication> app= 
-        //     *(static_cast<std::shared_ptr<WinApplication> *>(app_));
+        void* app_ = glfwGetWindowUserPointer(windows_);
+        std::shared_ptr<WinApplication> app= 
+            *(static_cast<std::shared_ptr<WinApplication> *>(app_));
+        if(event == GLFW_PRESS){
+            MouseActionDown = true;
+            app->onEventAction(ACTION_DOWN , mouseX , mouseY);
+        }else if(event == GLFW_RELEASE){
+            MouseActionDown = false;
+            app->onEventAction(ACTION_UP , mouseX , mouseY);
+        }
         // std::cout << "event " << button << "  " << event << std::endl;
     });
 
     glfwSetCursorPosCallback(window , [](GLFWwindow* windows_,double x,double y){
         mouseX = static_cast<int>(x);
         mouseY = static_cast<int>(y);
+
+        if(MouseActionDown){
+            void* app_ = glfwGetWindowUserPointer(windows_);
+            std::shared_ptr<WinApplication> app= 
+                *(static_cast<std::shared_ptr<WinApplication> *>(app_));
+            app->onEventAction(ACTION_MOVE , mouseX , mouseY);
+        }
         // std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
     });
 

@@ -50,7 +50,7 @@ void TestDemo::init(){
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTextureImageUnits);
     Logi("testDemo" , "max texture image units = %d"  ,maxTextureImageUnits[0]);
 
-    code_ = AssetManager::getInstance()->readTextFile("shader/render_text_vert.glsl");
+    code_ = AssetManager::getInstance()->readTextFile("teng.txt");
     Logi("debug" , "read code size %d" , code_.size());
 }
 
@@ -73,8 +73,8 @@ void TestDemo::tick(){
 
     // testRenderText();
     // testRenderTextWithRect();
-    // testRenderTextGravity();
-    testRenderTextCode();
+     testRenderTextGravity();
+    //testRenderTextCode();
 }
 
 void TestDemo::dispose(){
@@ -111,10 +111,19 @@ void TestDemo::testRenderTextCode(){
     paint.textColor = glm::vec4(1.0 ,0.0 ,0.0, 1.0f);
     paint.textGravity = Center;
 
+    Rect warpRect;
+
     renderEngine_->renderTextWithRect(code_ ,
         limitRect ,
         paint ,
-        nullptr);
+        &warpRect);
+
+    Paint warpPaint;
+    warpPaint.color = glm::vec4(1.0f , 0.0f ,0.0f ,0.3f);
+    auto shapeBatch = renderEngine_->getShapeBatch();
+    shapeBatch->begin();
+    shapeBatch->renderRect(warpRect , warpPaint);
+    shapeBatch->end();
 }
 
 void TestDemo::testRenderTextGravity(){
