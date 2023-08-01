@@ -47,6 +47,8 @@ private:
 
     std::wstring code_;
 
+    int count_ = 0;
+
     void testAudio();
     
     void testRender1();
@@ -71,4 +73,6 @@ private:
     void testRenderTextWithRect();
     void testRenderTextGravity();
     void testRenderTextCode();
+
+    void testActionDown();
 };

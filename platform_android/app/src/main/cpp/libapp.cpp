@@ -9,7 +9,7 @@
 #include "application.hpp"
 #include "input/input_manager.hpp"
 
-#define  LOG_TAG    "textrender"
+#define  LOG_TAG    "farmfun"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 AAssetManager *AndroidAssetManagerInstance = nullptr;

@@ -8,6 +8,7 @@
 #include <cmath>
 #include "widget/timer.hpp"
 #include "resource/asset_manager.hpp"
+#include "input/input_manager.hpp"
 
 void TestDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -69,7 +70,7 @@ void TestDemo::tick(){
     // testRenderSprite3();
     // testRenderSprite4();
     // testRenderSprite5Rotate();
-    testRenderSprite6();
+//    testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
     //testRenderShader();
@@ -78,6 +79,8 @@ void TestDemo::tick(){
     // testRenderTextWithRect();
     // testRenderTextGravity();
     //testRenderTextCode();
+
+    testActionDown();
 }
 
 void TestDemo::dispose(){
@@ -86,7 +89,29 @@ void TestDemo::dispose(){
 
 bool TestDemo::onEventAction(int action , float x , float y){
     Logi("testdemo" , "onEventAction event: %d ( %f , %f)" , action , x , y);
+    if(action == ACTION_UP){
+        count_++;
+    }
     return false;
+}
+
+void TestDemo::testActionDown() {
+    TextPaint paint;
+    float fontSize = 128.0f;
+    paint.setTextSize(fontSize);
+    paint.textColor = glm::vec4(1.0 ,1.0 ,1.0, 1.0f);
+    paint.textGravity = Center;
+
+    Rect showRect;
+    showRect.width = viewWidth_;
+    showRect.height = viewHeight_;
+    showRect.top = viewHeight_;
+    showRect.left = 0;
+
+    std::wstring countStr = L"";
+    countStr += std::to_wstring(count_);;
+
+    renderEngine_->renderTextWithRect(countStr , showRect , paint , nullptr);
 }
 
 void TestDemo::testRenderTextCode(){
