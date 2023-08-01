@@ -6,12 +6,19 @@
 #include <ctime>
 #include <chrono>
 #include <sstream>
+#include <vector>
 
 
 class RenderEngine;
 class Timer;
 class TestDemo;
 class ShaderDemo;
+
+
+class EventActionCallback{
+public:
+    virtual bool onEventAction(int action , float x , float y) = 0;
+};
 
 /**
  * @brief  应用入口
@@ -37,6 +44,10 @@ public:
 
     void onEventAction(int event , float x , float y);
 
+    bool addEventActionCallback(EventActionCallback *callback);
+
+    EventActionCallback* removeEventActionCallback(EventActionCallback *callback);
+    
     virtual void updateSence();
     
     virtual void onResize(int width , int height);
@@ -61,6 +72,7 @@ public:
     //获取上一帧经过的时间
     long long getLastFrameDeltaTime();
     long long timeStamp_ = -1L;
+    
 protected:
     long startTime_;
 
@@ -69,6 +81,9 @@ protected:
     //定时器  调度定时任务 或 延时任务
     std::shared_ptr<Timer> timer_ = nullptr;
 private:
+    std::vector<EventActionCallback *> eventCallbackList_;
+
+    bool checkInCallbackList(EventActionCallback *callback);
     //for -----------test---------------------
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
     std::shared_ptr<TestDemo> testDemo_ = nullptr;

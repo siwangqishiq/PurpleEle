@@ -15,6 +15,8 @@
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
+    eventCallbackList_.clear();
+
     if(testDemo_ != nullptr){
         testDemo_->dispose();
     }
@@ -110,6 +112,16 @@ void Application::onInit(){
 
  void Application::onEventAction(int event , float x , float y){
     // Logi("action" , "tigger action: %d (%f, %f)" , event , x , y);
+    y = viewHeight_ - y;
+    
+    for(EventActionCallback *pCallback : eventCallbackList_){
+        if(pCallback != nullptr){
+            bool isCost = pCallback->onEventAction(event , x , y);
+            if(isCost){
+                break;
+            }
+        }
+    }//end for each
  }
 
 void Application::onCreate(){
@@ -174,10 +186,19 @@ void Application::updateSence(){
         p4.textColor = showFps >=50
             ? glm::vec4(0.0f ,1.0f , 0.0f , 1.0f)
             : glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
-        std::wstring name = L"帧率:";
+        std::wstring name = L"fps:";
         std::wstring fpsStr = name + std::to_wstring(showFps);
-        renderEngine_->renderText(fpsStr, screenWidth_ - 220.0f, 
-            screenHeight_ - 80.0f, p4);
+
+        Rect outputRect;
+        outputRect.left = 0.0f;
+        outputRect.top = viewHeight_ - 16.0f;
+        outputRect.width = viewWidth_ - 16.0f;
+        outputRect.height = viewHeight_;
+        p4.textGravity = TopRight; 
+        
+        renderEngine_->renderTextWithRect(fpsStr , outputRect , p4 , nullptr);
+        // renderEngine_->renderText(fpsStr, screenWidth_ - 220.0f, 
+        //     screenHeight_ - 80.0f, p4);
     }
 }
 
@@ -189,8 +210,40 @@ long long Application::getLastFrameDeltaTime(){
     return currentTimeMicro() - timeStamp_;
 }
 
+bool Application::checkInCallbackList(EventActionCallback *callback){
+    for(auto p : eventCallbackList_){
+        if(p == callback){
+            return true;
+        }
+    }
+    return false;
+}
 
+bool Application::addEventActionCallback(EventActionCallback *callback){
+    if(checkInCallbackList(callback)){
+        return false;
+    }
 
+    eventCallbackList_.push_back(callback);
+    Logi("application" , "callback list size %d" , eventCallbackList_.size());
+    return true;
+}
+
+EventActionCallback* Application::removeEventActionCallback(EventActionCallback *callback){
+    if(!checkInCallbackList(callback)){
+        return nullptr;
+    }
+
+    for(int i = 0 ; i < eventCallbackList_.size();i++){
+        if(callback == eventCallbackList_[i]){
+            eventCallbackList_.erase(eventCallbackList_.begin() + i);
+            break;
+        }
+    }
+
+    Logi("application" , "callback list size %d" , eventCallbackList_.size());
+    return callback;
+}
 
 
 

@@ -5,10 +5,14 @@
 #include <GLFW/glfw3.h>
 
 #include "application.hpp"
+#include "input/input_manager.hpp"
 
 class LinuxApplication : public Application{
 };
 
+static bool MouseActionDown = false;
+static int mouseX = 0;
+static int mouseY = 0;
 
 int main(int argc , char *argv[]){
     glfwInit();
@@ -42,6 +46,33 @@ int main(int argc , char *argv[]){
         std::shared_ptr<LinuxApplication> app= 
             *(static_cast<std::shared_ptr<LinuxApplication> *>(app_));
         app->onResize(w , h);
+    });
+
+     glfwSetMouseButtonCallback(window , [](GLFWwindow* windows_,int button,int event,int mods){
+        void* app_ = glfwGetWindowUserPointer(windows_);
+        std::shared_ptr<LinuxApplication> app= 
+            *(static_cast<std::shared_ptr<LinuxApplication> *>(app_));
+        if(event == GLFW_PRESS){
+            MouseActionDown = true;
+            app->onEventAction(ACTION_DOWN , mouseX , mouseY);
+        }else if(event == GLFW_RELEASE){
+            MouseActionDown = false;
+            app->onEventAction(ACTION_UP , mouseX , mouseY);
+        }
+        // std::cout << "event " << button << "  " << event << std::endl;
+    });
+
+    glfwSetCursorPosCallback(window , [](GLFWwindow* windows_,double x,double y){
+        mouseX = static_cast<int>(x);
+        mouseY = static_cast<int>(y);
+
+        if(MouseActionDown){
+            void* app_ = glfwGetWindowUserPointer(windows_);
+            std::shared_ptr<LinuxApplication> app= 
+                *(static_cast<std::shared_ptr<LinuxApplication> *>(app_));
+            app->onEventAction(ACTION_MOVE , mouseX , mouseY);
+        }
+        // std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
     });
 
     // glad: load all OpenGL function pointers

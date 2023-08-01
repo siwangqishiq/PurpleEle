@@ -14,12 +14,15 @@ void TestDemo::init(){
     viewHeight_ = appContext->viewHeight_;
 
     renderEngine_ = appContext->getRender();
+        
+    appContext->addEventActionCallback(this);
 
     testAudio();
     testImage = BuildImageByAsset("lan.jpg");
     testGakkiImage = BuildImageByAsset("test.jpeg");
     wallpaperImage = BuildImageByAsset("bg.jpg");
     walkingImage = BuildImageByAsset("sprite/walk.png");//32 x 48
+    yuanImage_ = BuildImageByAsset("sprite/yuan.png");
     customRenderShader = ShaderManager::getInstance()->loadAssetShader("custom" ,
                                                                        "shader/shader_vert.glsl" ,
                                                                         "shader/shader_frag.glsl");
@@ -65,20 +68,25 @@ void TestDemo::tick(){
     // testRenderSprite2();
     // testRenderSprite3();
     // testRenderSprite4();
-
     // testRenderSprite5Rotate();
+    testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
     //testRenderShader();
 
     // testRenderText();
     // testRenderTextWithRect();
-     testRenderTextGravity();
+    // testRenderTextGravity();
     //testRenderTextCode();
 }
 
 void TestDemo::dispose(){
-    
+    appContext->removeEventActionCallback(this);
+}
+
+bool TestDemo::onEventAction(int action , float x , float y){
+    Logi("testdemo" , "onEventAction event: %d ( %f , %f)" , action , x , y);
+    return false;
 }
 
 void TestDemo::testRenderTextCode(){
@@ -350,6 +358,28 @@ void TestDemo::testRenderSprite5Rotate(){
     spriteBatch->end();
 
     rotateAngle -= PI / 180.0f;
+}
+
+void TestDemo::testRenderSprite6(){
+    auto spriteBatch = renderEngine_->getSpriteBatch();
+    spriteBatch->begin();
+
+    Rect srcRect;
+    srcRect.left = 0.0f;
+    srcRect.top = yuanImage_->getHeight();
+    srcRect.height = yuanImage_->getHeight();
+    srcRect.width = yuanImage_->getWidth();
+
+    float ratio = static_cast<float>(yuanImage_->getWidth()) / yuanImage_->getHeight();
+
+    Rect dstRect;
+    dstRect.height = appContext->viewHeight_;
+    dstRect.width = ratio * (dstRect.height);
+    dstRect.left = (appContext->viewWidth_ - dstRect.width) / 2.0f;
+    dstRect.top = appContext->viewHeight_;
+    
+    spriteBatch->renderImage(*yuanImage_ , srcRect , dstRect);
+    spriteBatch->end();
 }
 
 void TestDemo::testRenderSprite1(){

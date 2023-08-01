@@ -5,7 +5,7 @@
 class RenderEngine;
 class TextureImage;
 
-class TestDemo{
+class TestDemo :public EventActionCallback{
 public:
     TestDemo(Application *app){
         appContext = app;
@@ -16,6 +16,8 @@ public:
     void tick();
 
     void dispose();
+
+    virtual bool onEventAction(int action , float x , float y);
 
     bool isInited = false;
 private:
@@ -32,6 +34,8 @@ private:
     std::shared_ptr<TextureImage> testGakkiImage;
     std::shared_ptr<TextureImage> wallpaperImage;
     std::shared_ptr<TextureImage> walkingImage;
+
+    std::shared_ptr<TextureImage> yuanImage_;
 
     Shader customRenderShader;
 
@@ -57,6 +61,7 @@ private:
     void testRenderSprite3();
     void testRenderSprite4();
     void testRenderSprite5Rotate();
+    void testRenderSprite6();
 
     void testRenderShader();
 

@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "application.hpp"
+#include "input/input_manager.hpp"
 
 #define  LOG_TAG    "textrender"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -65,4 +66,31 @@ JNIEXPORT void JNICALL
 Java_panyi_xyz_textrender_NativeBridge_setAndroidAssetManager(JNIEnv *env, jclass clazz,
                                                               jobject mgr) {
     AndroidAssetManagerInstance = AAssetManager_fromJava(env , mgr);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_panyi_xyz_textrender_NativeBridge_handleOnAction(JNIEnv *env, jclass clazz, jint action,
+                                                      jfloat x, jfloat y) {
+    // LOGI("onAction: %d , %f , %f" , action , x , y);
+    if(app != nullptr){
+        int transformAction = -1;
+        switch (action) {
+            case 0://down
+                transformAction = ACTION_DOWN;
+                break;
+            case 1://up
+                transformAction = ACTION_UP;
+                break;
+            case 2://move
+                transformAction = ACTION_MOVE;
+                break;
+            default:
+                break;
+        }//end switch
+
+        if(transformAction >= 0){
+            app->onEventAction(transformAction , x , y);
+        }
+    }//end if
 }

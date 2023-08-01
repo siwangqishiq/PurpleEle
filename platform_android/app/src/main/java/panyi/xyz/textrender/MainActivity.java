@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -41,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         public MainView(Context context) {
             super(context);
             initView(context);
+        }
+
+        @Override
+        public boolean onTouchEvent(final MotionEvent event) {
+            postRunnableRenderThread(()->{
+                NativeBridge.handleOnAction(event.getAction() , event.getX() , event.getY());
+            });
+            return true;
         }
 
         private void initView(Context context){
