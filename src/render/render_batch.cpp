@@ -135,6 +135,18 @@ void ShapeBatch::renderRoundRect(Rect &rect ,float radius , Paint &paint){
     formatShape(ShapeType::ShapeRoundRect , rect , paint , radius);
 }
 
+void ShapeBatch::renderBlurRect(Rect &rect ,float blur, Paint &paint){
+    Rect realRect;
+    realRect.left = rect.left - blur;
+    realRect.top = rect.top + blur;
+    float twiceBlur = 2 * blur;
+    realRect.width = rect.width + twiceBlur;
+    realRect.height = rect.height + twiceBlur;
+    paint.stokenWidth = blur;
+    
+    formatShape(ShapeType::ShapeBlurRect , realRect , paint);
+}
+
 //颜色线性插值的矩形 用于绘制矩形阴影
 void ShapeBatch::renderLinearGradientRect(Rect &rect, 
         glm::vec4 leftTopColor,

@@ -70,7 +70,7 @@ void TestDemo::tick(){
     // testRenderSprite3();
     // testRenderSprite4();
     // testRenderSprite5Rotate();
-//    testRenderSprite6();
+   testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
     //testRenderShader();
@@ -82,7 +82,8 @@ void TestDemo::tick(){
 
     // testActionDown();
     // testRenderBlurCircle();
-    testRenderLinearGradRect();
+    // testRenderLinearGradRect();
+    testRenderBlurRect();
 }
 
 void TestDemo::dispose(){
@@ -527,6 +528,35 @@ void TestDemo::testRenderSprite3(){
     }
 }
 
+void TestDemo::testRenderBlurRect(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Paint paint;
+    paint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
+
+    Rect rect;
+    rect.left = (viewWidth_ - viewHeight_)/2.0f + 300.0f;
+    rect.top = viewHeight_ / 2.0f;
+    rect.width = 160.0f;
+    rect.height = 100.0f;
+
+    renderEngine_->getShapeBatch()
+        ->renderBlurRect(rect , 100.0f , paint);
+
+    renderEngine_->getShapeBatch()->end();
+}
+
 void TestDemo::testRenderLinearGradRect(){
     Paint bottomPaint;
     bottomPaint.fillStyle = Filled;
@@ -560,10 +590,8 @@ void TestDemo::testRenderLinearGradRect(){
             glm::vec4(0.0f , 0.0f , 1.0f , 1.0f),
             glm::vec4(1.0f , 1.0f , 0.0f , 1.0f));
 
-    renderEngine_->getShapeBatch()->end();
-
-    
-    renderEngine_->getShapeBatch()->begin();
+    // renderEngine_->getShapeBatch()->end();
+    // renderEngine_->getShapeBatch()->begin();
     Paint paint2;
     paint2.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
 

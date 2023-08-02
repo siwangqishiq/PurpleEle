@@ -60,6 +60,7 @@ private:
 
     void testRenderBlurCircle();
     void testRenderLinearGradRect();
+    void testRenderBlurRect();
 
     void testRenderSprite1();
     void testRenderSprite2();

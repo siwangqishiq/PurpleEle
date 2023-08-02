@@ -14,8 +14,9 @@ const float shape_circle = 0.0f;
 const float shape_rect = 1.0f;
 const float shape_round_rect = 2.0f;
 const float shape_oval = 3.0f;
-const float shape_circle_blur = 4.0f;
+const float shape_blur_circle = 4.0f;
 const float shape_linear_gradient = 5.0f;
+const float shape_blur_rect = 6.0f;
 
 const float mode_filled = 0.0f;
 const float mode_stoken = 1.0f;
@@ -80,6 +81,7 @@ float renderCircleBlur(vec2 pos , float blur){
     return 1.0f - smoothstep(radius - blur , radius , distance(pos , center));
 }
 
+
 float renderOval(vec2 pos){
     float ra = vRect.z / 2.0f;
     float rb = vRect.w / 2.0f;
@@ -93,6 +95,21 @@ float renderOval(vec2 pos){
 
 bool isPointInRect(vec4 rect , vec2 p){
     return p.x >= rect.x && p.x <= rect.x + rect.z && p.y <= rect.y && p.y >= rect.y - rect.w;
+}
+
+float renderBlurRect(vec2 pos , float blur){
+    vec4 outRect = vRect;
+    vec4 innerRect;
+    float twiceBlur = 2 * blur;
+    innerRect.x = vRect.x + blur;
+    innerRect.y = vRect.y - blur;
+    innerRect.z = vRect.z - twiceBlur;
+    innerRect.w = vRect.w - twiceBlur;
+    
+    if(isPointInRect(innerRect , pos)){
+        return 1.0f;
+    }
+    return 0.0f;
 }
 
 bool isPointInCircle(vec2 center , float r , vec2 p){
@@ -143,10 +160,13 @@ void main(){
     }else if(floatEqual(vShape.x ,shape_round_rect)){
         value = renderRoundRect(pos);
         fragColor = vColor * value;
-    }else if(floatEqual(vShape.x ,shape_circle_blur)){
+    }else if(floatEqual(vShape.x ,shape_blur_circle)){
         value = renderCircleBlur(pos , vShape.z);
         fragColor = vColor * value;
     }else if(floatEqual(vShape.x ,shape_linear_gradient)){//直接取顶点颜色
         fragColor = vColor;
+    }else if(floatEqual(vShape.x ,shape_blur_rect)){
+        value = renderBlurRect(pos , vShape.z);
+        fragColor = vColor * value;
     }
 }
