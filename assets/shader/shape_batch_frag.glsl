@@ -14,6 +14,8 @@ const float shape_circle = 0.0f;
 const float shape_rect = 1.0f;
 const float shape_round_rect = 2.0f;
 const float shape_oval = 3.0f;
+const float shape_circle_blur = 4.0f;
+const float shape_linear_gradient = 5.0f;
 
 const float mode_filled = 0.0f;
 const float mode_stoken = 1.0f;
@@ -72,6 +74,12 @@ float renderCircle(vec2 pos){
     return 1.0f - step(radius , distance(pos , center));
 }
 
+float renderCircleBlur(vec2 pos , float blur){
+    float radius = vRect.w / 2.0f;
+    vec2 center = vec2(vRect.x + radius , vRect.y - radius);
+    return 1.0f - smoothstep(radius - blur , radius , distance(pos , center));
+}
+
 float renderOval(vec2 pos){
     float ra = vRect.z / 2.0f;
     float rb = vRect.w / 2.0f;
@@ -125,12 +133,20 @@ void main(){
     vec2 pos = gl_FragCoord.xy;
     if(floatEqual(vShape.x , shape_rect)){//draw rect
         value = renderRect(pos);
+        fragColor = vColor * value;
     }else if(floatEqual(vShape.x , shape_circle)){
         value = renderCircle(pos);
+        fragColor = vColor * value;
     }else if(floatEqual(vShape.x , shape_oval)){
         value = renderOval(pos);
+        fragColor = vColor * value;
     }else if(floatEqual(vShape.x ,shape_round_rect)){
         value = renderRoundRect(pos);
+        fragColor = vColor * value;
+    }else if(floatEqual(vShape.x ,shape_circle_blur)){
+        value = renderCircleBlur(pos , vShape.z);
+        fragColor = vColor * value;
+    }else if(floatEqual(vShape.x ,shape_linear_gradient)){//直接取顶点颜色
+        fragColor = vColor;
     }
-    fragColor = vColor * value;
 }

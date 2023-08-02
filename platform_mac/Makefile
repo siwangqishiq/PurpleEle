@@ -1,5 +1,8 @@
 include ../module.mk
 
+${BUILD_DIR}/glad.o:glad.cpp
+	${CC} -std=${STD} -c ${OPTPARAMS} glad.cpp -o ${BUILD_DIR}/glad.o -I ${INCLUDE_DIR}
+
 # ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_mac.cpp \
 # 				${SRC_DIR}/audio/audio_mac.hpp
 # 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio_mac.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_impl.o 

@@ -49,7 +49,9 @@ enum ShapeType{
     ShapeCircle = 0,
     ShapeRect = 1,
     ShapeRoundRect = 2,
-    ShapeOval = 3
+    ShapeOval = 3,
+    ShapeBlurCircle = 4,
+    ShapeLinearGradientRect = 5
 };
 
 enum TextStyle{

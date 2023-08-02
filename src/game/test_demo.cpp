@@ -64,7 +64,7 @@ void TestDemo::tick(){
     // testRender3();
     // testRender4();
     // testRenderRoundRect();
-    // testRenderTableTennis();
+    testRenderTableTennis();
     // testRenderSprite1();
     // testRenderSprite2();
     // testRenderSprite3();
@@ -78,9 +78,11 @@ void TestDemo::tick(){
     // testRenderText();
     // testRenderTextWithRect();
     // testRenderTextGravity();
-    //testRenderTextCode();
+    // testRenderTextCode();
 
-    testActionDown();
+    // testActionDown();
+    // testRenderBlurCircle();
+    testRenderLinearGradRect();
 }
 
 void TestDemo::dispose(){
@@ -523,6 +525,95 @@ void TestDemo::testRenderSprite3(){
     if(srcTop_ + 300.0f >= curImage->getHeight()){
         srcTop_ = 0.0f;
     }
+}
+
+void TestDemo::testRenderLinearGradRect(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+
+    auto startColor = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+    auto endColor = glm::vec4(0.0f , 0.0f , 0.0f , 0.0f);
+
+    Rect rect;
+    rect.left = (viewWidth_ - viewHeight_)/2.0f;
+    rect.top = viewHeight_ / 2.0f;
+    rect.width = 160.0f;
+    rect.height = 100.0f;
+
+    renderEngine_->getShapeBatch()
+        ->renderLinearGradientRect(rect , 
+            glm::vec4(1.0f , 0.0f , 0.0f , 1.0f),
+            glm::vec4(0.0f , 1.0f , 0.0f , 1.0f),
+            glm::vec4(0.0f , 0.0f , 1.0f , 1.0f),
+            glm::vec4(1.0f , 1.0f , 0.0f , 1.0f));
+
+    renderEngine_->getShapeBatch()->end();
+
+    
+    renderEngine_->getShapeBatch()->begin();
+    Paint paint2;
+    paint2.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+
+    float radius = 100.0f;
+    float centerX = viewWidth_ / 2.0f;
+    float centerY = viewHeight_ / 2.0f;
+
+    float shadowOffset = 4.0f;
+    renderEngine_->getShapeBatch()
+        ->renderBlurCircle(centerX + shadowOffset, centerY - 2*shadowOffset, 
+            0.4f * radius , radius * 0.8f , paint2);
+    
+    paint2.color = ConvertColor(100,181,246,255);
+    renderEngine_->getShapeBatch()
+        ->renderCircle(centerX , centerY , radius , paint2);
+
+    renderEngine_->getShapeBatch()->end();
+}
+
+void TestDemo::testRenderBlurCircle(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+
+    float radius = 100.0f;
+    float centerX = viewWidth_ / 2.0f;
+    float centerY = viewHeight_ / 2.0f;
+
+    float shadowOffset = 4.0f;
+    renderEngine_->getShapeBatch()
+        ->renderBlurCircle(centerX + shadowOffset, centerY - shadowOffset, 
+            0.4f * radius , radius * 0.8f , paint);
+    
+    paint.color = ConvertColor(100,181,246,255);
+    renderEngine_->getShapeBatch()
+        ->renderCircle(centerX , centerY , radius , paint);
+
+    renderEngine_->getShapeBatch()->end();
 }
 
 

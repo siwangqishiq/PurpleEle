@@ -44,9 +44,6 @@ ${BUILD_DIR}/utils.o: ${SRC_DIR}/utils.cpp ${SRC_DIR}/utils.hpp
 ${BUILD_DIR}/application.o: ${SRC_DIR}/application.hpp ${SRC_DIR}/application.cpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/application.cpp -o ${BUILD_DIR}/application.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
-${BUILD_DIR}/glad.o:${SRC_DIR}/render/glad.cpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/glad.cpp -o ${BUILD_DIR}/glad.o -I ${INCLUDE_DIR}
-
 ${BUILD_DIR}/shader.o:${SRC_DIR}/render/shader.cpp ${SRC_DIR}/render/shader.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/shader.cpp -o ${BUILD_DIR}/shader.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 

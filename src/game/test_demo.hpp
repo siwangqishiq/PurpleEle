@@ -58,6 +58,9 @@ private:
     void testRenderRoundRect();
     void testRenderTableTennis();
 
+    void testRenderBlurCircle();
+    void testRenderLinearGradRect();
+
     void testRenderSprite1();
     void testRenderSprite2();
     void testRenderSprite3();

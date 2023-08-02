@@ -110,6 +110,18 @@ void ShapeBatch::renderCircle(float cx , float cy , float radius , Paint &paint)
     formatShape(ShapeType::ShapeCircle , rect , paint);
 }
 
+void ShapeBatch::renderBlurCircle(float cx , float cy , float radius, float blur, Paint &paint){
+    Rect rect;
+    float realRadius = radius + blur;
+    rect.left = cx - realRadius;
+    rect.top = cy + realRadius;
+    rect.width = 2 * realRadius;
+    rect.height = 2 * realRadius;
+    paint.stokenWidth = blur;
+
+    formatShape(ShapeType::ShapeBlurCircle , rect , paint);
+}
+
 //绘制矩形
 void ShapeBatch::renderRect(Rect &rect ,Paint &paint){
     formatShape(ShapeType::ShapeRect , rect , paint);
@@ -121,6 +133,53 @@ void ShapeBatch::renderOval(Rect &rect , Paint &paint){
 
 void ShapeBatch::renderRoundRect(Rect &rect ,float radius , Paint &paint){
     formatShape(ShapeType::ShapeRoundRect , rect , paint , radius);
+}
+
+//颜色线性插值的矩形 用于绘制矩形阴影
+void ShapeBatch::renderLinearGradientRect(Rect &rect, 
+        glm::vec4 leftTopColor,
+        glm::vec4 rightTopColor,
+        glm::vec4 leftBottomColor,
+        glm::vec4 rightBottomColor){
+    
+    if(!isDrawing_){
+        Logi("ShapeBatch" , "batch is not call begin()");
+        return;
+    }
+
+    int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
+    if(index_ + addedSize >= vertexBuffer_.size()){
+        end();
+        begin();
+    }
+
+    Paint paint;
+
+    float depth = renderEngine_->getAndChangeDepthValue();//图元深度
+
+    auto type = ShapeType::ShapeLinearGradientRect;
+    //v1
+    putVertexAttributeWithColor(0 , type, rect.left , rect.getBottom() , 
+        rect, paint , leftBottomColor , depth);
+    //v2
+    putVertexAttributeWithColor(1 ,type, rect.getRight() , rect.getBottom(), 
+        rect , paint , rightBottomColor, depth);
+    //v3
+    putVertexAttributeWithColor(2 ,type , rect.getRight() , rect.top, 
+        rect , paint , rightTopColor , depth);
+
+    //v4
+    putVertexAttributeWithColor(3 ,type , rect.left , rect.getBottom(), 
+        rect , paint , leftBottomColor, depth);
+    //v5
+    putVertexAttributeWithColor(4 ,type , rect.getRight() , rect.top, 
+        rect , paint , rightTopColor, depth);
+    //v6
+    putVertexAttributeWithColor(5 ,type , rect.left , rect.top, 
+        rect , paint , leftTopColor , depth);
+
+    index_ += attrCountPerVertex_ * VERTEX_COUNT_PER_PERMITIVE;
+    vertexCount_ += VERTEX_COUNT_PER_PERMITIVE;
 }
 
 void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint , float extra){
@@ -189,6 +248,35 @@ void ShapeBatch::putVertexAttribute(int vertexIndex
     vertexBuffer_[offset + 8] = paint.fillStyle;
     vertexBuffer_[offset + 9] = paint.stokenWidth;
     vertexBuffer_[offset + 10] = extra; //if shape roundrect this is round rect radius
+
+    //rect
+    vertexBuffer_[offset + 11] = rect.left;
+    vertexBuffer_[offset + 12] = rect.top;
+    vertexBuffer_[offset + 13] = rect.width;
+    vertexBuffer_[offset + 14] = rect.height;
+}
+
+void ShapeBatch::putVertexAttributeWithColor(int vertexIndex ,ShapeType type, float x , float y 
+        ,Rect &rect ,Paint &paint 
+        ,glm::vec4 color
+        ,float depth){
+    const int offset = index_ + vertexIndex * attrCountPerVertex_;
+    //position
+    vertexBuffer_[offset + 0] = x;
+    vertexBuffer_[offset + 1] = y;
+    vertexBuffer_[offset + 2] = depth;
+
+    //color
+    vertexBuffer_[offset + 3] = color.r;
+    vertexBuffer_[offset + 4] = color.g;
+    vertexBuffer_[offset + 5] = color.b;
+    vertexBuffer_[offset + 6] = color.a;
+
+    //shape
+    vertexBuffer_[offset + 7] = type;
+    vertexBuffer_[offset + 8] = paint.fillStyle;
+    vertexBuffer_[offset + 9] = paint.stokenWidth;
+    vertexBuffer_[offset + 10] = 0.0f; 
 
     //rect
     vertexBuffer_[offset + 11] = rect.left;

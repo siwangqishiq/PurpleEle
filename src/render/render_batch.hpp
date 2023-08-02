@@ -75,6 +75,15 @@ public:
     //绘制圆角矩形
     void renderRoundRect(Rect &rect ,float radius , Paint &paint);
 
+    //绘制周边带阴影的圆形
+    void renderBlurCircle(float cx , float cy , float radius,float blur, Paint &paint);
+
+    //颜色线性插值的矩形 用于绘制矩形阴影
+    void renderLinearGradientRect(Rect &rect , 
+                glm::vec4 leftTopColor,
+                glm::vec4 rightTopColor,
+                glm::vec4 leftBottomColor,
+                glm::vec4 rightBottomColor);
 protected:
 
     void formatShape(ShapeType type , Rect &rect , Paint &paint , float extra = 0.0f);
@@ -83,6 +92,11 @@ protected:
 
     void putVertexAttribute(int vertexIndex ,ShapeType type, float x , float y 
             ,Rect &rect ,Paint &paint , float extra , float depth);
+
+    void putVertexAttributeWithColor(int vertexIndex ,ShapeType type, float x , float y 
+            ,Rect &rect ,Paint &paint 
+            ,glm::vec4 color
+            ,float depth);
 };
 
 class TextureImage;
