@@ -100,7 +100,7 @@ bool isPointInRect(vec4 rect , vec2 p){
 float renderBlurRect(vec2 pos , float blur){
     vec4 outRect = vRect;
     vec4 innerRect;
-    float twiceBlur = 2 * blur;
+    float twiceBlur = 2.0f * blur;
     innerRect.x = vRect.x + blur;
     innerRect.y = vRect.y - blur;
     innerRect.z = vRect.z - twiceBlur;

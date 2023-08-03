@@ -59,31 +59,31 @@ void TestDemo::init(){
 }
 
 void TestDemo::tick(){
-    // testRender1();
-    // testRender2();
-    // testRender3();
-    // testRender4();
-    // testRenderRoundRect();
-    testRenderTableTennis();
-    // testRenderSprite1();
-    // testRenderSprite2();
-    // testRenderSprite3();
-    // testRenderSprite4();
-    // testRenderSprite5Rotate();
-   testRenderSprite6();
+//     testRender1();
+//     testRender2();
+//     testRender3();
+//     testRender4();
+//     testRenderRoundRect();
+//    testRenderTableTennis();
+//     testRenderSprite1();
+//     testRenderSprite2();
+//     testRenderSprite3();
+//     testRenderSprite4();
+//     testRenderSprite5Rotate();
+   // testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
     //testRenderShader();
 
-    // testRenderText();
-    // testRenderTextWithRect();
-    // testRenderTextGravity();
-    // testRenderTextCode();
+//     testRenderText();
+//     testRenderTextWithRect();
+//     testRenderTextGravity();
+//     testRenderTextCode();
 
     // testActionDown();
-    // testRenderBlurCircle();
-    // testRenderLinearGradRect();
-    testRenderBlurRect();
+     testRenderBlurCircle();
+     testRenderLinearGradRect();
+//    testRenderBlurRect();
 }
 
 void TestDemo::dispose(){
