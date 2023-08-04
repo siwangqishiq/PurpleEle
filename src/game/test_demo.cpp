@@ -84,8 +84,8 @@ void TestDemo::tick(){
     //  testRenderBlurCircle();
     //  testRenderLinearGradRect();
 //    testRenderBlurRect();
-//    testRenderBlurRect2();
-    // testRenderBlurRect3();
+//     testRenderBlurRect2();
+//     testRenderBlurRect3();
     // testRenderBlurRect4();
     testRenderBlurRoundRect();
 }
@@ -122,12 +122,11 @@ void TestDemo::testRenderBlurRoundRect(){
     rect.left = viewWidth_ / 2.0 - rect.width / 2.0f;
     rect.top = viewHeight_ / 2.0 + rect.height / 2.0f;
 
-
     Paint paint;
     paint.color = COLOR_SKY_BLUE;
     paint.fillStyle = Filled; 
-    renderEngine_->getShapeBatch()->renderBlurRoundRect(rect , 30.0f , 10.0f , paint);
-
+    renderEngine_->getShapeBatch()->renderBlurRoundRect(rect , 20.0f , 40.0f , paint);
+    
     renderEngine_->getShapeBatch()->end();    
 }
 

@@ -98,14 +98,19 @@ bool isPointInRect(vec4 rect , vec2 p){
     return p.x >= rect.x && p.x <= rect.x + rect.z && p.y <= rect.y && p.y >= rect.y - rect.w;
 }
 
-float renderBlurRect(vec2 pos , float blur){
-    vec4 outRect = vRect;
+vec4 createInnerRectForBlurRender(float blur){
     vec4 innerRect;
     float twiceBlur = 2.0f * blur;
     innerRect.x = vRect.x + blur;
     innerRect.y = vRect.y - blur;
     innerRect.z = vRect.z - twiceBlur;
     innerRect.w = vRect.w - twiceBlur;
+    return innerRect;
+}
+
+float renderBlurRect(vec2 pos , float blur){
+    vec4 outRect = vRect;
+    vec4 innerRect = createInnerRectForBlurRender(blur);
 
     if(isPointInRect(innerRect , pos)){
         return one;
@@ -143,36 +148,36 @@ bool isPointInCircle(vec2 center , float r , vec2 p){
     return distance(p , center) <= r;
 }
 
+//渲染外部模糊的圆角矩形
 float renderBlurRoundRect(vec2 pos , float blur){
-    
+    vec4 outRect = vRect;
+    vec4 innerRect = createInnerRectForBlurRender(blur);
 
     float roundRadius = vShape.w;
     float cube = roundRadius;
 
-    vec4 leftTopRect = vec4(vRect.x , vRect.y , cube , cube);
-    if(isPointInRect(leftTopRect , pos)
-        && !isPointInCircle(vec2(leftTopRect.x + cube , leftTopRect.y - cube) , roundRadius , pos)){
-        return zero;
+    if(isPointInRect(innerRect , pos)){
+        return one;
     }
 
-    vec4 rightTopRect = vec4(vRect.x + vRect.z - cube , vRect.y , cube , cube);
-    if(isPointInRect(rightTopRect , pos) 
-        && !isPointInCircle(vec2(rightTopRect.x + rightTopRect.z - cube , rightTopRect.y - cube) , roundRadius , pos)){
-        return zero;
+    if(pos.y >= innerRect.y - roundRadius
+            && pos.x >= innerRect.x + roundRadius
+            && pos.x <= innerRect.x + innerRect.z - roundRadius){
+            return smoothstep(outRect.y , innerRect.y, pos.y);
+    }else if(pos.y <= innerRect.y - innerRect.w
+                && pos.x >= innerRect.x
+                && pos.x <= innerRect.x + innerRect.z){
+        return smoothstep(outRect.y - outRect.w , innerRect.y - innerRect.w, pos.y);
+    }else if(pos.x <= innerRect.x
+                && pos.y <= innerRect.y
+                && pos.y >= innerRect.y - innerRect.w){
+        return smoothstep(outRect.x , innerRect.x , pos.x);
+    }else if(pos.x >= innerRect.x + innerRect.z
+                && pos.y <= innerRect.y
+                && pos.y >= innerRect.y - innerRect.w){
+        return smoothstep(outRect.x + outRect.z , innerRect.x + innerRect.z , pos.x);
     }
-
-    vec4 leftBottomRect = vec4(vRect.x, vRect.y - vRect.w + cube , cube , cube);
-    if(isPointInRect(leftBottomRect , pos)
-         && !isPointInCircle(vec2(leftBottomRect.x + cube , leftBottomRect.y - leftBottomRect.w + cube) , roundRadius , pos)){
-        return zero;
-    }
-
-    vec4 rightBottomRect = vec4(vRect.x + vRect.z - cube, vRect.y - vRect.w + cube , cube , cube);
-    if(isPointInRect(rightBottomRect , pos)
-            && !isPointInCircle(vec2(rightBottomRect.x + rightBottomRect.z - cube , rightBottomRect.y - rightBottomRect.w + cube) , roundRadius , pos)){
-        return zero;
-    }
-    return one;
+    return zero;
 }
 
 float renderRoundRect(vec2 pos){
