@@ -77,13 +77,16 @@ void TestDemo::tick(){
 
 //     testRenderText();
 //     testRenderTextWithRect();
-//     testRenderTextGravity();
+    // testRenderTextGravity();
 //     testRenderTextCode();
 
     // testActionDown();
-     testRenderBlurCircle();
-     testRenderLinearGradRect();
+    //  testRenderBlurCircle();
+    //  testRenderLinearGradRect();
 //    testRenderBlurRect();
+//    testRenderBlurRect2();
+    testRenderBlurRect3();
+    // testRenderBlurRect4();
 }
 
 void TestDemo::dispose(){
@@ -133,7 +136,6 @@ void TestDemo::testRenderTextCode(){
     batch->begin();
     batch->renderImage(wallpaperImage, srcRect , dstRect);
     batch->end();
-
 
     Rect limitRect;
     limitRect.left = 0.0;
@@ -243,7 +245,7 @@ void TestDemo::testRenderTextGravity(){
 
     paint.textGravity = Center;
     paint.textColor = glm::vec4(0.0f , 1.0f ,0.0f ,1.0f);
-    renderEngine_->renderTextWithRect(L"你好世界9" ,
+    renderEngine_->renderTextWithRect(L"惨" ,
         limitRect ,
         paint ,
         nullptr);
@@ -517,8 +519,7 @@ void TestDemo::testRenderSprite3(){
     originDstRect.width = curImage->getWidth();
     originDstRect.height = curImage->getHeight();
     
-    spriteBatch->renderImage(*curImage , originSrcRect , originDstRect
-);
+    spriteBatch->renderImage(*curImage , originSrcRect , originDstRect);
 
     spriteBatch->end();
 
@@ -526,6 +527,117 @@ void TestDemo::testRenderSprite3(){
     if(srcTop_ + 300.0f >= curImage->getHeight()){
         srcTop_ = 0.0f;
     }
+}
+
+void TestDemo::testRenderBlurRect4(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+
+    
+    Rect rect;
+    rect.left = bottomRect.left + bottomRect.width / 4.0;
+    rect.height = 100.0f;
+    rect.top = (viewHeight_/2.0 + rect.height / 2.0f);
+    rect.width = bottomRect.width / 2.0f;
+
+    Rect shadowRect = rect;
+    shadowRect.height = 8.0f;
+    shadowRect.top -= rect.height;
+    
+    auto blackColor = glm::vec4(0.0f , 0.0f ,0.0f ,0.5f);
+    auto transparentColor = glm::vec4(0.0f , 0.0f ,0.0f ,0.0f);
+    renderEngine_->getShapeBatch()
+        ->renderLinearGradientRect(shadowRect , blackColor,blackColor , transparentColor,transparentColor);
+
+    paint.color = ConvertColor(100,181,246,255);
+    renderEngine_->getShapeBatch()->renderRect(rect , paint);
+
+    renderEngine_->getShapeBatch()->end();
+}
+
+void TestDemo::testRenderBlurRect3(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
+
+    float shadowOffset = 4.0f;
+    
+    Rect rect;
+    rect.left = bottomRect.left + bottomRect.width / 4.0;
+    rect.height = 100.0f;
+    rect.top = (viewHeight_/2.0 + rect.height / 2.0f);
+    rect.width = bottomRect.width / 2.0f;
+
+    Rect shadowRect = rect;
+    shadowRect.height = 0.0f;
+    shadowRect.left += 7.0f;
+    shadowRect.width = rect.width - 16.0f;
+    shadowRect.top -= rect.height - 4.5f;
+    
+    renderEngine_->getShapeBatch()->renderBlurRect(shadowRect , 10.0f , paint);
+
+    paint.color = ConvertColor(100,181,246,255);
+    renderEngine_->getShapeBatch()->renderRect(rect , paint);
+
+    renderEngine_->getShapeBatch()->end();
+}
+
+void TestDemo::testRenderBlurRect2(){
+    Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 1.0f , 1.0f);
+
+    float blurSize = 15.0f * glm::sin(deltatime_) + 15.0f;
+
+    deltatime_ += 0.05f;
+
+    renderEngine_->getShapeBatch()->begin();
+
+    float cubeSize = 10.0f;
+    float gapSize = 15.0f * 2.0f;
+
+    float x = 0.0f;
+    float y = viewHeight_;
+
+    for(;y > 0.0f ; y -= cubeSize + gapSize){
+        for(x = 0.0f ; x < viewWidth_; x += cubeSize + gapSize){
+            Rect rect;
+            rect.left = x;
+            rect.top = y;
+            rect.width = cubeSize;
+            rect.height = cubeSize;
+
+            renderEngine_->getShapeBatch()
+                ->renderBlurRect(rect , blurSize , paint);
+        }
+    }//end for y
+
+   
+    renderEngine_->getShapeBatch()->end();
 }
 
 void TestDemo::testRenderBlurRect(){
@@ -543,16 +655,24 @@ void TestDemo::testRenderBlurRect(){
     renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
 
     Paint paint;
-    paint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
+    paint.color = glm::vec4(0.0f , 0.0f , 0.0f , 1.0f);
 
     Rect rect;
-    rect.left = (viewWidth_ - viewHeight_)/2.0f + 300.0f;
+    rect.left = (viewWidth_ - viewHeight_)/2.0f +100.0f;
     rect.top = viewHeight_ / 2.0f;
-    rect.width = 160.0f;
-    rect.height = 100.0f;
+    rect.width = bottomRect.width / 2.0f;
+    rect.height = 0.0f;    
+
+    float blurSize = 30.0f * glm::sin(deltatime_) + 30.0f;
+
+    deltatime_ += 0.05f;
 
     renderEngine_->getShapeBatch()
-        ->renderBlurRect(rect , 100.0f , paint);
+        ->renderBlurRect(rect , 40.0f , paint);
+
+    // paint.color = glm::vec4(1.0f  ,0.0f , 0.0f , 1.0f);
+    // renderEngine_->getShapeBatch()
+    //     ->renderRect(rect , paint);
 
     renderEngine_->getShapeBatch()->end();
 }

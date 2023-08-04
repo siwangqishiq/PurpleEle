@@ -478,7 +478,7 @@ void SpriteBatch::putVertexAttribute(int vertexIndex ,float x , float y ,
     vertexBuffer_[offset + 0] = point.x;
     vertexBuffer_[offset + 1] = point.y;
     vertexBuffer_[offset + 2] = depthValue;
-
+    
     //uv
     vertexBuffer_[offset + 3] = u;
     vertexBuffer_[offset + 4] = v;

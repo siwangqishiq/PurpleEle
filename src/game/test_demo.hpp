@@ -49,6 +49,8 @@ private:
 
     int count_ = 0;
 
+    float deltatime_ = 0.0f;
+
     void testAudio();
     
     void testRender1();
@@ -61,6 +63,9 @@ private:
     void testRenderBlurCircle();
     void testRenderLinearGradRect();
     void testRenderBlurRect();
+    void testRenderBlurRect2();
+    void testRenderBlurRect3();
+    void testRenderBlurRect4();
 
     void testRenderSprite1();
     void testRenderSprite2();

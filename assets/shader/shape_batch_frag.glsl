@@ -105,11 +105,37 @@ float renderBlurRect(vec2 pos , float blur){
     innerRect.y = vRect.y - blur;
     innerRect.z = vRect.z - twiceBlur;
     innerRect.w = vRect.w - twiceBlur;
-    
+
     if(isPointInRect(innerRect , pos)){
-        return 1.0f;
+        return one;
+    }else{
+        if(pos.y >= innerRect.y 
+            && pos.x >= innerRect.x 
+            && pos.x <= innerRect.x + innerRect.z){
+            return smoothstep(outRect.y , innerRect.y, pos.y);
+        }else if(pos.y <= innerRect.y - innerRect.w
+                    && pos.x >= innerRect.x
+                    && pos.x <= innerRect.x + innerRect.z){
+            return smoothstep(outRect.y - outRect.w , innerRect.y - innerRect.w, pos.y);
+        }else if(pos.x <= innerRect.x
+                    && pos.y <= innerRect.y
+                    && pos.y >= innerRect.y - innerRect.w){
+            return smoothstep(outRect.x , innerRect.x , pos.x);
+        }else if(pos.x >= innerRect.x + innerRect.z
+                    && pos.y <= innerRect.y
+                    && pos.y >= innerRect.y - innerRect.w){
+            return smoothstep(outRect.x + outRect.z , innerRect.x + innerRect.z , pos.x);
+        }else if(pos.x < innerRect.x && pos.y > innerRect.y){
+            return smoothstep(blur , 0.0f, distance(pos , innerRect.xy));
+        }else if(pos.x > innerRect.x && pos.y > innerRect.y){
+            return smoothstep(blur , 0.0f, distance(pos , vec2(innerRect.x + innerRect.z,innerRect.y)));
+        }else if(pos.x < innerRect.x && pos.y < innerRect.y){
+            return smoothstep(blur , 0.0f, distance(pos , vec2(innerRect.x,innerRect.y - innerRect.w)));
+        }else if(pos.x > innerRect.x && pos.y < innerRect.y) {
+            return smoothstep(blur , 0.0f, distance(pos , vec2(innerRect.x + innerRect.z,innerRect.y - innerRect.w)));
+        }
     }
-    return 0.0f;
+    return zero;
 }
 
 bool isPointInCircle(vec2 center , float r , vec2 p){
