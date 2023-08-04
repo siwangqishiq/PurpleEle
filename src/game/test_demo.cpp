@@ -85,8 +85,9 @@ void TestDemo::tick(){
     //  testRenderLinearGradRect();
 //    testRenderBlurRect();
 //    testRenderBlurRect2();
-    testRenderBlurRect3();
+    // testRenderBlurRect3();
     // testRenderBlurRect4();
+    testRenderBlurRoundRect();
 }
 
 void TestDemo::dispose(){
@@ -99,6 +100,35 @@ bool TestDemo::onEventAction(int action , float x , float y){
         count_++;
     }
     return false;
+}
+
+void TestDemo::testRenderBlurRoundRect(){
+    Paint bottomPaint;
+    bottomPaint.fillStyle = Filled;
+    bottomPaint.color = glm::vec4(1.0f , 1.0f , 1.0f ,1.0f);
+
+    Rect bottomRect;
+    bottomRect.left = (viewWidth_ - viewHeight_)/2.0f;
+    bottomRect.top = viewHeight_;
+    bottomRect.height = viewWidth_;
+    bottomRect.width = viewHeight_;
+
+    renderEngine_->getShapeBatch()->begin();
+    renderEngine_->getShapeBatch()->renderRect(bottomRect , bottomPaint);
+
+    Rect rect;
+    rect.width = 300.0f;
+    rect.height = 200.0f;
+    rect.left = viewWidth_ / 2.0 - rect.width / 2.0f;
+    rect.top = viewHeight_ / 2.0 + rect.height / 2.0f;
+
+
+    Paint paint;
+    paint.color = COLOR_SKY_BLUE;
+    paint.fillStyle = Filled; 
+    renderEngine_->getShapeBatch()->renderBlurRoundRect(rect , 30.0f , 10.0f , paint);
+
+    renderEngine_->getShapeBatch()->end();    
 }
 
 void TestDemo::testActionDown() {

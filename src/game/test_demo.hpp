@@ -1,6 +1,7 @@
 #pragma once
 
 #include "application.hpp"
+#include "utils.hpp"
 
 class RenderEngine;
 class TextureImage;
@@ -20,6 +21,8 @@ public:
     virtual bool onEventAction(int action , float x , float y);
 
     bool isInited = false;
+
+    glm::vec4 COLOR_SKY_BLUE = ConvertColor(100,181,246,255);
 private:
     Application *appContext;
 
@@ -84,4 +87,6 @@ private:
     void testRenderTextCode();
 
     void testActionDown();
+
+    void testRenderBlurRoundRect();
 };

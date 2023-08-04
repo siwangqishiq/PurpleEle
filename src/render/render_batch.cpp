@@ -135,6 +135,17 @@ void ShapeBatch::renderRoundRect(Rect &rect ,float radius , Paint &paint){
     formatShape(ShapeType::ShapeRoundRect , rect , paint , radius);
 }
 
+void ShapeBatch::renderBlurRoundRect(Rect &rect ,float radius ,float blur, Paint &paint){
+    Rect realRect;
+    realRect.left = rect.left - blur;
+    realRect.top = rect.top + blur;
+    float twiceBlur = 2 * blur;
+    realRect.width = rect.width + twiceBlur;
+    realRect.height = rect.height + twiceBlur;
+    paint.stokenWidth = blur;
+    formatShape(ShapeType::ShapeBlurRoundRect , realRect , paint , radius);
+}
+
 void ShapeBatch::renderBlurRect(Rect &rect ,float blur, Paint &paint){
     Rect realRect;
     realRect.left = rect.left - blur;

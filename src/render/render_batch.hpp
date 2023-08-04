@@ -75,6 +75,9 @@ public:
     //绘制圆角矩形
     void renderRoundRect(Rect &rect ,float radius , Paint &paint);
 
+    //绘制周边带阴影的圆角矩形
+    void renderBlurRoundRect(Rect &rect ,float radius ,float blur, Paint &paint);
+
     //绘制周边带阴影的圆形
     void renderBlurCircle(float cx , float cy , float radius,float blur, Paint &paint);
 

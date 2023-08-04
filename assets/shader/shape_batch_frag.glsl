@@ -17,6 +17,7 @@ const float shape_oval = 3.0f;
 const float shape_blur_circle = 4.0f;
 const float shape_linear_gradient = 5.0f;
 const float shape_blur_rect = 6.0f;
+const float shape_blur_round_rect = 7.0f;
 
 const float mode_filled = 0.0f;
 const float mode_stoken = 1.0f;
@@ -142,6 +143,38 @@ bool isPointInCircle(vec2 center , float r , vec2 p){
     return distance(p , center) <= r;
 }
 
+float renderBlurRoundRect(vec2 pos , float blur){
+    
+
+    float roundRadius = vShape.w;
+    float cube = roundRadius;
+
+    vec4 leftTopRect = vec4(vRect.x , vRect.y , cube , cube);
+    if(isPointInRect(leftTopRect , pos)
+        && !isPointInCircle(vec2(leftTopRect.x + cube , leftTopRect.y - cube) , roundRadius , pos)){
+        return zero;
+    }
+
+    vec4 rightTopRect = vec4(vRect.x + vRect.z - cube , vRect.y , cube , cube);
+    if(isPointInRect(rightTopRect , pos) 
+        && !isPointInCircle(vec2(rightTopRect.x + rightTopRect.z - cube , rightTopRect.y - cube) , roundRadius , pos)){
+        return zero;
+    }
+
+    vec4 leftBottomRect = vec4(vRect.x, vRect.y - vRect.w + cube , cube , cube);
+    if(isPointInRect(leftBottomRect , pos)
+         && !isPointInCircle(vec2(leftBottomRect.x + cube , leftBottomRect.y - leftBottomRect.w + cube) , roundRadius , pos)){
+        return zero;
+    }
+
+    vec4 rightBottomRect = vec4(vRect.x + vRect.z - cube, vRect.y - vRect.w + cube , cube , cube);
+    if(isPointInRect(rightBottomRect , pos)
+            && !isPointInCircle(vec2(rightBottomRect.x + rightBottomRect.z - cube , rightBottomRect.y - rightBottomRect.w + cube) , roundRadius , pos)){
+        return zero;
+    }
+    return one;
+}
+
 float renderRoundRect(vec2 pos){
     float roundRadius = vShape.w;
     float cube = 1.0f * roundRadius;
@@ -193,6 +226,9 @@ void main(){
         fragColor = vColor;
     }else if(floatEqual(vShape.x ,shape_blur_rect)){
         value = renderBlurRect(pos , vShape.z);
+        fragColor = vColor * value;
+    }else if(floatEqual(vShape.x , shape_blur_round_rect)){
+        value = renderBlurRoundRect(pos , vShape.z);
         fragColor = vColor * value;
     }
 }
