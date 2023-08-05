@@ -89,4 +89,6 @@ private:
     void testActionDown();
 
     void testRenderBlurRoundRect();
+
+    void testRenderBlurRoundRect2();
 };

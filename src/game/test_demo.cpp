@@ -87,7 +87,8 @@ void TestDemo::tick(){
 //     testRenderBlurRect2();
 //     testRenderBlurRect3();
     // testRenderBlurRect4();
-    testRenderBlurRoundRect();
+    // testRenderBlurRoundRect();
+    testRenderBlurRoundRect2();
 }
 
 void TestDemo::dispose(){
@@ -100,6 +101,38 @@ bool TestDemo::onEventAction(int action , float x , float y){
         count_++;
     }
     return false;
+}
+
+void TestDemo::testRenderBlurRoundRect2(){
+     Paint paint;
+    paint.color = glm::vec4(0.0f , 0.0f , 1.0f , 1.0f);
+
+    float blurSize = 15.0f * glm::sin(deltatime_) + 15.0f;
+
+    deltatime_ += 0.05f;
+
+    renderEngine_->getShapeBatch()->begin();
+
+    float cubeSize = 10.0f;
+    float gapSize = 15.0f * 2.0f;
+
+    float x = 0.0f;
+    float y = viewHeight_;
+
+    for(;y > 0.0f ; y -= cubeSize + gapSize){
+        for(x = 0.0f ; x < viewWidth_; x += cubeSize + gapSize){
+            Rect rect;
+            rect.left = x;
+            rect.top = y;
+            rect.width = cubeSize;
+            rect.height = cubeSize;
+
+            renderEngine_->getShapeBatch()
+                ->renderBlurRoundRect(rect ,8.0f, blurSize , paint);
+        }
+    }//end for y
+    
+    renderEngine_->getShapeBatch()->end();
 }
 
 void TestDemo::testRenderBlurRoundRect(){
@@ -125,8 +158,10 @@ void TestDemo::testRenderBlurRoundRect(){
     Paint paint;
     paint.color = COLOR_SKY_BLUE;
     paint.fillStyle = Filled; 
-    renderEngine_->getShapeBatch()->renderBlurRoundRect(rect , 20.0f , 40.0f , paint);
-    
+
+    float blur = 30.0f * glm::sin(deltatime_) + 30.0f;
+    deltatime_ += 0.01f;
+    renderEngine_->getShapeBatch()->renderBlurRoundRect(rect , 50.0f , blur , paint);
     renderEngine_->getShapeBatch()->end();    
 }
 
