@@ -1,32 +1,50 @@
 
 #include "audio.hpp"
+#include "log.hpp"
 
 std::shared_ptr<AudioManager> AudioManager::getInstance(){
     static std::shared_ptr<AudioManager> instance_;
     if(instance_ == nullptr){
         instance_ = std::make_shared<AudioManager>();
-        instance_->audioService_ = buildAudioService();
     }
     return instance_;
 }
 
-void AudioManager::loadSound(std::string path , std::string name){
-    audioService_->loadMusic(path , path);
+void AudioManager::init(){
+    Logi("audio" , "audio manager init");
 }
 
-void AudioManager::loadMusic(std::string path , std::string name){
-    audioService_->loadMusic(path , path);
+//载入音效
+void AudioManager::loadAudioResource(std::string path , std::string key){
+
 }
 
-void AudioManager::playMusic(std::string name){
-    audioService_->playMusic(name);
+//释放音效
+void AudioManager::releaseAudioResource(std::string key){
+
 }
 
-void AudioManager::playSound(std::string name){
-    audioService_->playSound(name);
+ //播放音乐
+void AudioManager::playMusic(std::string key , bool loop){
+
 }
 
+//暂停音乐播放
+void AudioManager::pauseMusic(std::string key){
+
+}
+
+//重新开始音乐播放
+void AudioManager::resetPlayMusic(std::string key){
+
+}
+
+//播放音效
+void AudioManager::playSound(std::string resKey){
+
+}
+    
 void AudioManager::dispose(){
-    audioService_->dispose();
+    Logi("audio" , "audio manager dispose");
 }
 

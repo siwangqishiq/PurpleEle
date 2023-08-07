@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include "game/test_demo.hpp"
 #include "game/shader_demo.hpp"
+#include "audio/audio.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -28,6 +29,9 @@ void Application::onFree(){
     if(timer_ != nullptr){
         timer_->clear();
     }
+
+    AudioManager::getInstance()->dispose();
+    
     // triangleDemo_->free();
     if(renderEngine_ != nullptr){
         renderEngine_->free();
@@ -85,6 +89,8 @@ void Application::onInit(){
     renderEngine_->init();
     
     renderEngine_->onScreenResize();
+
+    AudioManager::getInstance()->init();
 
     triangleDemo_ = std::make_shared<Triangle>();
     triangleDemo_->init();

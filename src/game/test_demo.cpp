@@ -18,7 +18,7 @@ void TestDemo::init(){
         
     appContext->addEventActionCallback(this);
 
-    testAudio();
+    // testAudio();
     testImage = BuildImageByAsset("lan.jpg");
     testGakkiImage = BuildImageByAsset("test.jpeg");
     wallpaperImage = BuildImageByAsset("bg.jpg");
@@ -113,7 +113,7 @@ void TestDemo::testRenderBlurRoundRect2(){
 
     renderEngine_->getShapeBatch()->begin();
 
-    float cubeSize = 10.0f;
+    float cubeSize = 100.0f;
     float gapSize = 15.0f * 2.0f;
 
     float x = 0.0f;
@@ -121,11 +121,14 @@ void TestDemo::testRenderBlurRoundRect2(){
 
     for(;y > 0.0f ; y -= cubeSize + gapSize){
         for(x = 0.0f ; x < viewWidth_; x += cubeSize + gapSize){
+
             Rect rect;
             rect.left = x;
             rect.top = y;
             rect.width = cubeSize;
             rect.height = cubeSize;
+
+            paint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , GenRandomFloat() , 1.0f);
 
             renderEngine_->getShapeBatch()
                 ->renderBlurRoundRect(rect ,8.0f, blurSize , paint);
@@ -1056,13 +1059,11 @@ void TestDemo::testRender1(){
 }
 
 void TestDemo::testAudio(){
-    AudioManager::getInstance()->loadMusic("musicA" , "music_name");
-    AudioManager::getInstance()->loadSound("soundA" , "soundA_name");
-
-    AudioManager::getInstance()->playSound("soundA");
-    AudioManager::getInstance()->playMusic("musicA");
-    
-    AudioManager::getInstance()->dispose();
+    // AudioManager::getInstance()->loadMusic("musicA" , "music_name");
+    // AudioManager::getInstance()->loadSound("soundA" , "soundA_name");
+    // AudioManager::getInstance()->playSound("soundA");
+    // AudioManager::getInstance()->playMusic("musicA");
+    // AudioManager::getInstance()->dispose();
 }
 
 void TestDemo::testRenderShader(){
