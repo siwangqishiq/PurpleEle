@@ -1,6 +1,7 @@
 
 #include "audio.hpp"
 #include "log.hpp"
+#include "resource/asset_manager.hpp"
 
 std::shared_ptr<AudioManager> AudioManager::getInstance(){
     static std::shared_ptr<AudioManager> instance_;
@@ -12,6 +13,14 @@ std::shared_ptr<AudioManager> AudioManager::getInstance(){
 
 void AudioManager::init(){
     Logi("audio" , "audio manager init");
+}
+
+std::shared_ptr<AudioEntity> AudioManager::loadAudioEntity(std::string path){
+    std::vector<char> dataVec;
+    AssetManager::getInstance()->readBinaryFile(path , dataVec);
+    Logi("audio" , "loadAudioResource file size: %d" , dataVec.size());
+
+    return nullptr;
 }
 
 //载入音效

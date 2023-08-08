@@ -56,6 +56,8 @@ void TestDemo::init(){
 
     code_ = AssetManager::getInstance()->readTextFile("teng.txt");
     Logi("debug" , "read code size %d" , code_.size());
+
+    testLoadAudioFile();
 }
 
 void TestDemo::tick(){
@@ -89,6 +91,10 @@ void TestDemo::tick(){
     // testRenderBlurRect4();
     // testRenderBlurRoundRect();
     testRenderBlurRoundRect2();
+}
+
+void TestDemo::testLoadAudioFile(){
+    AudioManager::getInstance()->loadAudioEntity("audio/click1.wav");
 }
 
 void TestDemo::dispose(){

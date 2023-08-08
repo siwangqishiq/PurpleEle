@@ -24,6 +24,37 @@ std::wstring AssetManager::readTextFile(std::string path){
     return readFileAsWstring(filePath.c_str());
 }
 
+int AssetManager::readBinaryFile(std::string path , std::vector<char> &dataVec){
+    std::string filePath = assetRootDir() + path;
+    Logi("asset" , "read file path %s" , filePath.c_str());
+
+    try{
+        std::ifstream binFile(filePath, std::ios::binary);
+        // Logi("asset" , "readBinaryFile is good? %d" , binFile.good);
+        
+        if(!binFile.is_open()){
+            Logi("asset" , "readBinaryFile is not existed!");
+            return -1;
+        }
+
+        binFile.seekg(0 , std::ios::end);
+        
+        int length = binFile.tellg();
+        binFile.seekg(0 , std::ios::beg);
+
+        Logi("asset" , "readBinaryFile size %d" , length);
+
+        dataVec.resize(length);
+        binFile.read(dataVec.data() , length);
+        binFile.close();
+        
+        return length;
+    }catch(std::exception &e){
+        Logi("error" , "readBinaryFile code %s" , e.what());
+    }
+    return -1;
+}
+
 std::unique_ptr<uint8_t> AssetManager::readTextureFile(std::string path ,
         TextureFileConfig &fileConfig , bool needFlip){
     std::string filePath = assetRootDir() + path;

@@ -91,4 +91,6 @@ private:
     void testRenderBlurRoundRect();
 
     void testRenderBlurRoundRect2();
+
+    void testLoadAudioFile();
 };

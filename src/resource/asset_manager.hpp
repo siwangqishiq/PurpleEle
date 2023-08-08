@@ -12,6 +12,7 @@
 #include <fstream>
 #include <streambuf>
 #include <codecvt>
+#include <vector>
 
 const int TEXTURE_FILE_CHANNEL_UNKNOW = -1;
 const int TEXTURE_FILE_CHANNEL_R = 1;
@@ -40,6 +41,8 @@ public:
     // read png file 
     virtual std::unique_ptr<uint8_t> readTextureFile(std::string path ,
                 TextureFileConfig &fileConfig , bool needFlip = false);
+    
+    virtual int readBinaryFile(std::string path , std::vector<char> &dataVec);
     
     inline std::string readTextFileAsString(std::string path){
         return toByteString(readTextFile(path));

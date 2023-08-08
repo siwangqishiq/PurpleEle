@@ -2,6 +2,11 @@
 
 #include <string>
 #include <memory>
+#include <map>
+
+class AudioEntity{
+
+};
 
 
 class AudioManager{
@@ -29,6 +34,10 @@ public:
     virtual void playSound(std::string resKey);
     
     void dispose();
+
+    std::shared_ptr<AudioEntity> loadAudioEntity(std::string path);
+private:
+    
 };
 
 
