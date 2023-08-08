@@ -33,7 +33,6 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/render/texture.cpp
         ${SRC_DIR}/widget/timer.cpp
         ${SRC_DIR}/audio/audio.cpp
-        ${SRC_DIR}/audio/audio_android.cpp
         ${SRC_DIR}/game/test_demo.cpp
         ${SRC_DIR}/game/shader_demo.cpp
         )
