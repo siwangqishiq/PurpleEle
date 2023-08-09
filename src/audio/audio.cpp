@@ -11,6 +11,7 @@
 
 struct AudioEntity{
     std::string name;
+    std::unique_ptr<uint8_t[]> pData;
     ma_device device;
     ma_device_config deviceConfig;
     ma_decoder decoder;
@@ -51,8 +52,9 @@ std::shared_ptr<AudioEntity> AudioManager::loadAudioEntity(std::string path){
     }
     
     std::shared_ptr<AudioEntity> entity = std::make_shared<AudioEntity>();
-    
-    if(ma_decoder_init_memory(fileData.get() , 
+    entity->pData.reset(fileData.release());
+
+    if(ma_decoder_init_memory(entity->pData.get() , 
             fileSize , nullptr , &entity->decoder) != MA_SUCCESS){
         Logi("audio" , "loadAudioResource %s create decoder error" , path.c_str());
         return nullptr;
@@ -65,6 +67,7 @@ std::shared_ptr<AudioEntity> AudioManager::loadAudioEntity(std::string path){
         entity->decoder.outputFormat);
 
     entity->dataCallback = [](ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount){
+        std::cout << "audio play callback" << std::endl;
         ma_decoder* pDecoder = (ma_decoder*)pDevice->pUserData;
         if (pDecoder == NULL) {
             return;
@@ -85,12 +88,12 @@ std::shared_ptr<AudioEntity> AudioManager::loadAudioEntity(std::string path){
         return nullptr;
     }
 
-    // if (ma_device_start(&(entity->device)) != MA_SUCCESS) {
-    //     printf("Failed to start playback device.\n");
-    //     ma_device_uninit(&(entity->device));
-    //     ma_decoder_uninit(&(entity->decoder));
-    //     return nullptr;
-    // }
+    if (ma_device_start(&(entity->device)) != MA_SUCCESS) {
+        printf("Failed to start playback device.\n");
+        ma_device_uninit(&(entity->device));
+        ma_decoder_uninit(&(entity->decoder));
+        return nullptr;
+    }
     return entity;
 }
 
