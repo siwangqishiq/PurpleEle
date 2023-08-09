@@ -94,7 +94,7 @@ void TestDemo::tick(){
 }
 
 void TestDemo::testLoadAudioFile(){
-    AudioManager::getInstance()->loadAudioEntity("audio/click1.wav");
+    audio_ = AudioManager::getInstance()->loadAudioEntity("audio/click1.wav");
 }
 
 void TestDemo::dispose(){

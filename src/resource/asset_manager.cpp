@@ -24,6 +24,37 @@ std::wstring AssetManager::readTextFile(std::string path){
     return readFileAsWstring(filePath.c_str());
 }
 
+std::unique_ptr<uint8_t[]> AssetManager::readFileAsBin(std::string path , int &length){
+    std::string filePath = assetRootDir() + path;
+    Logi("asset" , "read file path %s" , filePath.c_str());
+
+    try{
+        std::ifstream binFile(filePath, std::ios::binary);
+        // Logi("asset" , "readBinaryFile is good? %d" , binFile.good);
+        
+        if(!binFile.is_open()){
+            Logi("asset" , "readBinaryFile is not existed!");
+            return nullptr;
+        }
+
+        binFile.seekg(0 , std::ios::end);
+        
+        length = binFile.tellg();
+        binFile.seekg(0 , std::ios::beg);
+
+        Logi("asset" , "readFileAsBin size %d" , length);
+
+        std::unique_ptr<uint8_t[]> pData = std::unique_ptr<uint8_t[]>(new uint8_t[length]);
+        binFile.read((char *)pData.get() , length);
+        binFile.close();
+        
+        return pData;
+    }catch(std::exception &e){
+        Logi("error" , "readBinaryFile code %s" , e.what());
+    }
+    return nullptr;
+}
+
 int AssetManager::readBinaryFile(std::string path , std::vector<char> &dataVec){
     std::string filePath = assetRootDir() + path;
     Logi("asset" , "read file path %s" , filePath.c_str());
@@ -112,6 +143,23 @@ std::unique_ptr<uint8_t> AssetManager::readTextureFile(std::string path ,
 //     }
      return readTextureFileByStbi(path , fileConfig , needFlip);
  }
+
+//Android 二进制方式读取文件
+std::unique_ptr<uint8_t[]> AndroidAssetManager::readFileAsBin(std::string path , int &length){
+    try{
+        auto assetFile  = AAssetManager_open(AndroidAssetManagerInstance , path.c_str() , AASSET_MODE_STREAMING);
+        size_t fileSize = AAsset_getLength(assetFile);
+        auto contentBuf = std::unique_ptr<uint8_t []>(new uint8_t[fileSize]);
+        AAsset_read(assetFile, contentBuf.get() , fileSize);
+        AAsset_close(assetFile);
+        length = fileSize;
+        return contentBuf;
+    }catch (std::exception &e){
+        Logi("asset" , "AndroidAssetManager read asset failed %s" , e.what());
+        length = -1;
+        return nullptr;
+    }
+}
 
 // std::unique_ptr<uint8_t> AndroidAssetManager::readTextureFileByImageDecoder(std::string path ,TextureFileConfig &fileConfig){
 // #if __ANDROID_MIN_SDK_VERSION__ >= 23

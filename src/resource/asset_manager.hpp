@@ -43,6 +43,9 @@ public:
                 TextureFileConfig &fileConfig , bool needFlip = false);
     
     virtual int readBinaryFile(std::string path , std::vector<char> &dataVec);
+
+    //二进制方式读取文件 
+    virtual std::unique_ptr<uint8_t[]> readFileAsBin(std::string path , int &length);
     
     inline std::string readTextFileAsString(std::string path){
         return toByteString(readTextFile(path));
@@ -99,6 +102,8 @@ public:
     virtual std::unique_ptr<uint8_t> readTextureFile(std::string path ,
                                                       TextureFileConfig &fileConfig , bool needFlip = false);
 
+    //二进制方式读取文件
+    virtual std::unique_ptr<uint8_t[]> readFileAsBin(std::string path , int &length);
 private:
 //    std::unique_ptr<uint8_t> readTextureFileByImageDecoder(std::string path ,TextureFileConfig &fileConfig);
 

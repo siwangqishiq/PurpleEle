@@ -5,6 +5,7 @@
 
 class RenderEngine;
 class TextureImage;
+struct AudioEntity;
 
 class TestDemo :public EventActionCallback{
 public:
@@ -39,6 +40,8 @@ private:
     std::shared_ptr<TextureImage> walkingImage;
 
     std::shared_ptr<TextureImage> yuanImage_;
+
+    std::shared_ptr<AudioEntity> audio_;
 
     Shader customRenderShader;
 

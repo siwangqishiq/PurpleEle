@@ -4,10 +4,8 @@
 #include <memory>
 #include <map>
 
-class AudioEntity{
 
-};
-
+struct AudioEntity;
 
 class AudioManager{
 public:
