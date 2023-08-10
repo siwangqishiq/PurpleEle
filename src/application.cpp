@@ -13,17 +13,22 @@
 #include "game/test_demo.hpp"
 #include "game/shader_demo.hpp"
 #include "audio/audio.hpp"
+#include "game/ui_demo.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
     eventCallbackList_.clear();
 
-    if(testDemo_ != nullptr){
-        testDemo_->dispose();
-    }
+    // if(testDemo_ != nullptr){
+    //     testDemo_->dispose();
+    // }
 
-    if(shaderDemo_ != nullptr){
-        shaderDemo_->dispose();
+    // if(shaderDemo_ != nullptr){
+    //     shaderDemo_->dispose();
+    // }
+
+    if(uiDemo_ != nullptr){
+        uiDemo_->dispose();
     }
 
     if(timer_ != nullptr){
@@ -113,6 +118,8 @@ void Application::onInit(){
     // auto info2 = TextureManager::getInstance()->acquireTexture("text/font_texture_1.png");
 
     timeStamp_ = currentTimeMicro();
+
+
     onCreate();
 }
 
@@ -137,13 +144,17 @@ void Application::onCreate(){
         frameCount_ = 0;
     } , 1000L);
 
-    testDemo_ = std::make_shared<TestDemo>(this);
+  
     startTime_ = static_cast<long>(currentTimeMillis());
 
-    testDemo_->init();
+    // testDemo_ = std::make_shared<TestDemo>(this);
+    // testDemo_->init();
 
     // shaderDemo_ = std::make_shared<ShaderDemo>(this);
     // shaderDemo_->init();
+
+    uiDemo_ = std::make_shared<UiDemo>(this);
+    uiDemo_->init();
 }
 
 void Application::onTick(){
@@ -183,8 +194,9 @@ void Application::onTick(){
 }
 
 void Application::updateSence(){
-    testDemo_->tick();
+    // testDemo_->tick();
     // shaderDemo_->tick();
+    uiDemo_->tick();
 
     if(showNumber){
         TextPaint p4;

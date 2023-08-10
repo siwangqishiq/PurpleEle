@@ -13,7 +13,7 @@ class RenderEngine;
 class Timer;
 class TestDemo;
 class ShaderDemo;
-
+class UiDemo;
 
 class EventActionCallback{
 public:
@@ -88,6 +88,7 @@ private:
     std::shared_ptr<Triangle> triangleDemo_ = nullptr;
     std::shared_ptr<TestDemo> testDemo_ = nullptr;
     std::shared_ptr<ShaderDemo> shaderDemo_ = nullptr;
+    std::shared_ptr<UiDemo> uiDemo_ = nullptr;
 
     bool showNumber = false;
     int showFps = 0;

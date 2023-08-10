@@ -36,6 +36,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/audio/audio.cpp
         ${SRC_DIR}/game/test_demo.cpp
         ${SRC_DIR}/game/shader_demo.cpp
+        ${SRC_DIR}/game/ui_demo.cpp
         )
 
 set(opengl_lib GLESv3)

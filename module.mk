@@ -33,7 +33,8 @@ compile: build_dir \
 		${BUILD_DIR}/sprite.o \
 		${BUILD_DIR}/audio_manager.o \
 		${BUILD_DIR}/test_demo.o \
-		${BUILD_DIR}/shader_demo.o 
+		${BUILD_DIR}/shader_demo.o \
+		${BUILD_DIR}/ui_demo.o \
 
 ${BUILD_DIR}/json.o: ${DIR}/libjson/json.cpp ${DIR}/libjson/json.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${DIR}/libjson/json.cpp -o ${BUILD_DIR}/json.o
@@ -90,6 +91,9 @@ ${BUILD_DIR}/test_demo.o:${SRC_DIR}/game/test_demo.cpp ${SRC_DIR}/game/test_demo
 
 ${BUILD_DIR}/shader_demo.o:${SRC_DIR}/game/shader_demo.cpp ${SRC_DIR}/game/shader_demo.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/shader_demo.cpp -o ${BUILD_DIR}/shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
+
+${BUILD_DIR}/ui_demo.o:${SRC_DIR}/game/ui_demo.cpp ${SRC_DIR}/game/ui_demo.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/ui_demo.cpp -o ${BUILD_DIR}/ui_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
 # ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \
 # 				${SRC_DIR}/audio/audio_impl.hpp
