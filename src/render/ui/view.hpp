@@ -19,7 +19,7 @@ class ViewGroup : public View{
 public:
     virtual void onRender(std::shared_ptr<RenderEngine> renderEngine);
 
-    
+    virtual void addView(std::shared_ptr<View> view);
 private:
     std::vector<std::shared_ptr<View>> childViews_;
 };

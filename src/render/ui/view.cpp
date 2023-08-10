@@ -1,6 +1,6 @@
 
 #include "view.hpp"
-#include "render.hpp"
+#include "../render.hpp"
 
 void View::onRender(std::shared_ptr<RenderEngine> renderEngine){
     Logi("view" , "view on render");
