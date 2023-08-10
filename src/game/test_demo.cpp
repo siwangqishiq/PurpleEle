@@ -102,6 +102,11 @@ void TestDemo::testLoadAudioFile(){
     AudioManager::getInstance()->loadAudio("audio/click1.wav","click1");
     AudioManager::getInstance()->loadAudio("audio/click2.wav","click2");
     AudioManager::getInstance()->loadAudio("audio/click3.wav","click3");
+
+    // AudioManager::getInstance()->loadAudio("audio/baijie.mp3","bai");
+
+    
+    // AudioManager::getInstance()->playAudio("bai");
 }
 
 void TestDemo::dispose(){

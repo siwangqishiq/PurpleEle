@@ -28,6 +28,7 @@ compile: build_dir \
 		${BUILD_DIR}/vram.o \
 		${BUILD_DIR}/asset_manager.o \
 		${BUILD_DIR}/texture.o \
+		${BUILD_DIR}/view.o \
 		${BUILD_DIR}/timer.o \
 		${BUILD_DIR}/sprite.o \
 		${BUILD_DIR}/audio_manager.o \
@@ -79,6 +80,10 @@ ${BUILD_DIR}/asset_manager.o:${SRC_DIR}/resource/asset_manager.cpp ${SRC_DIR}/re
 ${BUILD_DIR}/audio_manager.o:${SRC_DIR}/audio/audio.cpp \
 						${SRC_DIR}/audio/audio.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_manager.o 
+
+${BUILD_DIR}/view.o:${SRC_DIR}/render/ui/view.cpp \
+						${SRC_DIR}/render/ui/view.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/ui/view.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/view.o 
 
 ${BUILD_DIR}/test_demo.o:${SRC_DIR}/game/test_demo.cpp ${SRC_DIR}/game/test_demo.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/test_demo.cpp -o ${BUILD_DIR}/test_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}

@@ -45,6 +45,9 @@ void RenderEngine::clearRenderCommands(){
 }
 
 void RenderEngine::onScreenResize(){
+    viewWidth_ = appContext_->viewWidth_;
+    viewHeight_ = appContext_->viewHeight_;
+    
     resetNormalMat(appContext_->viewWidth_ , appContext_->viewHeight_);
     glViewport(0 , 0 , appContext_->screenWidth_ , appContext_->screenHeight_);
 }
@@ -121,19 +124,21 @@ void RenderEngine::renderShader(Shader &shader ,
 
 void RenderEngine::renderText(std::wstring &text , 
         float left , float bottom , TextPaint &paint){
-    auto cmd = fetchTextRenderCommand(this);
-    cmd->putParams(text , left , bottom , paint);
-    cmd->runCommands();
+    // auto cmd = fetchTextRenderCommand(this);
+    TextRenderCommand cmd(this);
+    cmd.putParams(text , left , bottom , paint);
+    cmd.runCommands();
     // submitRenderCommand(cmd);
 }
 
 void RenderEngine::renderTextWithRect(std::wstring &text , Rect &showRect , 
         TextPaint &paint, Rect *wrapContentRect){
-    auto cmd = fetchTextRenderCommand(this);
-    cmd->limitRect_ = showRect;
+    // auto cmd = fetchTextRenderCommand(this);
+    TextRenderCommand cmd(this);
+    cmd.limitRect_ = showRect;
 
-    cmd->putTextParamsByRectLimit(text , showRect ,wrapContentRect , paint);
-    cmd->runCommands();
+    cmd.putTextParamsByRectLimit(text , showRect ,wrapContentRect , paint);
+    cmd.runCommands();
     
     // submitRenderCommand(cmd);
 }

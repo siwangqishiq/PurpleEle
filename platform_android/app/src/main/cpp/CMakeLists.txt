@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/resource/asset_manager.cpp
         ${SRC_DIR}/render/texture.cpp
         ${SRC_DIR}/widget/timer.cpp
+        ${SRC_DIR}/render/ui/view.cpp
         ${SRC_DIR}/audio/audio.cpp
         ${SRC_DIR}/game/test_demo.cpp
         ${SRC_DIR}/game/shader_demo.cpp

@@ -119,6 +119,9 @@ private:
     std::shared_ptr<SpriteBatch> spriteBatch_;
 
     float depthValue = 1.0f;
+
+    int viewWidth_;
+    int viewHeight_;
 };
 
 //字符信息
