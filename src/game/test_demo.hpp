@@ -41,7 +41,8 @@ private:
 
     std::shared_ptr<TextureImage> yuanImage_;
 
-    std::shared_ptr<AudioEntity> audio_;
+//    std::shared_ptr<AudioEntity> music_;
+//    std::shared_ptr<AudioEntity> audio_;
 
     Shader customRenderShader;
 

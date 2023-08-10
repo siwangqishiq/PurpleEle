@@ -66,16 +66,16 @@ void TestDemo::tick(){
 //     testRender3();
 //     testRender4();
 //     testRenderRoundRect();
-//    testRenderTableTennis();
+//     testRenderTableTennis();
 //     testRenderSprite1();
 //     testRenderSprite2();
 //     testRenderSprite3();
 //     testRenderSprite4();
 //     testRenderSprite5Rotate();
-   // testRenderSprite6();
+   //  testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
-    //testRenderShader();
+    // testRenderShader();
 
 //     testRenderText();
 //     testRenderTextWithRect();
@@ -84,27 +84,53 @@ void TestDemo::tick(){
 
     // testActionDown();
     //  testRenderBlurCircle();
-    //  testRenderLinearGradRect();
-//    testRenderBlurRect();
+    // testRenderLinearGradRect();
+//     testRenderBlurRect();
 //     testRenderBlurRect2();
 //     testRenderBlurRect3();
     // testRenderBlurRect4();
     // testRenderBlurRoundRect();
-    testRenderBlurRoundRect2();
+     testRenderBlurRoundRect2();
 }
 
 void TestDemo::testLoadAudioFile(){
-    audio_ = AudioManager::getInstance()->loadAudioEntity("audio/butterfly.mp3");
+//    music_ = AudioManager::getInstance()->loadAudioEntity("audio/pao.mp3" , true);
+//    audio_ = AudioManager::getInstance()->loadAudioEntity("audio/click1.wav");
+//
+//    AudioManager::getInstance()->playAudioEntity(music_);
+
+    AudioManager::getInstance()->loadAudio("audio/click1.wav","click1");
+    AudioManager::getInstance()->loadAudio("audio/click2.wav","click2");
+    AudioManager::getInstance()->loadAudio("audio/click3.wav","click3");
 }
 
 void TestDemo::dispose(){
-    appContext->removeEventActionCallback(this);
+//    AudioManager::getInstance()->releaseAudioEntity(audio_);
+//    AudioManager::getInstance()->releaseAudioEntity(music_);
 }
 
 bool TestDemo::onEventAction(int action , float x , float y){
     Logi("testdemo" , "onEventAction event: %d ( %f , %f)" , action , x , y);
     if(action == ACTION_UP){
         count_++;
+
+        // if(AudioManager::getInstance()->isPlayAudioEntity(audio_)){
+        //     AudioManager::getInstance()->stopAudioEntity(audio_);
+        // }else{
+        //     AudioManager::getInstance()->playAudioEntity(audio_);
+        // }
+        // AudioManager::getInstance()->playAudioEntity(audio_);
+        // AudioManager::getInstance()->restartAudioEntity(music_);
+    }else if(action == ACTION_DOWN){
+//        AudioManager::getInstance()->playAudioEntity(audio_);
+
+        if(x < viewWidth_ / 3.0f){
+            AudioManager::getInstance()->playAudio("click1");
+        }else if(x >  viewWidth_ / 3.0f && x < (2.0f * viewWidth_) / 3.0f){
+            AudioManager::getInstance()->playAudio("click2");
+        }else{
+            AudioManager::getInstance()->playAudio("click3");
+        }
     }
     return false;
 }
