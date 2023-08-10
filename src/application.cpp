@@ -14,6 +14,7 @@
 #include "game/shader_demo.hpp"
 #include "audio/audio.hpp"
 #include "game/ui_demo.hpp"
+#include <string>
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -27,8 +28,8 @@ void Application::onFree(){
     //     shaderDemo_->dispose();
     // }
 
-    if(uiDemo_ != nullptr){
-        uiDemo_->dispose();
+    if(currentScene_ != nullptr){
+        currentScene_->dispose();
     }
 
     if(timer_ != nullptr){
@@ -72,8 +73,8 @@ void Application::onResize(int w , int h){
         renderEngine_->onScreenResize();
     }
 
-    if(testDemo_ != nullptr){
-        testDemo_->init();
+    if(currentScene_ != nullptr){
+        currentScene_->init();
     }
 }
 
@@ -97,28 +98,8 @@ void Application::onInit(){
 
     AudioManager::getInstance()->init();
 
-    triangleDemo_ = std::make_shared<Triangle>();
-    triangleDemo_->init();
-
     showNumber = true;
-
-    // TextPaint paint;
-    // renderEngine_->renderText(std::to_wstring(mIndex_++) , 0 , 0 , paint);
-    
-    // auto fileContent = AssetManager::getInstance()->readTextFile("test.txt");
-    // Logi("asset" , "test.txt szie: %d \n content: %s" , 
-    //         fileContent.size() , fileContent.c_str());
-
-    // TextureFileConfig config;
-    // AssetManager::getInstance()->readTextureFile("lan.jpg", config);
-    // Logi("asset" , "image info width : %d , height %d , channel : %d , datasize : %d",
-    //      config.width , config.height , config.channel , config.dataSize);
-    
-    // auto info1 = TextureManager::getInstance()->acquireTexture("text/font_texture_0.png");
-    // auto info2 = TextureManager::getInstance()->acquireTexture("text/font_texture_1.png");
-
     timeStamp_ = currentTimeMicro();
-
 
     onCreate();
 }
@@ -147,14 +128,9 @@ void Application::onCreate(){
   
     startTime_ = static_cast<long>(currentTimeMillis());
 
-    // testDemo_ = std::make_shared<TestDemo>(this);
-    // testDemo_->init();
-
-    // shaderDemo_ = std::make_shared<ShaderDemo>(this);
-    // shaderDemo_->init();
-
-    uiDemo_ = std::make_shared<UiDemo>(this);
-    uiDemo_->init();
+    currentScene_ = std::make_shared<TestDemo>(this);
+    // currentScene_ = std::make_shared<UiDemo>(this);
+    currentScene_->init();
 }
 
 void Application::onTick(){
@@ -194,9 +170,7 @@ void Application::onTick(){
 }
 
 void Application::updateSence(){
-    // testDemo_->tick();
-    // shaderDemo_->tick();
-    uiDemo_->tick();
+    currentScene_->tick();
 
     if(showNumber){
         TextPaint p4;

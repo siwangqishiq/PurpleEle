@@ -7,17 +7,17 @@ class RenderEngine;
 class TextureImage;
 struct AudioEntity;
 
-class UiDemo :public EventActionCallback{
+class UiDemo :public IScene,EventActionCallback{
 public:
     UiDemo(Application *app){
         appContext = app;
     }
 
-    void init();
+    virtual void init();
 
-    void tick();
+    virtual void tick();
 
-    void dispose();
+    virtual void dispose();
 
     virtual bool onEventAction(int action , float x , float y);
 

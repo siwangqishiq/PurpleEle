@@ -4,17 +4,17 @@
 
 class RenderEngine;
 
-class ShaderDemo{
+class ShaderDemo : public IScene{
 public:
     ShaderDemo(Application *app){
         appContext = app;
     }
 
-    void init();
+    virtual void init();
     
-    void tick();
+    virtual void tick();
 
-    void dispose();
+    virtual void dispose();
 
     bool isInited = false;
 private:

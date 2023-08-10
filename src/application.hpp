@@ -20,6 +20,15 @@ public:
     virtual bool onEventAction(int action , float x , float y) = 0;
 };
 
+class IScene{
+public:
+    virtual void init() = 0;
+
+    virtual void tick() = 0;
+
+    virtual void dispose() = 0;
+};
+
 /**
  * @brief  应用入口
  * 
@@ -85,10 +94,8 @@ private:
 
     bool checkInCallbackList(EventActionCallback *callback);
     //for -----------test---------------------
-    std::shared_ptr<Triangle> triangleDemo_ = nullptr;
-    std::shared_ptr<TestDemo> testDemo_ = nullptr;
-    std::shared_ptr<ShaderDemo> shaderDemo_ = nullptr;
-    std::shared_ptr<UiDemo> uiDemo_ = nullptr;
+    
+    std::shared_ptr<IScene> currentScene_ = nullptr;
 
     bool showNumber = false;
     int showFps = 0;

@@ -103,10 +103,9 @@ void TestDemo::testLoadAudioFile(){
     AudioManager::getInstance()->loadAudio("audio/click2.wav","click2");
     AudioManager::getInstance()->loadAudio("audio/click3.wav","click3");
 
-    // AudioManager::getInstance()->loadAudio("audio/baijie.mp3","bai");
+    AudioManager::getInstance()->loadAudio("audio/pao.mp3","bai");
 
-    
-    // AudioManager::getInstance()->playAudio("bai");
+    AudioManager::getInstance()->playAudio("bai");
 }
 
 void TestDemo::dispose(){
@@ -219,7 +218,8 @@ void TestDemo::testActionDown() {
     showRect.left = 0;
 
     std::wstring countStr = L"";
-    countStr += std::to_wstring(count_);;
+    auto countS = std::to_string(count_);
+    countStr += std::wstring(countS.begin() , countS.end());
 
     renderEngine_->renderTextWithRect(countStr , showRect , paint , nullptr);
 }
