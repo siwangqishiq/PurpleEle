@@ -75,6 +75,8 @@ protected:
 
     //click action callback
     IViewListener *onClickListener_ = nullptr;
+    
+    virtual bool isRootHasTarget();
 };
 
 //ViewGroup

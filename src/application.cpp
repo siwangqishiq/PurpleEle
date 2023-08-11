@@ -123,7 +123,7 @@ void Application::onInit(){
 
 void Application::onCreate(){
     getTimer()->scheduleAtFixedRate([this](Application *app){
-        Logi("application" , "timer fps : %d" , frameCount_);
+        // Logi("application" , "timer fps : %d" , frameCount_);
         showFps = frameCount_;
         frameCount_ = 0;
     } , 1000L);

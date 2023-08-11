@@ -45,6 +45,12 @@ bool View::onTouchEvent(int action , float x , float y){
     return false;
 }
 
+//是否rootView已经设置了targetView
+bool View::isRootHasTarget(){
+    auto rootView = this->findRootView();
+    return rootView != nullptr && rootView->targetView_ != nullptr;
+}
+
 void View::onRender(std::shared_ptr<RenderEngine> renderEngine){
     if(visible != VIEW_VISIBLE){
         return;
@@ -87,36 +93,29 @@ bool ViewGroup::dispathTouchEvent(int action , float x , float y){
             // Logi("view" , "%s viewgroup dispathTouchEvent %d (%f , %f)" 
             //     ,childView->tag_.c_str(),
             //     action , x, y);
-            if(childView->interceptTouchEvent(action , x , y)){
-                if(childView->onTouchEvent(action , x , y)){
+            if(childView->dispathTouchEvent(action , x , y)){
+                if(!isRootHasTarget()){
                     auto rootView = childView->findRootView();
                     if(rootView != nullptr){
+                        // std::cout << "set target view -> " << childView->tag_ << std::endl;
                         rootView->targetView_ = childView.get();
+                        // std::cout << "isRootHasTarget() -> " << isRootHasTarget() << std::endl;
                     }
-                    return true;
-                }//end if
-            }else{
-                if(childView->dispathTouchEvent(action , x , y)){
-                    auto rootView = childView->findRootView();
-                    if(rootView != nullptr){
-                        rootView->targetView_ = childView.get();
-                    }
-                    return true;
-                }//end if
-            }
+                }
+                return true;
+            }//end if
         }
     }//end for i
 
-    auto rootView = this->findRootView();
-    if(rootView != nullptr && rootView->targetView_ != nullptr){
-        return false;
+    if(isRootHasTarget()){
+        return true;
     }
     return onTouchEvent(action , x , y);
 }
 
 RootViewGroup* View::findRootView(){
-    ViewGroup *p = this->parentView_;
-    ViewGroup *prior = nullptr;
+    View *p = this;
+    View *prior = p;
     while(p != nullptr){
         prior = p;
         p = p->parentView_;
@@ -131,14 +130,16 @@ bool ViewGroup::onTouchEvent(int action , float x , float y){
 bool RootViewGroup::dispathTouchEvent(int action , float x , float y){
     if(action == ACTION_UP){//clear action session
         if(targetView_ != nullptr){
-            targetView_->dispathTouchEvent(action , x , y);
+            targetView_->onTouchEvent(action , x , y);
         }
         targetView_ = nullptr;
+        // std::cout << "clear target view!!!" << std::endl;
         return true;
     }
 
     if(targetView_ != nullptr){
-        return targetView_->dispathTouchEvent(action , x , y);
+        // std::cout << "target view is " << targetView_->tag_ << std::endl;
+        return targetView_->onTouchEvent(action , x , y);
     }
     
     if(action == ACTION_DOWN){
