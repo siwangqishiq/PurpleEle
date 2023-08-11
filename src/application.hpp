@@ -11,6 +11,8 @@
 
 class RenderEngine;
 class Timer;
+class ViewGroup;
+class RootViewGroup;
 class TestDemo;
 class ShaderDemo;
 class UiDemo;
@@ -76,6 +78,10 @@ public:
     
     std::shared_ptr<Timer> getTimer();
 
+    std::shared_ptr<RootViewGroup> getRootView(){
+        return rootViewGroup_;
+    }
+
     int frameCount_ = 0;
 
     //获取上一帧经过的时间
@@ -89,15 +95,18 @@ protected:
     std::shared_ptr<RenderEngine> renderEngine_ = nullptr;
     //定时器  调度定时任务 或 延时任务
     std::shared_ptr<Timer> timer_ = nullptr;
+
+    std::shared_ptr<RootViewGroup> rootViewGroup_;
 private:
     std::vector<EventActionCallback *> eventCallbackList_;
 
     bool checkInCallbackList(EventActionCallback *callback);
+
     //for -----------test---------------------
-    
     std::shared_ptr<IScene> currentScene_ = nullptr;
 
     bool showNumber = false;
     int showFps = 0;
 
+    void createRootView();
 };

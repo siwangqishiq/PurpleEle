@@ -102,7 +102,26 @@ struct Rect{
     }
 };
 
+//矩形
+struct RectI{
+    int left;
+    int top;
+    int width;
+    int height;
 
+    inline Rect toRectF(){
+        Rect rect;
+        rect.left = static_cast<float>(left);
+        rect.top = static_cast<float>(top);
+        rect.width = static_cast<float>(width);
+        rect.height = static_cast<float>(height);
+        return rect;
+    }
+    
+    inline bool isPointInRect(float x , float y){
+        return x >= left && x <= left + width && y <= top && y >= top - height;
+    }
+};
 
 //文本绘制 配置
 struct TextPaint{

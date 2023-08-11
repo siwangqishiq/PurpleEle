@@ -8,14 +8,6 @@
 
 const double PI = 3.141592653589793238463;
 
-//rect
-//struct Rect{
-//    float left;
-//    float top;
-//    float width;
-//    float height;
-//};
-
 std::string& StringTrim(std::string &s, std::string suffix = " ");
 
 //split字符串

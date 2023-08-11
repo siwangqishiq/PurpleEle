@@ -15,6 +15,7 @@
 #include "audio/audio.hpp"
 #include "game/ui_demo.hpp"
 #include <string>
+#include "render/ui/view.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -101,6 +102,8 @@ void Application::onInit(){
     showNumber = true;
     timeStamp_ = currentTimeMicro();
 
+    createRootView();
+
     onCreate();
 }
 
@@ -128,9 +131,14 @@ void Application::onCreate(){
   
     startTime_ = static_cast<long>(currentTimeMillis());
 
-    currentScene_ = std::make_shared<TestDemo>(this);
-    // currentScene_ = std::make_shared<UiDemo>(this);
+//     currentScene_ = std::make_shared<TestDemo>(this);
+    currentScene_ = std::make_shared<UiDemo>(this);
     currentScene_->init();
+}
+
+void Application::createRootView(){
+    rootViewGroup_ = std::make_shared<RootViewGroup>(viewWidth_ , viewHeight_);
+    rootViewGroup_->setTag("rootView");
 }
 
 void Application::onTick(){

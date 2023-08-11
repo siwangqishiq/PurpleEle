@@ -4,8 +4,8 @@
 #include "utils.hpp"
 
 class RenderEngine;
-class TextureImage;
-struct AudioEntity;
+class View;
+class ViewGroup;
 
 class UiDemo :public IScene,EventActionCallback{
 public:
@@ -33,4 +33,14 @@ private:
     int viewHeight_;
 
     std::shared_ptr<RenderEngine> renderEngine_;
+
+    //UI root view
+    std::shared_ptr<RootViewGroup> rootView_;
+
+    std::shared_ptr<View> childView1_;
+    std::shared_ptr<View> childView2_;
+    std::shared_ptr<View> childView3_;
+
+    std::shared_ptr<ViewGroup> viewContainer_;
+    std::shared_ptr<View> childView4_;
 };
