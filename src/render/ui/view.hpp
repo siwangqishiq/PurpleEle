@@ -75,8 +75,10 @@ protected:
 
     //click action callback
     IViewListener *onClickListener_ = nullptr;
-    
+
     virtual bool isRootHasTarget();
+private:
+    RootViewGroup *rootViewCached = nullptr;
 };
 
 //ViewGroup

@@ -114,13 +114,18 @@ bool ViewGroup::dispathTouchEvent(int action , float x , float y){
 }
 
 RootViewGroup* View::findRootView(){
+    if(rootViewCached != nullptr){
+        return rootViewCached;
+    }
+
     View *p = this;
     View *prior = p;
     while(p != nullptr){
         prior = p;
         p = p->parentView_;
     }
-    return static_cast<RootViewGroup*>(prior);
+    rootViewCached = static_cast<RootViewGroup*>(prior);
+    return rootViewCached;
 }
 
 bool ViewGroup::onTouchEvent(int action , float x , float y){
