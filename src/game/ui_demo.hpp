@@ -29,6 +29,8 @@ public:
 
     void test1();
 
+    void test2();
+
     virtual void buildViews();
 
     virtual void onClick(View *view) override;
@@ -49,4 +51,6 @@ private:
 
     std::shared_ptr<ViewGroup> viewContainer_;
     std::shared_ptr<View> childView4_;
+
+    std::shared_ptr<TextView> textView1_;
 };
