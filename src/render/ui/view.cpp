@@ -31,7 +31,7 @@ void View::setBackgroundColor(glm::vec4 bgColor){
     backgroundPaint_.color = bgColor;
 }
 
-bool View::dispathTouchEvent(int action , float x , float y){
+bool View::dispatchTouchEvent(int action , float x , float y){
     return onTouchEvent(action , x , y);
 }
  
@@ -55,6 +55,10 @@ bool View::onTouchEvent(int action , float x , float y){
         if(onClickListener_ != nullptr){
             onClickListener_->onClick(this);
         }
+
+        if(lambdaClickCallback_ != nullptr){
+            lambdaClickCallback_(this);
+        }
         break;
         default:
         break;
@@ -64,7 +68,7 @@ bool View::onTouchEvent(int action , float x , float y){
 }
 
 bool View::hasActionCallback(){
-    return onClickListener_ != nullptr;
+    return onClickListener_ != nullptr || lambdaClickCallback_ != nullptr;
 }
 
 //是否rootView已经设置了targetView
@@ -108,14 +112,14 @@ void ViewGroup::addView(std::shared_ptr<View> view , int offsetX , int offsetY){
     childViews_.push_back(view);
 }
 
-bool ViewGroup::dispathTouchEvent(int action , float x , float y){
+bool ViewGroup::dispatchTouchEvent(int action , float x , float y){
     for(int i = childViews_.size() - 1 ; i >= 0 ;i--){
         auto childView = childViews_[i];
         if(childView->getViewRect().isPointInRect(x , y)){
             // Logi("view" , "%s viewgroup dispathTouchEvent %d (%f , %f)" 
             //     ,childView->tag_.c_str(),
             //     action , x, y);
-            if(childView->dispathTouchEvent(action , x , y)){
+            if(childView->dispatchTouchEvent(action , x , y)){
                 if(!isRootHasTarget()){
                     auto rootView = childView->findRootView();
                     if(rootView != nullptr){
@@ -154,7 +158,7 @@ bool ViewGroup::onTouchEvent(int action , float x , float y){
     return View::onTouchEvent(action , x , y);
 }
 
-bool RootViewGroup::dispathTouchEvent(int action , float x , float y){
+bool RootViewGroup::dispatchTouchEvent(int action , float x , float y){
     if(action == ACTION_UP){//clear action session
         if(targetView_ != nullptr){
             targetView_->onTouchEvent(action , x , y);
@@ -170,7 +174,7 @@ bool RootViewGroup::dispathTouchEvent(int action , float x , float y){
     }
     
     if(action == ACTION_DOWN){
-        return ViewGroup::dispathTouchEvent(action , x , y);
+        return ViewGroup::dispatchTouchEvent(action , x , y);
     }
 
     return false;

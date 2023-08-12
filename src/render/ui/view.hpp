@@ -4,6 +4,7 @@
 #include "../common.hpp"
 #include <memory>
 #include <vector>
+#include <functional>
 
 class RenderEngine;
 class ViewGroup;
@@ -30,7 +31,7 @@ public:
 
     virtual void setViewSize(int width , int height);
 
-    virtual bool dispathTouchEvent(int action , float x , float y);
+    virtual bool dispatchTouchEvent(int action , float x , float y);
 
     virtual bool onTouchEvent(int action , float x , float y);
 
@@ -55,6 +56,10 @@ public:
     void setOnClickListener(IViewListener *onClickListener){
         onClickListener_ = onClickListener;
     }
+
+    void setLambdaOnClickListener(std::function<void(View *)> callback){
+        lambdaClickCallback_ = callback;
+    }
     
     void setTag(std::string tag){
         tag_ = tag;
@@ -75,12 +80,14 @@ protected:
 
     //click action callback
     IViewListener *onClickListener_ = nullptr;
-
+    
     virtual bool isRootHasTarget();
 
     virtual bool hasActionCallback(); 
 private:
     RootViewGroup *rootViewCached = nullptr;
+
+    std::function<void(View *)> lambdaClickCallback_ = nullptr;
 };
 
 //ViewGroup
@@ -96,7 +103,7 @@ public:
     
     virtual void addView(std::shared_ptr<View> view , int offsetX , int offsetY);
 
-    virtual bool dispathTouchEvent(int action , float x , float y);
+    virtual bool dispatchTouchEvent(int action , float x , float y);
     
     virtual bool onTouchEvent(int action , float x , float y);
 
@@ -116,7 +123,7 @@ public:
     RootViewGroup(int viewWidth, int viewHeight) : ViewGroup(viewWidth , viewHeight){
     }
 
-    virtual bool dispathTouchEvent(int action , float x , float y);
+    virtual bool dispatchTouchEvent(int action , float x , float y);
 
     View *targetView_ = nullptr;
 };

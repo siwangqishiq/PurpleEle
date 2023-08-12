@@ -29,7 +29,7 @@ public:
     
     //delay 毫秒后 执行
     int schedule(std::function<void(Application *)> runnable, long long delay);
-
+    
     // 以固定时间 period 毫秒 执行
     int scheduleAtFixedRate(std::function<void(Application *)> runnable ,long long period);
 

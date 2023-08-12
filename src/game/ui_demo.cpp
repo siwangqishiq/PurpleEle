@@ -67,6 +67,10 @@ void UiDemo::buildViews(){
     childView1_->setOnClickListener(this);
     childView4_->setOnClickListener(this);
     viewContainer_->setOnClickListener(this);
+
+    childView3_->setLambdaOnClickListener([this](View *view){
+        onClick(view);
+    });
 }
 
 void UiDemo::tick(){
@@ -79,7 +83,7 @@ void UiDemo::dispose(){
 
 bool UiDemo::onEventAction(int action , float x , float y){
     // Logi("UiDemo" , "onEventAction event: %d ( %f , %f)" , action , x , y);
-    bool cost = rootView_->dispathTouchEvent(action , x , y);
+    bool cost = rootView_->dispatchTouchEvent(action , x , y);
 
     if(!cost){
         //todo your owen logic
