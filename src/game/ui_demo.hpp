@@ -27,6 +27,8 @@ public:
 
     glm::vec4 COLOR_SKY_BLUE = ConvertColor(100,181,246,255);
 
+    void test1();
+
     virtual void buildViews();
 
     virtual void onClick(View *view) override;

@@ -25,7 +25,7 @@ void UiDemo::init(){
     // AudioManager::getInstance()->playAudio("bgm");
 }
 
-void UiDemo::buildViews(){
+void UiDemo::test1(){
     Logi("UiDemo" , "buildViews");
     rootView_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
 
@@ -71,6 +71,10 @@ void UiDemo::buildViews(){
     childView3_->setLambdaOnClickListener([this](View *view){
         onClick(view);
     });
+}
+
+void UiDemo::buildViews(){
+    test1();
 }
 
 void UiDemo::tick(){

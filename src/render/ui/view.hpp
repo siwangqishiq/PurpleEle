@@ -80,7 +80,7 @@ protected:
 
     //click action callback
     IViewListener *onClickListener_ = nullptr;
-    
+
     virtual bool isRootHasTarget();
 
     virtual bool hasActionCallback(); 
@@ -126,6 +126,25 @@ public:
     virtual bool dispatchTouchEvent(int action , float x , float y);
 
     View *targetView_ = nullptr;
+};
+
+class TextView : public View {
+public:
+    TextView(int viewWidth, int viewHeight) : View(viewWidth , viewHeight){
+    }
+
+    virtual void setTextSize(float textSize);
+
+    virtual void setTextColor(glm::vec4 textColor);
+
+    virtual void setTextGravity(TextGravity gravity);
+
+    virtual void setText(std::wstring text);
+    
+    virtual void onRender(std::shared_ptr<RenderEngine> renderEngine);
+private:
+    TextPaint textPaint_;
+    std::wstring text_;
 };
 
 

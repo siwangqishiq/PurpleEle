@@ -179,3 +179,26 @@ bool RootViewGroup::dispatchTouchEvent(int action , float x , float y){
 
     return false;
 }
+
+void TextView::setTextSize(float textSize){
+    textPaint_.setTextSize(textSize);
+}
+
+void TextView::setTextColor(glm::vec4 textColor){
+    textPaint_.textColor = textColor;
+}
+
+void TextView::setTextGravity(TextGravity gravity){
+    textPaint_.textGravity = gravity;
+}
+
+void TextView::setText(std::wstring text){
+    text_ = text;
+}
+
+void TextView::onRender(std::shared_ptr<RenderEngine> renderEngine){
+    View::onRender(renderEngine);
+    auto rect = viewRect_.toRectF();
+    renderEngine->renderTextWithRect(text_ , rect , textPaint_, nullptr);
+}
+

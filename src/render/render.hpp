@@ -77,7 +77,8 @@ public:
             TextPaint &paint , 
             Rect *wrapContentRect);//
 
-    void renderTextWithRect(const wchar_t *text , Rect &showRect , 
+    void renderTextWithRect(const wchar_t *text , 
+            Rect &showRect , 
             TextPaint &paint ,
             Rect *wrapContentRect){
         auto str = std::wstring(text);
