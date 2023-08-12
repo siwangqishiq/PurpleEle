@@ -36,13 +36,35 @@ bool View::dispathTouchEvent(int action , float x , float y){
 }
  
 bool View::onTouchEvent(int action , float x , float y){
-    Logi("view" , "%s view onTouchEvent %d (%f , %f)" ,tag_.c_str(),
-         action , x, y);
-    if(action == ACTION_DOWN){
-        return true;
+    // Logi("view" , "%s view onTouchEvent %d (%f , %f)" ,tag_.c_str(),
+    //      action , x, y);
+    if(!hasActionCallback()){
+        return false;
     }
 
-    return false;
+    bool result = false;
+    switch(action){
+        case ACTION_DOWN:
+        result = true;
+        break;
+        case ACTION_MOVE:
+        result = true;
+        break;
+        case ACTION_UP:
+        result = true;
+        if(onClickListener_ != nullptr){
+            onClickListener_->onClick(this);
+        }
+        break;
+        default:
+        break;
+    }//end switch
+
+    return result;
+}
+
+bool View::hasActionCallback(){
+    return onClickListener_ != nullptr;
 }
 
 //是否rootView已经设置了targetView
@@ -123,7 +145,7 @@ RootViewGroup* View::findRootView(){
     while(p != nullptr){
         prior = p;
         p = p->parentView_;
-    }
+    }//end while
     rootViewCached = static_cast<RootViewGroup*>(prior);
     return rootViewCached;
 }
@@ -153,5 +175,3 @@ bool RootViewGroup::dispathTouchEvent(int action , float x , float y){
 
     return false;
 }
-
-

@@ -63,6 +63,10 @@ void UiDemo::buildViews(){
     viewContainer_->addView(childView4_ , 
         containerSize.width / 2  - childView4Size.width / 2  , 
         -containerSize.width / 2 + childView4Size.height / 2);
+
+    childView1_->setOnClickListener(this);
+    childView4_->setOnClickListener(this);
+    viewContainer_->setOnClickListener(this);
 }
 
 void UiDemo::tick(){
@@ -81,6 +85,10 @@ bool UiDemo::onEventAction(int action , float x , float y){
         //todo your owen logic
     }
     return cost;
+}
+
+void UiDemo::onClick(View *view){
+    std::cout << view->tag_ << " clicked!!!!" << std::endl;
 }
 
 

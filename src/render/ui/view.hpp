@@ -77,6 +77,8 @@ protected:
     IViewListener *onClickListener_ = nullptr;
 
     virtual bool isRootHasTarget();
+
+    virtual bool hasActionCallback(); 
 private:
     RootViewGroup *rootViewCached = nullptr;
 };

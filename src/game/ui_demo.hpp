@@ -2,12 +2,14 @@
 
 #include "application.hpp"
 #include "utils.hpp"
+#include "render/ui/view.hpp"
 
 class RenderEngine;
-class View;
-class ViewGroup;
+// class View;
+// class ViewGroup;
+// class IViewListener;
 
-class UiDemo :public IScene,EventActionCallback{
+class UiDemo :public IScene,EventActionCallback , IViewListener{
 public:
     UiDemo(Application *app){
         appContext = app;
@@ -26,6 +28,8 @@ public:
     glm::vec4 COLOR_SKY_BLUE = ConvertColor(100,181,246,255);
 
     virtual void buildViews();
+
+    virtual void onClick(View *view) override;
 private:
     Application *appContext;
 
