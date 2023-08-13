@@ -84,15 +84,15 @@ int main(int argc , char *argv[]){
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-    // if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    //     std::cerr << "Failed to initialize GLAD" << std::endl;
-    //     return -1;
-    // }
-
-    if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+    // if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+    //     std::cout << "Failed to initialize GLAD" << std::endl;
+    //     return -1;
+    // }
 
     app->onResize(app->viewWidth_ , app->viewHeight_);
     app->init();
