@@ -37,9 +37,9 @@ int main(int argc , char *argv[]){
                             app->viewWidth_, 
                             app->viewHeight_, 
                             "run", nullptr, nullptr);
-    char *buf;
-    glfwGetError((const char **)&buf);
-    std::cout << buf << std::endl;
+    // char *buf;
+    // glfwGetError((const char **)&buf);
+    // std::cout << buf << std::endl;
     
     if (window == nullptr) {
         std::cerr << "Failed to create GLFW window" << std::endl;

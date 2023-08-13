@@ -71,7 +71,7 @@ void TestDemo::tick(){
 //     testRenderSprite2();
 //     testRenderSprite3();
 //     testRenderSprite4();
-//     testRenderSprite5Rotate();
+    testRenderSprite5Rotate();
    //  testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
@@ -90,7 +90,7 @@ void TestDemo::tick(){
 //     testRenderBlurRect3();
     // testRenderBlurRect4();
     // testRenderBlurRoundRect();
-     testRenderBlurRoundRect2();
+    //  testRenderBlurRoundRect2();
 }
 
 void TestDemo::testLoadAudioFile(){

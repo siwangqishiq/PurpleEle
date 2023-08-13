@@ -131,8 +131,8 @@ void Application::onCreate(){
   
     startTime_ = static_cast<long>(currentTimeMillis());
 
-//     currentScene_ = std::make_shared<TestDemo>(this);
-    currentScene_ = std::make_shared<UiDemo>(this);
+    currentScene_ = std::make_shared<TestDemo>(this);
+    // currentScene_ = std::make_shared<UiDemo>(this);
     currentScene_->init();
 }
 

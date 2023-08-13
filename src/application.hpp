@@ -39,8 +39,13 @@ class Application {
 public:
     const std::string TAG = "Application"; 
 
+    #ifdef __ARM_ARCH //for 树梅派
+    int viewWidth_ = 800;
+    int viewHeight_ = 600;
+    #else
     int viewWidth_ = 1280;
     int viewHeight_ = 800;
+    #endif
 
     int screenWidth_ = viewWidth_;
     int screenHeight_ = viewHeight_;

@@ -250,6 +250,8 @@ std::string ShaderManager::readShaderSrc(std::string shaderPath){
     std::string shadrHeadSrc =   
     #ifdef __ANDROID__
     "#version 300 es\n";
+    #elif __ARM_ARCH
+    "#version 300 es\n";
     #else
     "#version 330 core\n";
     #endif
