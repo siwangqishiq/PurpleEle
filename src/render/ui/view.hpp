@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include "drawable.hpp"
 
 class RenderEngine;
 class ViewGroup;
@@ -37,6 +38,11 @@ public:
 
     virtual bool interceptTouchEvent(int action , float x , float y){
         return true;
+    }
+
+    virtual void setCustomRenderPass(std::function<void(std::shared_ptr<RenderEngine> renderEngine)> 
+        renderPass){
+        this->customRenderPass_ = renderPass;
     }
 
     int visible = VIEW_VISIBLE;
@@ -84,10 +90,13 @@ protected:
     virtual bool isRootHasTarget();
 
     virtual bool hasActionCallback(); 
+
 private:
     RootViewGroup *rootViewCached = nullptr;
 
     std::function<void(View *)> lambdaClickCallback_ = nullptr;
+
+    std::function<void(std::shared_ptr<RenderEngine> renderEngine)> customRenderPass_ = nullptr;
 };
 
 //ViewGroup
@@ -112,7 +121,7 @@ public:
     }
 
     ~ViewGroup(){
-        View::~View();
+        Logi("ui_view" , "~ free viewgroup %s" , tag_.c_str());
     }
 protected:
     std::vector<std::shared_ptr<View>> childViews_;

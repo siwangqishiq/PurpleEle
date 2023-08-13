@@ -85,10 +85,16 @@ void View::onRender(std::shared_ptr<RenderEngine> renderEngine){
     // Logi("view" , "view on render %d , %d , %d , %d" , viewRect_.left , viewRect_.top
     //     ,viewRect_.width , viewRect_.height);
 
+    //draw background
     auto batch = renderEngine->getShapeBatch();
     batch->begin();
     batch->renderRect(viewRect_, backgroundPaint_);
     batch->end();
+
+    //自定义渲染流程
+    if(customRenderPass_ != nullptr){
+        customRenderPass_(renderEngine);
+    }
 }
 
 void ViewGroup::onRender(std::shared_ptr<RenderEngine> renderEngine){

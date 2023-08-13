@@ -77,14 +77,14 @@ void UiDemo::test2(){
     Logi("UiDemo" , "buildViews test2");
     rootView_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
 
-    textView1_ = std::make_shared<TextView>(300 , 300);
-    textView1_->setBackgroundColor(glm::vec4(1.0f , 0.0f , 0.0f , 0.5f));
-    textView1_->setText(L"你好世界");
+    textView1_ = std::make_shared<TextView>(400 , 300);
+    textView1_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
+    textView1_->setText(L"你好世界\nHello World");
     textView1_->setTextColor(glm::vec4(0.0f , 1.0f , 0.0f , 1.0f));
     textView1_->setTextGravity(Center);
     rootView_->addView(textView1_ , viewWidth_ / 2 - textView1_->getViewRect().width / 2 
         , -viewHeight_ / 2 + textView1_->getViewRect().height / 2);
-    
+
     textView1_->setLambdaOnClickListener([this](View *view){
         textView1_->setText(L"Hello\nWorld");
     });

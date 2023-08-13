@@ -1,7 +1,7 @@
 #include <iostream>
 #include "libjson/json.hpp"
 
-#include <glad/glad.h>
+#include "glad.h"
 #include <GLFW/glfw3.h>
 
 #include "application.hpp"
@@ -16,9 +16,15 @@ static int mouseY = 0;
 
 int main(int argc , char *argv[]){
     glfwInit();
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
     
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
@@ -77,8 +83,13 @@ int main(int argc , char *argv[]){
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
+    // if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    //     std::cerr << "Failed to initialize GLAD" << std::endl;
+    //     return -1;
+    // }
+
+    if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
