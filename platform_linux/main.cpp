@@ -23,7 +23,7 @@ int main(int argc , char *argv[]){
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     //todo create instance
-    std::unique_ptr<LinuxApplication> app = std::make_unique<LinuxApplication>();
+    std::shared_ptr<LinuxApplication> app = std::make_shared<LinuxApplication>();
 
 
     GLFWwindow* window = glfwCreateWindow(

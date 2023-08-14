@@ -2,22 +2,24 @@
 #include "libjson/json.hpp"
 
 //window surface header
-#ifdef _WIN32
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#elif _WIN64
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#elif __CYGWIN__
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#elif __ANDROID__
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#elif __APPLE__
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#endif
+// #ifdef _WIN32
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+// #elif _WIN64
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+// #elif __CYGWIN__
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+// #elif __ANDROID__
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+// #elif __APPLE__
+// #include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+// #endif
 
 #include "application.hpp"
 #include "input/input_manager.hpp"
