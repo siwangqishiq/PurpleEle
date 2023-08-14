@@ -5,6 +5,7 @@
 - [x] macos 
 - [x] Android 
 - [ ] iOS 
+- [x] Raspiberry OS
 
 环境: C++ 
 
