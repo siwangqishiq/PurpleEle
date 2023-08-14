@@ -28,7 +28,7 @@ void View::setViewSize(int width , int height){
 }
 
 void View::setBackgroundColor(glm::vec4 bgColor){
-    backgroundPaint_.color = bgColor;
+    backgroundDrawable_ = std::make_shared<ColorDrawable>(bgColor);
 }
 
 bool View::dispatchTouchEvent(int action , float x , float y){
@@ -84,12 +84,17 @@ void View::onRender(std::shared_ptr<RenderEngine> renderEngine){
 
     // Logi("view" , "view on render %d , %d , %d , %d" , viewRect_.left , viewRect_.top
     //     ,viewRect_.width , viewRect_.height);
-
+    
+    Rect viewRectF = viewRect_.toRectF();
     //draw background
-    auto batch = renderEngine->getShapeBatch();
-    batch->begin();
-    batch->renderRect(viewRect_, backgroundPaint_);
-    batch->end();
+    if(backgroundDrawable_ != nullptr){
+        backgroundDrawable_->render(viewRectF , renderEngine);
+    }
+
+    // auto batch = renderEngine->getShapeBatch();
+    // batch->begin();
+    // batch->renderRect(viewRect_, backgroundPaint_);
+    // batch->end();
 
     //自定义渲染流程
     if(customRenderPass_ != nullptr){

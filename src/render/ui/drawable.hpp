@@ -5,7 +5,13 @@
 
 class Drawable{
 public:
-    virtual void render(RectI rect,std::shared_ptr<RenderEngine> renderEngine);
+    virtual void render(Rect &rect,std::shared_ptr<RenderEngine> renderEngine);
+};
+
+class NullDrawable : public Drawable{
+public:
+    NullDrawable(){
+    }
 };
 
 
@@ -15,7 +21,7 @@ public:
         color_ = color;
     }
     
-    virtual void render(RectI rect,std::shared_ptr<RenderEngine> renderEngine);
+    virtual void render(Rect &rect,std::shared_ptr<RenderEngine> renderEngine);
 private:
     glm::vec4 color_;
 };

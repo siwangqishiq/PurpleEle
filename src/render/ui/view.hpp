@@ -94,6 +94,8 @@ protected:
 private:
     RootViewGroup *rootViewCached = nullptr;
 
+    std::shared_ptr<Drawable> backgroundDrawable_ = nullptr;
+
     std::function<void(View *)> lambdaClickCallback_ = nullptr;
 
     std::function<void(std::shared_ptr<RenderEngine> renderEngine)> customRenderPass_ = nullptr;
