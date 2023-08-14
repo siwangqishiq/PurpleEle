@@ -25,3 +25,16 @@ public:
 private:
     glm::vec4 color_;
 };
+
+class RoundRectDrawable : public Drawable{
+public:
+    RoundRectDrawable(glm::vec4 color , float roundRadius){
+        color_ = color;
+        roundRadius_ = roundRadius;
+    }
+    
+    virtual void render(Rect &rect,std::shared_ptr<RenderEngine> renderEngine);
+private:
+    glm::vec4 color_;
+    float roundRadius_;
+};

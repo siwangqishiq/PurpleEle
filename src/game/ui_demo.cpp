@@ -76,7 +76,7 @@ void UiDemo::test1(){
 void UiDemo::test2(){
     Logi("UiDemo" , "buildViews test2");
     // rootView_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
-    
+
     textView1_ = std::make_shared<TextView>(400 , 300);
     // textView1_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
     textView1_->setText(L"你好世界\nHello World");
@@ -95,9 +95,24 @@ void UiDemo::test2(){
     textView1_->setBackgroundColor(glm::vec4(0.0f, 0.0f,1.0f, 0.4f));
 }
 
+void UiDemo::test3(){
+    bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
+    bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
+    rootView_->addView(bottomView_ 
+        , viewWidth_ / 2 - bottomView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + bottomView_->getViewRect().height / 2);
+
+    rectView_ = std::make_shared<View>(300 , 200);
+    rectView_->setBackgroundRoundRect(glm::vec4(0.0f , 1.0f , 0.0f , 1.0f) , 40.0f);
+    rootView_->addView(rectView_ 
+        , viewWidth_ / 2 - rectView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + rectView_->getViewRect().height / 2);
+}
+
 void UiDemo::buildViews(){
     // test1();
-    test2();
+    // test2();
+    test3();
 }
 
 void UiDemo::tick(){

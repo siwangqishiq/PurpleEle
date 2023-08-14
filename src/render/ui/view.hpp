@@ -55,6 +55,8 @@ public:
     // set View background color;
     virtual void setBackgroundColor(glm::vec4 bgColor);
 
+    virtual void setBackgroundRoundRect(glm::vec4 bgColor , float radius);
+
     void setParentView(ViewGroup *parentView){
         parentView_ = parentView;
     }

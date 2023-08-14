@@ -31,6 +31,10 @@ void View::setBackgroundColor(glm::vec4 bgColor){
     backgroundDrawable_ = std::make_shared<ColorDrawable>(bgColor);
 }
 
+void View::setBackgroundRoundRect(glm::vec4 bgColor , float radius){
+    backgroundDrawable_ = std::make_shared<RoundRectDrawable>(bgColor , radius);
+}
+
 bool View::dispatchTouchEvent(int action , float x , float y){
     return onTouchEvent(action , x , y);
 }
