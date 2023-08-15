@@ -16,6 +16,15 @@ const int VIEW_VISIBLE = 1;
 const int VIEW_GONE = 0;
 const int VIEW_INVISIBLE = -1;
 
+const glm::vec4 COLOR_WHITE(1.0f , 1.0f ,1.0f ,1.0f);
+const glm::vec4 COLOR_BLACK(0.0f , 0.0f ,0.0f ,1.0f);
+const glm::vec4 COLOR_GRAY(0.5f , 0.5f , 0.5f ,1.0f);
+
+enum ViewState{
+    IDLE,
+    PRESSED
+};
+
 class IViewListener{
 public:
     virtual void onClick(View *view) = 0;
@@ -57,6 +66,9 @@ public:
 
     virtual void setBackgroundRoundRect(glm::vec4 bgColor , float radius);
 
+    virtual void setBackgroundShadowRoundRect(glm::vec4 bgColor , float radius , 
+                    float blur);
+
     void setParentView(ViewGroup *parentView){
         parentView_ = parentView;
     }
@@ -67,6 +79,10 @@ public:
 
     void setLambdaOnClickListener(std::function<void(View *)> callback){
         lambdaClickCallback_ = callback;
+    }
+
+    void setViewStateChangeListener(std::function<void(View *, ViewState)> callback){
+        viewStateChangeCallback_ = callback;
     }
     
     void setTag(std::string tag){
@@ -89,6 +105,10 @@ protected:
     //click action callback
     IViewListener *onClickListener_ = nullptr;
 
+    ViewState state_ = IDLE;
+
+    std::shared_ptr<Drawable> backgroundDrawable_ = nullptr;
+
     virtual bool isRootHasTarget();
 
     virtual bool hasActionCallback(); 
@@ -96,9 +116,9 @@ protected:
 private:
     RootViewGroup *rootViewCached = nullptr;
 
-    std::shared_ptr<Drawable> backgroundDrawable_ = nullptr;
-
     std::function<void(View *)> lambdaClickCallback_ = nullptr;
+
+    std::function<void(View *, ViewState)> viewStateChangeCallback_ = nullptr;
 
     std::function<void(std::shared_ptr<RenderEngine> renderEngine)> customRenderPass_ = nullptr;
 };
@@ -129,6 +149,7 @@ public:
     }
 protected:
     std::vector<std::shared_ptr<View>> childViews_;
+
 };
 
 class RootViewGroup : public ViewGroup{
@@ -155,9 +176,25 @@ public:
     virtual void setText(std::wstring text);
     
     virtual void onRender(std::shared_ptr<RenderEngine> renderEngine);
-private:
+protected:
     TextPaint textPaint_;
     std::wstring text_;
+};
+
+class ButtonView : public TextView {
+public:
+    ButtonView(int viewWidth, int viewHeight , std::wstring text) 
+        : TextView(viewWidth , viewHeight){
+        this->text_ = text;
+        initButton();
+    }
+
+    virtual void setButtonUI(glm::vec4 color , float radius , float blur);
+protected:
+    std::shared_ptr<Drawable> idleBackgroundDrawable_ = nullptr;
+    std::shared_ptr<Drawable> pressedBackgroundDrawable_ = nullptr;
+private:
+    void initButton();
 };
 
 

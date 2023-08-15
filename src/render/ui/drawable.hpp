@@ -38,3 +38,18 @@ private:
     glm::vec4 color_;
     float roundRadius_;
 };
+
+class ShadowRoundRectDrawable : public Drawable{
+public:
+    ShadowRoundRectDrawable(glm::vec4 color , float roundRadius , float blur){
+        color_ = color;
+        roundRadius_ = roundRadius;
+        blur_ = blur;
+    }
+    
+    virtual void render(Rect &rect,std::shared_ptr<RenderEngine> renderEngine);
+private:
+    glm::vec4 color_;
+    float roundRadius_;
+    float blur_;
+};

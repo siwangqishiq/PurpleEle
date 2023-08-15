@@ -109,10 +109,54 @@ void UiDemo::test3(){
         , -viewHeight_ / 2 + rectView_->getViewRect().height / 2);
 }
 
+void UiDemo::test4(){
+    bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
+    bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
+    rootView_->addView(bottomView_ 
+        , viewWidth_ / 2 - bottomView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + bottomView_->getViewRect().height / 2);
+
+    testTextView_ = std::make_shared<TextView>(300 , 150);
+    testTextView_->setBackgroundShadowRoundRect(COLOR_SKY_BLUE , 0.0f , 8.0f);
+    testTextView_->setText(L"Hello你好");
+    testTextView_->setTextColor(COLOR_WHITE);
+    testTextView_->setTextGravity(Center);
+
+    testTextView_->setViewStateChangeListener([this](View *view ,ViewState state){
+        Logi("view" , "view state change %d" , state);
+    });
+
+    rootView_->addView(testTextView_ 
+        , viewWidth_ / 2 - testTextView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + testTextView_->getViewRect().height / 2);
+}
+
+void UiDemo::test5(){
+    bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
+    bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
+    rootView_->addView(bottomView_ 
+        , viewWidth_ / 2 - bottomView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + bottomView_->getViewRect().height / 2);
+
+    testButtonView_ = std::make_shared<ButtonView>(300 , 100 , L"点我");
+    
+    testButtonView_->setButtonUI(COLOR_SKY_BLUE , 8.0f , 4.0f);
+    testButtonView_->setTextSize(40.0f);
+    testButtonView_->setLambdaOnClickListener([this](View *view){
+        Logi("view" , "Button clicked!");
+    });
+
+    rootView_->addView(testButtonView_ 
+        , viewWidth_ / 2 - testButtonView_->getViewRect().width / 2 
+        , -viewHeight_ / 2 + testButtonView_->getViewRect().height / 2);
+}
+
 void UiDemo::buildViews(){
     // test1();
     // test2();
-    test3();
+    // test3();
+    // test4();
+    test5();
 }
 
 void UiDemo::tick(){

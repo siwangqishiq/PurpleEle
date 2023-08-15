@@ -35,6 +35,10 @@ void View::setBackgroundRoundRect(glm::vec4 bgColor , float radius){
     backgroundDrawable_ = std::make_shared<RoundRectDrawable>(bgColor , radius);
 }
 
+void View::setBackgroundShadowRoundRect(glm::vec4 bgColor , float radius ,float blur){
+    backgroundDrawable_ = std::make_shared<ShadowRoundRectDrawable>(bgColor , radius , blur);
+}
+
 bool View::dispatchTouchEvent(int action , float x , float y){
     return onTouchEvent(action , x , y);
 }
@@ -49,30 +53,40 @@ bool View::onTouchEvent(int action , float x , float y){
     bool result = false;
     switch(action){
         case ACTION_DOWN:
-        result = true;
-        break;
-        case ACTION_MOVE:
-        result = true;
-        break;
+            result = true;
+            state_ = PRESSED;
+            if(viewStateChangeCallback_ != nullptr){
+                viewStateChangeCallback_(this , state_);
+            }
+            break;
+            case ACTION_MOVE:
+            result = true;
+            break;
         case ACTION_UP:
-        result = true;
-        if(onClickListener_ != nullptr){
-            onClickListener_->onClick(this);
-        }
+            result = true;
+            state_ = IDLE;
+            if(viewStateChangeCallback_ != nullptr){
+                viewStateChangeCallback_(this , state_);
+            }
 
-        if(lambdaClickCallback_ != nullptr){
-            lambdaClickCallback_(this);
-        }
-        break;
+            if(onClickListener_ != nullptr){
+                onClickListener_->onClick(this);
+            }
+
+            if(lambdaClickCallback_ != nullptr){
+                lambdaClickCallback_(this);
+            }
+            break;
         default:
-        break;
+            break;
     }//end switch
 
     return result;
 }
 
 bool View::hasActionCallback(){
-    return onClickListener_ != nullptr || lambdaClickCallback_ != nullptr;
+    return onClickListener_ != nullptr || lambdaClickCallback_ != nullptr
+        || viewStateChangeCallback_ != nullptr;
 }
 
 //是否rootView已经设置了targetView
@@ -214,6 +228,39 @@ void TextView::setText(std::wstring text){
 void TextView::onRender(std::shared_ptr<RenderEngine> renderEngine){
     View::onRender(renderEngine);
     auto rect = viewRect_.toRectF();
-    renderEngine->renderTextWithRect(text_ , rect , textPaint_, nullptr);
+
+    Rect wrapRect;
+    renderEngine->renderTextWithRect(text_ , rect , textPaint_, &wrapRect);
+
+    // Paint rectPaint;
+    // rectPaint.color = glm::vec4(1.0f , 0.0f , 0.0f ,0.3f);
+    // auto batch = renderEngine->getShapeBatch();
+    // batch->begin();
+    // batch->renderRect(wrapRect, rectPaint);
+    // batch->end();
+}
+
+void ButtonView::initButton(){
+    textPaint_.setTextSize(0.3f * viewRect_.height);
+    textPaint_.textColor = COLOR_WHITE;
+    textPaint_.textGravity = Center;
+
+    setBackgroundShadowRoundRect(COLOR_GRAY , 8.0f , 4.0f);
+    idleBackgroundDrawable_ = backgroundDrawable_;
+    pressedBackgroundDrawable_ = std::make_shared<RoundRectDrawable>(COLOR_GRAY , 8.0f);
+
+    setViewStateChangeListener([this](View *view , ViewState state){
+        if(state == IDLE){
+            backgroundDrawable_ = idleBackgroundDrawable_;
+        }else if(state == PRESSED){
+            backgroundDrawable_ = pressedBackgroundDrawable_;
+        }
+    });
+}
+
+void ButtonView::setButtonUI(glm::vec4 color , float radius , float blur){
+    setBackgroundShadowRoundRect(color , radius , blur);
+    idleBackgroundDrawable_ = backgroundDrawable_;
+    pressedBackgroundDrawable_ = std::make_shared<RoundRectDrawable>(color , radius);
 }
 

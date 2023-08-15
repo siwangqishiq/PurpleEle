@@ -26,12 +26,17 @@ public:
     bool isInited = false;
 
     glm::vec4 COLOR_SKY_BLUE = ConvertColor(100,181,246,255);
+    glm::vec4 COLOR_WHITE = ConvertColor(255,255,255,255);
 
     void test1();
 
     void test2();
 
     void test3();
+
+    void test4();
+
+    void test5();
 
     virtual void buildViews();
 
@@ -59,4 +64,8 @@ private:
     std::shared_ptr<View> bottomView_;
 
     std::shared_ptr<View> rectView_;
+
+    std::shared_ptr<TextView> testTextView_;
+
+    std::shared_ptr<ButtonView> testButtonView_;
 };
