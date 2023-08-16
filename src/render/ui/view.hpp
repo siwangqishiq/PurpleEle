@@ -130,6 +130,8 @@ public:
         // Logi("ui_view" , "create ViewGroup");
     }
 
+    virtual void clearAllChildViews();
+
     virtual void onRender(std::shared_ptr<RenderEngine> renderEngine);
 
     virtual void renderSelf(std::shared_ptr<RenderEngine> renderEngine);

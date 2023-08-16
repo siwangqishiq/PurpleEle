@@ -45,11 +45,10 @@ void RenderEngine::clearRenderCommands(){
 }
 
 void RenderEngine::onScreenResize(){
-    viewWidth_ = appContext_->viewWidth_;
-    viewHeight_ = appContext_->viewHeight_;
-    
+//    viewWidth_ = appContext_->viewWidth_;
+//    viewHeight_ = appContext_->viewHeight_;
     resetNormalMat(appContext_->viewWidth_ , appContext_->viewHeight_);
-    glViewport(0 , 0 , appContext_->screenWidth_ , appContext_->screenHeight_);
+    glViewport(0 , 0 , appContext_->viewWidth_ , appContext_->viewHeight_);
 }
 
 void RenderEngine::init(){

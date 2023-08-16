@@ -19,14 +19,16 @@ void UiDemo::init(){
     }
     isInited = true;
 
-    // AudioManager::getInstance()->loadAudio("audio/butterfly.mp3","bgm",true);
-
     buildViews();
+
+    // AudioManager::getInstance()->loadAudio("audio/butterfly.mp3","bgm",true);
     // AudioManager::getInstance()->playAudio("bgm");
 }
 
 void UiDemo::test1(){
     Logi("UiDemo" , "buildViews test1");
+    rootView_->clearAllChildViews();
+
     rootView_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
 
     int posX = 100;
@@ -76,6 +78,7 @@ void UiDemo::test1(){
 void UiDemo::test2(){
     Logi("UiDemo" , "buildViews test2");
     // rootView_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
+    rootView_->clearAllChildViews();
 
     textView1_ = std::make_shared<TextView>(400 , 300);
     // textView1_->setBackgroundColor(glm::vec4(0.0f , 0.0f , 0.0f , 0.0f));
@@ -96,6 +99,8 @@ void UiDemo::test2(){
 }
 
 void UiDemo::test3(){
+    rootView_->clearAllChildViews();
+
     bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
     bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
     rootView_->addView(bottomView_ 
@@ -110,6 +115,8 @@ void UiDemo::test3(){
 }
 
 void UiDemo::test4(){
+    rootView_->clearAllChildViews();
+
     bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
     bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
     rootView_->addView(bottomView_ 
@@ -132,11 +139,13 @@ void UiDemo::test4(){
 }
 
 void UiDemo::test5(){
+    rootView_->clearAllChildViews();
+
     bottomView_ = std::make_shared<View>(viewHeight_ , viewHeight_);
     bottomView_->setBackgroundColor(glm::vec4(1.0f , 1.0f , 1.0f ,1.0f));
     rootView_->addView(bottomView_ 
         , viewWidth_ / 2 - bottomView_->getViewRect().width / 2 
-        , -viewHeight_ / 2 + bottomView_->getViewRect().height / 2);
+        , 0);
 
     testButtonView_ = std::make_shared<ButtonView>(300 , 100 , L"点我");
     
@@ -147,8 +156,8 @@ void UiDemo::test5(){
     });
 
     rootView_->addView(testButtonView_ 
-        , viewWidth_ / 2 - testButtonView_->getViewRect().width / 2 
-        , -viewHeight_ / 2 + testButtonView_->getViewRect().height / 2);
+        , viewWidth_ / 2.0f - testButtonView_->getViewRect().width / 2
+        , -viewHeight_ / 2.0f + testButtonView_->getViewRect().height / 2);
 }
 
 void UiDemo::buildViews(){

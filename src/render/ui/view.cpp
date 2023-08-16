@@ -120,6 +120,10 @@ void View::onRender(std::shared_ptr<RenderEngine> renderEngine){
     }
 }
 
+void ViewGroup::clearAllChildViews(){
+    childViews_.clear();
+}
+
 void ViewGroup::onRender(std::shared_ptr<RenderEngine> renderEngine){
     //todo render self
     renderSelf(renderEngine);
