@@ -13,13 +13,14 @@ void UiDemo::init(){
     
     //
     rootView_ = appContext->getRootView();
+    buildViews();
 
     if(isInited){
         return;
     }
     isInited = true;
 
-    buildViews();
+
 
     // AudioManager::getInstance()->loadAudio("audio/butterfly.mp3","bgm",true);
     // AudioManager::getInstance()->playAudio("bgm");

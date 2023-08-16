@@ -74,6 +74,8 @@ void Application::onResize(int w , int h){
         renderEngine_->onScreenResize();
     }
 
+    createRootView();
+
     if(currentScene_ != nullptr){
         currentScene_->init();
     }
