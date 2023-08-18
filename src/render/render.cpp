@@ -9,6 +9,7 @@
 #include "glheader.hpp"
 #include "application.hpp"
 #include "render_batch.hpp"
+#include "vram.hpp"
 
 std::unordered_map<wchar_t , wchar_t> SymbolMap;
 
@@ -26,7 +27,7 @@ void RenderEngine::render(){
     
     //clear cmd list
     clearRenderCommands();
-    VRamManager::getInstance()->onPostRender();
+    vramManager_->onPostRender();
 }
 
 void RenderEngine::free(){
@@ -34,7 +35,8 @@ void RenderEngine::free(){
         shapeBatch_->dispose();
     }
 
-    VRamManager::getInstance()->clear();
+    // VRamManager::getInstance()->clear();
+    vramManager_->clear();
     ShaderManager::getInstance()->clear();
     TextureManager::getInstance()->clear();
 }
@@ -53,6 +55,8 @@ void RenderEngine::onScreenResize(){
 
 void RenderEngine::init(){
     Logi(TAG , "render engine init start");
+
+    vramManager_ = std::make_shared<VRamManager>();
 
     loadTextRenderResource();//text render init
     // Logi(TAG , "render engine init end");
@@ -76,7 +80,7 @@ void RenderEngine::loadTextRenderResource(){
 
 void RenderEngine::loadShapeShader(){
     Logi(TAG , "render init loadShapeShader");
-
+    
     ShaderManager::getInstance()->loadAssetShader("shape_rect" , 
         "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
 

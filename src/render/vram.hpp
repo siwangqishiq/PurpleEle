@@ -23,7 +23,7 @@ private:
 
     void createNewBuffer();
 public:
-    const int ALLOCATOR_SIZE = 2 * 1024 * 1024;//一次分配2M缓存
+    const int ALLOCATOR_SIZE = 4 * 1024 * 1024;//一次分配4M缓存
 
     int fetchVideoMemory(int requestSize ,
             unsigned int &bufferId , unsigned int &vao,
@@ -39,9 +39,9 @@ class VRamManager{
 public:
     const char *TAG = "VRamManager";
     
-    static std::shared_ptr<VRamManager> getInstance();
+    // static std::shared_ptr<VRamManager> getInstance();
     
-    static std::shared_ptr<VRamManager> instance_;
+    // static std::shared_ptr<VRamManager> instance_;
 
     VRamManager();
 

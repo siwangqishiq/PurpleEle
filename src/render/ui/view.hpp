@@ -19,6 +19,7 @@ const int VIEW_INVISIBLE = -1;
 const glm::vec4 COLOR_WHITE(1.0f , 1.0f ,1.0f ,1.0f);
 const glm::vec4 COLOR_BLACK(0.0f , 0.0f ,0.0f ,1.0f);
 const glm::vec4 COLOR_GRAY(0.5f , 0.5f , 0.5f ,1.0f);
+const glm::vec4 COLOR_GREEN(0.0f , 1.0f ,0.0f ,1.0f);
 
 enum ViewState{
     IDLE,

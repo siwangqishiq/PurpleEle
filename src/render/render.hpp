@@ -27,6 +27,7 @@ class TextRenderHelper;
 class TextRenderCommand;
 class ShaderRenderCommand;
 class ShapeRenderCommand;
+class VRamManager;
 
 class ShapeBatch;
 class SpriteBatch;
@@ -96,6 +97,8 @@ public:
     float getAndChangeDepthValue();
 
     void resetDepth();
+
+    std::shared_ptr<VRamManager> vramManager_;
 private:
     std::vector<std::shared_ptr<RenderCommand>> renderCommandList_;
 

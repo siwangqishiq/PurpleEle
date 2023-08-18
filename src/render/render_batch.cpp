@@ -12,21 +12,21 @@
 // }
 
 void Batch::allocatorMemory(){
-    int requestSize = vertexMaxCount_ * attrCountPerVertex_ * sizeof(float);
     vramManager_ = std::make_shared<VRamManager>();
+    int requestSize = vertexMaxCount_ * attrCountPerVertex_ * sizeof(float);
 
     vertexBuffer_ = std::vector<float>(vertexMaxCount_ * attrCountPerVertex_);
 
     int requestSizeResult = 0;
     vramManager_->fetchVideoMemory(requestSize , vbo_ ,vao_, vboOffset_ , requestSizeResult);
-    Logi("ShapeBatch" , "fetch video memoroy size : %d" , requestSizeResult);
+    Logi("Batch" , "fetch video memoroy size : %d" , requestSizeResult);
 }
 
 ShapeBatch::ShapeBatch(RenderEngine *renderEngine){
     renderEngine_ = renderEngine;
     isDrawing_ = false;
     
-    vertexMaxCount_ = 1024;
+    vertexMaxCount_ = 4 * 1024;
     attrCountPerVertex_ = 3 + 4 + 4 + 4;//pos + color + shape + rect
 }
 
@@ -84,7 +84,8 @@ void ShapeBatch::executeGlCommands(){
                     index_ * sizeof(float) , vertexBuffer_.data());
     glBindBuffer(GL_ARRAY_BUFFER , 0);
 
-    // Logi("ShapeBatch" , "vertexBuffer_ vboOffset_ = %d" , vboOffset_);
+    // Logi("ShapeBatch" , "vertexBuffer_ %d vboOffset_ = %d vertexCount_ %d" ,vertexBuffer_.size(), 
+    //     vboOffset_ , vertexCount_);
     shader_.useShader();
     shader_.setUniformMat3("transMat" , renderEngine_->normalMatrix_);
     
@@ -213,6 +214,7 @@ void ShapeBatch::formatShape(ShapeType type , Rect &rect , Paint &paint , float 
 
     int addedSize = VERTEX_COUNT_PER_PERMITIVE * attrCountPerVertex_;
     if(index_ + addedSize >= vertexBuffer_.size()){
+        // std::cout << "occur error" << std::endl;
         end();
         begin();
     }

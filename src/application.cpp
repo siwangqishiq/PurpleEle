@@ -14,6 +14,7 @@
 #include "game/shader_demo.hpp"
 #include "audio/audio.hpp"
 #include "game/ui_demo.hpp"
+#include "game/life_game.hpp"
 #include <string>
 #include "render/ui/view.hpp"
 #include "game/counter_demo.hpp"
@@ -136,7 +137,8 @@ void Application::onCreate(){
 
     // currentScene_ = std::make_shared<TestDemo>(this);
     // currentScene_ = std::make_shared<UiDemo>(this);
-    currentScene_ = std::make_shared<CounterDemo>(this);
+    // currentScene_ = std::make_shared<CounterDemo>(this);
+    currentScene_ = std::make_shared<LifeGame>(this);
     currentScene_->init();
 }
 

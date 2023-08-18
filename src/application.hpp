@@ -44,12 +44,8 @@ public:
    int viewWidth_ = 800;
    int viewHeight_ = 600;
    #else
-    // int viewWidth_ = 1280;
-    // int viewHeight_ = 800;
-
-    //flutter counter demo
-    int viewWidth_ = 600;
-    int viewHeight_ = 800;
+    int viewWidth_ = 1280;
+    int viewHeight_ = 720;
    #endif
 
     int screenWidth_ = viewWidth_;

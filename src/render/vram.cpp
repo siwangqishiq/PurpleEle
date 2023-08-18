@@ -2,14 +2,14 @@
 #include "log.hpp"
 #include "glheader.hpp"
 
-std::shared_ptr<VRamManager> VRamManager::instance_ = nullptr;
+// std::shared_ptr<VRamManager> VRamManager::instance_ = nullptr;
 
-std::shared_ptr<VRamManager> VRamManager::getInstance() {
-    if(instance_ == nullptr){
-        instance_ = std::make_shared<VRamManager>();
-    }
-    return instance_;
-}
+// std::shared_ptr<VRamManager> VRamManager::getInstance() {
+//     if(instance_ == nullptr){
+//         instance_ = std::make_shared<VRamManager>();
+//     }
+//     return instance_;
+// }
 
 VRamManager::VRamManager(){
     Logi(TAG , "vram manager construct");
