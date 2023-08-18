@@ -15,13 +15,13 @@ public:
         appContext = app;
     }
 
-    virtual void init();
+    virtual void init() override;
 
-    virtual void tick();
+    virtual void tick() override;
 
-    virtual void dispose();
+    virtual void dispose() override;
 
-    virtual bool onEventAction(int action , float x , float y);
+    virtual bool onEventAction(int action , float x , float y) override;
 
     bool isInited = false;
 

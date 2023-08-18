@@ -77,12 +77,16 @@ public:
         onClickListener_ = onClickListener;
     }
 
-    void setLambdaOnClickListener(std::function<void(View *)> callback){
+    virtual void setLambdaOnClickListener(std::function<void(View *)> callback){
         lambdaClickCallback_ = callback;
     }
 
-    void setViewStateChangeListener(std::function<void(View *, ViewState)> callback){
+    virtual void setViewStateChangeListener(std::function<void(View *, ViewState)> callback){
         viewStateChangeCallback_ = callback;
+    }
+
+    virtual ViewState getViewState(){
+        return state_;
     }
     
     void setTag(std::string tag){

@@ -16,6 +16,7 @@ class RootViewGroup;
 class TestDemo;
 class ShaderDemo;
 class UiDemo;
+class CounterDemo;
 
 class EventActionCallback{
 public:
@@ -39,13 +40,17 @@ class Application {
 public:
     const std::string TAG = "Application"; 
 
-//    #ifdef __ARM_ARCH //for 树梅派
-//    int viewWidth_ = 800;
-//    int viewHeight_ = 600;
-//    #else
-    int viewWidth_ = 1280;
+   #ifdef __ARM_ARCH //for 树梅派
+   int viewWidth_ = 800;
+   int viewHeight_ = 600;
+   #else
+    // int viewWidth_ = 1280;
+    // int viewHeight_ = 800;
+
+    //flutter counter demo
+    int viewWidth_ = 600;
     int viewHeight_ = 800;
-//    #endif
+   #endif
 
     int screenWidth_ = viewWidth_;
     int screenHeight_ = viewHeight_;
@@ -93,6 +98,7 @@ public:
     long long getLastFrameDeltaTime();
     long long timeStamp_ = -1L;
     
+    bool isShowFps;
 protected:
     long startTime_;
 
@@ -110,7 +116,6 @@ private:
     //for -----------test---------------------
     std::shared_ptr<IScene> currentScene_ = nullptr;
 
-    bool showNumber = false;
     int showFps = 0;
 
     void createRootView();

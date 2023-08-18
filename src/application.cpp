@@ -16,6 +16,7 @@
 #include "game/ui_demo.hpp"
 #include <string>
 #include "render/ui/view.hpp"
+#include "game/counter_demo.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -101,7 +102,7 @@ void Application::onInit(){
 
     AudioManager::getInstance()->init();
 
-    showNumber = true;
+    isShowFps = true;
     timeStamp_ = currentTimeMicro();
 
     createRootView();
@@ -125,7 +126,7 @@ void Application::onInit(){
 
 void Application::onCreate(){
     getTimer()->scheduleAtFixedRate([this](Application *app){
-        // Logi("application" , "timer fps : %d" , frameCount_);
+        Logi("application" , "timer fps : %d" , frameCount_);
         showFps = frameCount_;
         frameCount_ = 0;
     } , 1000L);
@@ -134,7 +135,8 @@ void Application::onCreate(){
     startTime_ = static_cast<long>(currentTimeMillis());
 
     // currentScene_ = std::make_shared<TestDemo>(this);
-    currentScene_ = std::make_shared<UiDemo>(this);
+    // currentScene_ = std::make_shared<UiDemo>(this);
+    currentScene_ = std::make_shared<CounterDemo>(this);
     currentScene_->init();
 }
 
@@ -182,9 +184,9 @@ void Application::onTick(){
 void Application::updateSence(){
     currentScene_->tick();
 
-    if(showNumber){
+    if(isShowFps){
         TextPaint p4;
-        p4.setTextSize(64.0f);
+        p4.setTextSize(32.0f);
         p4.textColor = showFps >=50
             ? glm::vec4(0.0f ,1.0f , 0.0f , 1.0f)
             : glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);

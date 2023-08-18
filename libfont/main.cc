@@ -390,13 +390,13 @@ int exportFonts2(){
 
     FT_Face face;
     std::string fontPath = fontName + ".ttc";
-    fontPath = "shouxie.ttf";
+    fontPath = "fonts/zhuyuan.ttf";
     if (FT_New_Face(ftLib, fontPath.c_str(), 0, &face)){
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         return -1;
     }
 
-    const int fontSize = 64;
+    const int fontSize = 128;
     const int fontRowGapSize = 16;
 
     FT_Set_Pixel_Sizes(face , 0, fontSize);
@@ -405,7 +405,7 @@ int exportFonts2(){
     auto charListArray = JsonArray::create();
     outputJson->putJsonArray("list" , charListArray);
 
-    std::wstring content = ReadTextFileAsWstring("simple.txt");
+    std::wstring content = ReadTextFileAsWstring("chars/chars.txt");
     std::cout << "char file size : " << content.length() << std::endl;
 
     const int outTexWidth = 2 * 1024;
