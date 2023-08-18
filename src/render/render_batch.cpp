@@ -26,6 +26,8 @@ ShapeBatch::ShapeBatch(RenderEngine *renderEngine){
     renderEngine_ = renderEngine;
     isDrawing_ = false;
     
+    //todo debug
+    // vertexMaxCount_ = 32;
     vertexMaxCount_ = 4 * 1024;
     attrCountPerVertex_ = 3 + 4 + 4 + 4;//pos + color + shape + rect
 }

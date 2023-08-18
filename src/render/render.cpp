@@ -185,8 +185,10 @@ std::shared_ptr<CharInfo> TextRenderHelper::findCharInfo(wchar_t &ch){
 
 //读取字符配置
 void TextRenderHelper::buildTextCharConfig(){
+    
+    std::string fontFoldName = "font1/";
 
-    std::wstring charConfigStr = AssetManager::getInstance()->readTextFile("text/char_config.json");
+    std::wstring charConfigStr = AssetManager::getInstance()->readTextFile("text/"+ fontFoldName +"char_config.json");
 
     JsonParser parser;
     auto configJson = parser.parseJsonObject(charConfigStr);
@@ -199,7 +201,7 @@ void TextRenderHelper::buildTextCharConfig(){
     for(int i = 0 ; i < textureFileList->size() ;i++){
         std::string filename = ToByteString(textureFileList->getString(i));
         Logi("debug" , "filename: %s" , filename.c_str());
-        filelist.push_back("text/"+filename);
+        filelist.push_back("text/" + fontFoldName +filename);
     }//end for i
     // auto textureInfo = TextureManager::getInstance()->acquireTexture("text/" + textureName);
     auto textureInfo = TextureManager::getInstance()->loadTextureArray(filelist);

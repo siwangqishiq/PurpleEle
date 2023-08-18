@@ -43,7 +43,7 @@ void LifeGame::buildViews(){
     gameZoneRect_.left = viewWidth_ / 2 - gameZoneRect_.width / 2;
     gameZoneRect_.top = gameZoneRect_.height;
 
-    cellSize_ = gameZoneRect_.width / 200;
+    cellSize_ = gameZoneRect_.width / 30;
     cellRowCount_ = gameZoneRect_.width / cellSize_;
 
     cellData_ = std::vector<std::vector<char>>();
@@ -51,11 +51,12 @@ void LifeGame::buildViews(){
     for(int i = 0 ; i < cellRowCount_ ;i++){
         std::vector<char> rowVec;
         for(int j = 0 ; j < cellRowCount_;j++){
-            if(i == j){
-                rowVec.push_back(1);
-            }else{
-                rowVec.push_back(0);
-            }
+            // if(i == j){
+            //     rowVec.push_back(1);
+            // }else{
+            //     rowVec.push_back(0);
+            // }
+            rowVec.push_back(0);
         }//end for j
         cellData_.push_back(rowVec);
     }//end for i;
@@ -89,12 +90,15 @@ void LifeGame::tick(){
         for(int j = 0 ; j < cellRowCount_;j++){
             cellRect.left = x;
             cellRect.top = y;
+            
+            // cellPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , 
+            //     GenRandomFloat() ,1.0f);
 
-            if(cellData_[i][j] == 0){
-                cellPaint.fillStyle = Stroken;
+            if(cellData_[i][j] == 1){
+                cellPaint.fillStyle = Filled;
                 batch->renderRect(cellRect , cellPaint);
             }else{
-                cellPaint.fillStyle = Filled;
+                cellPaint.fillStyle = Stroken;
                 batch->renderRect(cellRect , cellPaint);
             }
           
@@ -106,6 +110,12 @@ void LifeGame::tick(){
 
     batch->end();
     // limitCount=100;
+
+    // batch->begin();
+    // Paint circlePaint;
+    // circlePaint.color = COLOR_GRAY;
+    // batch->renderBlurCircle(100,100,200,20 , circlePaint);
+    // batch->end();
 }
 
 void LifeGame::dispose(){

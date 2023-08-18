@@ -48,6 +48,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/game/shader_demo.cpp
         ${SRC_DIR}/game/ui_demo.cpp
         ${SRC_DIR}/game/counter_demo.cpp
+        ${SRC_DIR}/game/life_game.cpp
         )
 
 set(opengl_lib GLESv3)

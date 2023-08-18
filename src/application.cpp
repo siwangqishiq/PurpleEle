@@ -188,7 +188,7 @@ void Application::updateSence(){
 
     if(isShowFps){
         TextPaint p4;
-        p4.setTextSize(32.0f);
+        p4.setTextSize(viewHeight_ / 20.0f);
         p4.textColor = showFps >=50
             ? glm::vec4(0.0f ,1.0f , 0.0f , 1.0f)
             : glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);

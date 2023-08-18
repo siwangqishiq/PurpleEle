@@ -64,15 +64,15 @@ void TestDemo::tick(){
 //     testRender1();
 //     testRender2();
 //     testRender3();
-//     testRender4();
-//     testRenderRoundRect();
+    // testRender4();
+    // testRenderRoundRect();
 //     testRenderTableTennis();
 //     testRenderSprite1();
 //     testRenderSprite2();
 //     testRenderSprite3();
-//     testRenderSprite4();
+    // testRenderSprite4();
     // testRenderSprite5Rotate();
-   //  testRenderSprite6();
+    // testRenderSprite6();
     // testRenderSprite6ImageRegion();
 
     // testRenderShader();
@@ -80,7 +80,7 @@ void TestDemo::tick(){
 //     testRenderText();
 //     testRenderTextWithRect();
     // testRenderTextGravity();
-//     testRenderTextCode();
+    // testRenderTextCode();
 
     // testActionDown();
     //  testRenderBlurCircle();
@@ -89,7 +89,7 @@ void TestDemo::tick(){
 //     testRenderBlurRect2();
 //     testRenderBlurRect3();
     // testRenderBlurRect4();
-    testRenderBlurRoundRect();
+    // testRenderBlurRoundRect();
     //  testRenderBlurRoundRect2();
 }
 
