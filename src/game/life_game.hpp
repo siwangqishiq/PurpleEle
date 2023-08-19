@@ -29,6 +29,8 @@ public:
     void gameInit();
     
     void buildViews();
+
+    void resetCellData();
 private:
     Application *appContext;
 
@@ -53,4 +55,6 @@ private:
 
     std::shared_ptr<ButtonView> startButton_;
     std::shared_ptr<ButtonView> stopButton_;
+
+    void handleOnEventInGame(int event , float x , float y);
 };

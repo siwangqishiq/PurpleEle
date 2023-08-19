@@ -2,6 +2,7 @@
 #include "../render/render_batch.hpp"
 #include "../render/ui/view.hpp"
 #include <memory>
+#include "input/input_manager.hpp"
 
 
 /**
@@ -43,7 +44,9 @@ void LifeGame::gameInit(){
     gameZoneRect_.left = viewWidth_ / 2 - gameZoneRect_.width / 2;
     gameZoneRect_.top = gameZoneRect_.height;
 
-    cellSize_ = gameZoneRect_.width / 30;
+    const int cellNumPerRow = 30;
+    
+    cellSize_ = gameZoneRect_.width / cellNumPerRow;
     cellRowCount_ = gameZoneRect_.width / cellSize_;
 
     cellData_ = std::vector<std::vector<char>>();
@@ -56,7 +59,12 @@ void LifeGame::gameInit(){
             // }else{
             //     rowVec.push_back(0);
             // }
-            rowVec.push_back(0);
+           
+            if(i == 0 && j == 0){
+                rowVec.push_back(1);
+            }else{
+                rowVec.push_back(0);
+            }
         }//end for j
         cellData_.push_back(rowVec);
     }//end for i;
@@ -110,6 +118,7 @@ void LifeGame::buildViews(){
 
     stopButton_->setLambdaOnClickListener([this](View *view){
         Logi("LifeGame" , "Stop button click");
+        resetCellData();
     });
 }
 
@@ -178,8 +187,41 @@ void LifeGame::dispose(){
 bool LifeGame::onEventAction(int action , float x , float y){
     bool cost = rootView_->dispatchTouchEvent(action , x , y);
     if(!cost){
+        if(gameZoneRect_.isPointInRect(x , y)){
+            // std::cout << "point in game zone!" << std::endl;
+            handleOnEventInGame(action , x, y);
+        }
     }
     return cost;
+}
+
+void LifeGame::resetCellData(){
+    for(int j = 0 ; j < cellRowCount_ ;j++){
+        for(int i = 0 ; i < cellRowCount_;i++){
+            cellData_[j][i] = 0;
+        }//end for j
+    }//end for i;
+}
+
+void LifeGame::handleOnEventInGame(int event , float x , float y){
+    if(event != ACTION_DOWN){
+        return;
+    }
+
+    float startX = gameZoneRect_.left;
+    float startY = gameZoneRect_.top;
+
+    int idx = static_cast<int>((x - startX) / cellSize_);
+    int idy = static_cast<int>((startY - y) / cellSize_);
+    std::cout << "indexX = " << idx << " indexY = " << idy << std::endl;
+    if(idx >=0 && idx < cellRowCount_ && idy >=0 && idy < cellRowCount_){ 
+        //change array data
+        if(cellData_[idy][idx] == 0){
+            cellData_[idy][idx] = 1;
+        }else{
+            cellData_[idy][idx] = 0;
+        }
+    }
 }
 
 
