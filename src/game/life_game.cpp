@@ -27,6 +27,8 @@ void LifeGame::init(){
     
     //
     rootView_ = appContext->getRootView();
+
+    gameInit();
     buildViews();
 
     if(isInited){
@@ -35,9 +37,7 @@ void LifeGame::init(){
     isInited = true;
 }
 
-void LifeGame::buildViews(){
-    // rootView_->setBackgroundColor(glm::vec4(1.0f ,1.0f ,1.0f ,1.0f));
-
+void LifeGame::gameInit(){
     gameZoneRect_.width = viewHeight_;
     gameZoneRect_.height = viewHeight_;
     gameZoneRect_.left = viewWidth_ / 2 - gameZoneRect_.width / 2;
@@ -60,6 +60,57 @@ void LifeGame::buildViews(){
         }//end for j
         cellData_.push_back(rowVec);
     }//end for i;
+
+    iterCount_ = 0;
+}
+
+void LifeGame::buildViews(){
+    std::shared_ptr<TextView> titleTextView = std::make_shared<TextView>(gameZoneRect_.left , 
+        viewHeight_ / 10.0f);
+
+    rootView_->addView(titleTextView , 0 , -100);
+    titleTextView->setTextSize(titleTextView->getViewRect().height / 2.0f);
+    titleTextView->setTextGravity(Center);
+    titleTextView->setText(L"进化次数");
+
+    iterCountTextView_ = std::make_shared<TextView>(gameZoneRect_.left , 
+        viewHeight_ / 5.0f);
+    iterCountTextView_->setTextSize(iterCountTextView_->getViewRect().height / 1.5f);
+    iterCountTextView_->setTextGravity(Center);
+    iterCountTextView_->setText(std::to_wstring(iterCount_));
+    rootView_->addView(iterCountTextView_ , 0 , 
+        -100 - titleTextView->getViewRect().height);
+
+    int btnPadding = 10;
+    int btnWidth = viewWidth_ - gameZoneRect_.left - gameZoneRect_.width - btnPadding * 2;
+    int btnHeight = viewHeight_ / 10;
+
+    startButton_ = std::make_shared<ButtonView>(btnWidth , btnHeight , L"开始");
+    // startButton_->setText(L"开始");
+    rootView_->addView(startButton_ ,  
+        gameZoneRect_.left + gameZoneRect_.width + btnPadding ,
+        -100);
+
+    stopButton_ = std::make_shared<ButtonView>(btnWidth , btnHeight , L"停止进化");
+    rootView_->addView(stopButton_ ,  
+        gameZoneRect_.left + gameZoneRect_.width + btnPadding ,
+        - startButton_->getViewRect().height - 100 - 20);
+
+    startButton_->setLambdaOnClickListener([this](View *view){
+        Logi("LifeGame" , "Start button click");
+        
+        if(btnIsStart_){ // pause
+            startButton_->setText(L"暂停");
+        }else{
+            startButton_->setText(L"开始");
+        }
+        
+        btnIsStart_ = !btnIsStart_;
+    });
+
+    stopButton_->setLambdaOnClickListener([this](View *view){
+        Logi("LifeGame" , "Stop button click");
+    });
 }
 
 void LifeGame::tick(){
@@ -95,9 +146,11 @@ void LifeGame::tick(){
             //     GenRandomFloat() ,1.0f);
 
             if(cellData_[i][j] == 1){
+                // cellPaint.color = COLOR_GREEN;
                 cellPaint.fillStyle = Filled;
                 batch->renderRect(cellRect , cellPaint);
             }else{
+                // cellPaint.color = COLOR_WHITE;
                 cellPaint.fillStyle = Stroken;
                 batch->renderRect(cellRect , cellPaint);
             }
