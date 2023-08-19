@@ -42,7 +42,7 @@ public:
 
    #ifdef __ARM_ARCH //for 树梅派
    int viewWidth_ = 800;
-   int viewHeight_ = 600;
+   int viewHeight_ = 450;
    #else
     int viewWidth_ = 1280;
     int viewHeight_ = 720;
