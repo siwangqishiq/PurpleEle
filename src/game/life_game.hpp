@@ -31,6 +31,10 @@ public:
     void buildViews();
 
     void resetCellData();
+
+    void iterOneStep();
+
+    int timerId_ = -1;
 private:
     Application *appContext;
 

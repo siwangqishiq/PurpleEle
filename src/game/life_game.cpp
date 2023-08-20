@@ -3,17 +3,16 @@
 #include "../render/ui/view.hpp"
 #include <memory>
 #include "input/input_manager.hpp"
+#include "../widget/timer.hpp"
 
 
 /**
  * 
  * 康威生命游戏是一种细胞自动机，其规则如下：
-// 每个细胞有两种状态：存活或死亡。
-// 每个细胞的状态由其周围八个细胞的状态决定。
-// 如果一个细胞周围有三个存活的细胞，则该细胞在下一个时间步骤中将变为存活状态（或保持存活状态）。
-// 如果一个细胞周围有少于两个存活的细胞，则该细胞在下一个时间步骤中将死亡（或保持死亡状态）。
-// 如果一个细胞周围有超过三个存活的细胞，则该细胞在下一个时间步骤中将死亡（或保持死亡状态）。
-// 这些规则被应用于整个细胞自动机，以模拟生命在一个二维网格中的演化。
+// 1． 每个细胞的状态由该细胞及周围八个细胞上一次的状态所决定；
+2. 如果一个细胞周围有3个细胞为生，则该细胞为生，即该细胞若原先为死，则转为生，若原先为生，则保持不变；
+3. 如果一个细胞周围有2个细胞为生，则该细胞的生死状态保持不变；
+4. 在其它情况下，该细胞为死，即该细胞若原先为生，则转为死，若原先为死，则保持不变
  * 
  * 
  */
@@ -109,15 +108,37 @@ void LifeGame::buildViews(){
         
         if(btnIsStart_){ // pause
             startButton_->setText(L"暂停");
-        }else{
+
+            //启动定时任务
+            timerId_ = appContext->getTimer()->scheduleAtFixedRate([this](Application *app){
+                // std::cout << "time task run " << std::endl;
+                iterOneStep();
+                iterCountTextView_->setText(std::to_wstring(iterCount_));
+                iterCount_++;
+            } , 500L);
+        }else{ // 
             startButton_->setText(L"开始");
+            //结束定时任务
+            appContext->getTimer()->removeScheduleTask(timerId_);
+            timerId_ = -1;
         }
         
         btnIsStart_ = !btnIsStart_;
+        // iterOneStep();
     });
 
     stopButton_->setLambdaOnClickListener([this](View *view){
         Logi("LifeGame" , "Stop button click");
+
+        appContext->getTimer()->removeScheduleTask(timerId_);
+        timerId_ = -1;
+
+        iterCount_ = 0;
+        iterCountTextView_->setText(std::to_wstring(iterCount_));
+
+        btnIsStart_ = true;
+        startButton_->setText(L"暂停");
+
         resetCellData();
     });
 }
@@ -179,6 +200,76 @@ void LifeGame::tick(){
     // batch->renderBlurCircle(100,100,200,20 , circlePaint);
     // batch->end();
 }
+
+/**
+ * @brief 
+    0 0 0 0 
+    0 1 0 0 
+    0 0 0 0
+    0 0 0 0
+ * 
+ */
+void LifeGame::iterOneStep(){
+    auto originData = cellData_;
+    for(int j = 0 ; j < cellRowCount_ ;j++){
+        for(int i = 0 ; i < cellRowCount_;i++){
+            int surroundCellCount = 0;
+            
+            if(j -1 >= 0 && i - 1 >= 0){ // left top
+                if(originData[j - 1][ i - 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+            if(j - 1 >= 0){ // top
+                if(originData[j - 1][ i ] > 0){
+                    surroundCellCount++;
+                }
+            }
+            if(j - 1 >=0 && i + 1 < cellRowCount_){ // right top
+                if(originData[j - 1][ i + 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+            if(i - 1 >= 0){ // left
+                if(originData[j][ i - 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+
+            if(i + 1 < cellRowCount_){ // right
+                if(originData[j][ i + 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+
+            if( j + 1 < cellRowCount_ && i - 1 >= 0){
+                if(originData[j + 1][ i - 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+
+            if( j + 1 < cellRowCount_){
+                if(originData[j + 1][i] > 0){
+                    surroundCellCount++;
+                }
+            }
+
+            if( j + 1 < cellRowCount_ && i + 1< cellRowCount_){
+                if(originData[j + 1][i + 1] > 0){
+                    surroundCellCount++;
+                }
+            }
+
+            if(surroundCellCount == 3){
+                cellData_[j][i] = 1;
+            }else if(surroundCellCount == 2){
+                cellData_[j][i] = cellData_[j][i];
+            }else{
+                cellData_[j][i] = 0;
+            }
+        }//end for j
+    }//end for i;
+}   
 
 void LifeGame::dispose(){
 
