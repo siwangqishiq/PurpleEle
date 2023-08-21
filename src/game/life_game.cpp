@@ -112,9 +112,9 @@ void LifeGame::buildViews(){
             //启动定时任务
             timerId_ = appContext->getTimer()->scheduleAtFixedRate([this](Application *app){
                 // std::cout << "time task run " << std::endl;
+                iterCount_++;
                 iterOneStep();
                 iterCountTextView_->setText(std::to_wstring(iterCount_));
-                iterCount_++;
             } , 500L);
         }else{ // 
             startButton_->setText(L"开始");
@@ -137,7 +137,7 @@ void LifeGame::buildViews(){
         iterCountTextView_->setText(std::to_wstring(iterCount_));
 
         btnIsStart_ = true;
-        startButton_->setText(L"暂停");
+        startButton_->setText(L"开始");
 
         resetCellData();
     });
