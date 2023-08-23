@@ -43,7 +43,7 @@ void LifeGame::gameInit(){
     gameZoneRect_.left = viewWidth_ / 2 - gameZoneRect_.width / 2;
     gameZoneRect_.top = gameZoneRect_.height;
 
-    const int cellNumPerRow = 30;
+    const int cellNumPerRow = 36;
     
     cellSize_ = gameZoneRect_.width / cellNumPerRow;
     cellRowCount_ = gameZoneRect_.width / cellSize_;
@@ -58,17 +58,58 @@ void LifeGame::gameInit(){
             // }else{
             //     rowVec.push_back(0);
             // }
-           
-            if(i == 0 && j == 0){
-                rowVec.push_back(1);
-            }else{
-                rowVec.push_back(0);
-            }
+            
+            rowVec.push_back(0);
         }//end for j
         cellData_.push_back(rowVec);
     }//end for i;
 
     iterCount_ = 0;
+
+    //init data
+    cellData_[0][24] = 1;
+    cellData_[1][22] = 1;
+    cellData_[1][24] = 1;
+
+    cellData_[2][12] = 1;
+    cellData_[2][13] = 1;
+    cellData_[2][20] = 1;
+    cellData_[2][21] = 1;
+    cellData_[2][34] = 1;
+    cellData_[2][35] = 1;
+    
+    cellData_[3][11] = 1;
+    cellData_[3][15] = 1;
+    cellData_[3][20] = 1;
+    cellData_[3][21] = 1;
+    cellData_[3][34] = 1;
+    cellData_[3][35] = 1;
+
+    cellData_[4][1] = 1;
+    cellData_[4][0] = 1;
+    cellData_[4][10] = 1;
+    cellData_[4][16] = 1;
+    cellData_[4][20] = 1;
+    cellData_[4][21] = 1;
+
+    cellData_[5][1] = 1;
+    cellData_[5][0] = 1;
+    cellData_[5][10] = 1;
+    cellData_[5][14] = 1;
+    cellData_[5][16] = 1;
+    cellData_[5][17] = 1;
+    cellData_[5][22] = 1;
+    cellData_[5][24] = 1;
+
+    cellData_[6][10] = 1;
+    cellData_[6][16] = 1;
+    cellData_[6][24] = 1;
+
+    cellData_[7][11] = 1;
+    cellData_[7][15] = 1;
+
+    cellData_[8][12] = 1;
+    cellData_[8][13] = 1;
 }
 
 void LifeGame::buildViews(){
@@ -115,7 +156,7 @@ void LifeGame::buildViews(){
                 iterCount_++;
                 iterOneStep();
                 iterCountTextView_->setText(std::to_wstring(iterCount_));
-            } , 500L);
+            } , 250L);
         }else{ // 
             startButton_->setText(L"开始");
             //结束定时任务
@@ -141,6 +182,8 @@ void LifeGame::buildViews(){
 
         resetCellData();
     });
+
+
 }
 
 void LifeGame::tick(){
