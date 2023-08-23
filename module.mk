@@ -39,6 +39,7 @@ compile: build_dir \
 		${BUILD_DIR}/ui_demo.o \
 		${BUILD_DIR}/counter_demo.o \
 		${BUILD_DIR}/life_game.o \
+		${BUILD_DIR}/custom_shader_demo.o \
 
 ${BUILD_DIR}/json.o: ${DIR}/libjson/json.cpp ${DIR}/libjson/json.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${DIR}/libjson/json.cpp -o ${BUILD_DIR}/json.o
@@ -108,6 +109,9 @@ ${BUILD_DIR}/counter_demo.o:${SRC_DIR}/game/counter_demo.cpp ${SRC_DIR}/game/cou
 
 ${BUILD_DIR}/life_game.o:${SRC_DIR}/game/life_game.cpp ${SRC_DIR}/game/life_game.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/life_game.cpp -o ${BUILD_DIR}/life_game.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
+
+${BUILD_DIR}/custom_shader_demo.o:${SRC_DIR}/game/custom_shader_demo.cpp ${SRC_DIR}/game/custom_shader_demo.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/custom_shader_demo.cpp -o ${BUILD_DIR}/custom_shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
 # ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \
 # 				${SRC_DIR}/audio/audio_impl.hpp

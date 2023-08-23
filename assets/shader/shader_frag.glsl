@@ -8,7 +8,7 @@ out vec4 FragColor;
 vec4 renderCircle(vec2 pos) {
     float radius = uViewHeight / 4.0f;
     vec2 center = vec2(uViewWidth / 2.0f , uViewHeight / 2.0f);
-
+    
     if(distance(pos , center) >= radius){
         discard;
     }
