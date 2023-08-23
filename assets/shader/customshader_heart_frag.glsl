@@ -18,7 +18,9 @@ vec4 renderHeart(vec2 pos){
     float s = abs(d);
     float e = (13.0*s - 22.0*s*s + 10.0*s*s*s)/(6.0-5.0*s);
     float col = smoothstep(-0.02f, 0.02f, e-r);
-    vec4 color = vec4(col) * uColor;
+    // float col = step(0.0f, e-r);
+    // vec4 color = vec4(col) * uColor;
+    vec4 color = vec4(uColor.xyz , 1.0f * col);
     return color;
 }
 

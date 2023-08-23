@@ -44,6 +44,13 @@ void CustomShaderDemo::tick(){
         customRenderShader_.setUniformFloat("uHeight",rect.height);
         customRenderShader_.setUniformVec4("uColor",glm::vec4(1.0f , 0.0f ,0.0f , 1.0f));
     });
+
+    Rect screenRect;
+    screenRect.left = 0.0f;
+    screenRect.top = viewHeight_;
+    screenRect.width = viewWidth_;
+    screenRect.height = viewHeight_;
+    
 }
 
 void CustomShaderDemo::dispose(){
