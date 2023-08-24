@@ -60,5 +60,7 @@ private:
     std::shared_ptr<ButtonView> startButton_;
     std::shared_ptr<ButtonView> stopButton_;
 
+    std::shared_ptr<TextView> ruleTextView_;
+
     void handleOnEventInGame(int event , float x , float y);
 };

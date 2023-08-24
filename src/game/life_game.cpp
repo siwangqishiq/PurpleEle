@@ -121,13 +121,24 @@ void LifeGame::buildViews(){
     titleTextView->setTextGravity(Center);
     titleTextView->setText(L"进化次数");
 
-    iterCountTextView_ = std::make_shared<TextView>(gameZoneRect_.left , 
-        viewHeight_ / 5.0f);
+    iterCountTextView_ = std::make_shared<TextView>(gameZoneRect_.left , viewHeight_ / 6.0f);
     iterCountTextView_->setTextSize(iterCountTextView_->getViewRect().height / 1.5f);
     iterCountTextView_->setTextGravity(Center);
     iterCountTextView_->setText(std::to_wstring(iterCount_));
     rootView_->addView(iterCountTextView_ , 0 , 
         -100 - titleTextView->getViewRect().height);
+
+    
+    auto countViewRect = iterCountTextView_->getViewRect();
+    int reuleY = titleTextView->getViewRect().height + countViewRect.height + 100;
+
+    ruleTextView_ = std::make_shared<TextView>(countViewRect.width , viewHeight_ - reuleY);
+    ruleTextView_->setTextSize(countViewRect.width / 16.0f);
+    ruleTextView_->setTextGravity(TopLeft);
+    ruleTextView_->setText(L"康威生命游戏是一种细胞自动机,其规则如下:\n 1. 每个细胞的状态由该细胞及周围八个细胞上一次的状态所决定 \n2. 如果一个细胞周围有3个细胞为生,则该细胞为生,即该细胞若原先为死,则转为生,若原先为生,则保持不变 \n3. 如果一个细胞周围有2个细胞为生,则该细胞的生死状态保持不变 \n4. 在其它情况下,该细胞为死,即该细胞若原先为生,则转为死,若原先为死,则保持不变");
+    // ruleTextView_->setBackgroundColor(glm::vec4(1.0f , 0.0f , 0.0f , 1.0f));
+    rootView_->addView(ruleTextView_ , 0 , 
+        -reuleY);
 
     int btnPadding = 10;
     int btnWidth = viewWidth_ - gameZoneRect_.left - gameZoneRect_.width - btnPadding * 2;
@@ -143,7 +154,7 @@ void LifeGame::buildViews(){
     rootView_->addView(stopButton_ ,  
         gameZoneRect_.left + gameZoneRect_.width + btnPadding ,
         - startButton_->getViewRect().height - 100 - 20);
-
+    
     startButton_->setLambdaOnClickListener([this](View *view){
         Logi("LifeGame" , "Start button click");
         
