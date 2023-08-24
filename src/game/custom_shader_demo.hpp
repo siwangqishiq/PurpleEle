@@ -27,6 +27,8 @@ private:
     int viewWidth_;
     int viewHeight_;
 
+    float delta_ = 0.0f;
+
     std::shared_ptr<RenderEngine> renderEngine_;
 
     Shader customRenderShader_;
