@@ -16,6 +16,15 @@ TextureImage::TextureImage(std::shared_ptr<TextureInfo> textureInfo){
     textureInfo_ = textureInfo;
 }
 
+Rect TextureImage::getRect(){
+    Rect rect;
+    rect.left = 0.0f;
+    rect.top = getHeight();
+    rect.width = getWidth();
+    rect.height = getHeight();
+    return rect;
+}
+
 int TextureImage::getWidth(){
     return textureInfo_ != nullptr? textureInfo_->width : 0;
 }

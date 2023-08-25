@@ -17,6 +17,7 @@ class TestDemo;
 class ShaderDemo;
 class UiDemo;
 class CounterDemo;
+class NinjiaGame;
 
 class EventActionCallback{
 public:

@@ -18,9 +18,9 @@ const float espion_zero = 0.001;
 
 const int WORLD_MAX_OBJECT_COUNT = 20;//包含最大物体数量
 
-const int SAMPLE_TIMES = 8; //像素点采样次数
+const int SAMPLE_TIMES = 4; //像素点采样次数
 
-const int MAX_RAY_LIST_SIZE = 4;//光线的最大弹射次数
+const int MAX_RAY_LIST_SIZE = 8;//光线的最大弹射次数
 
 const int MATERIAL_TYPE_LAMBERTIAN = 1;//材质 漫反射
 const int MATERIAL_TYPE_METAL = 2;//材质 金属

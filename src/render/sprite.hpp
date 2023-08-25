@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "common.hpp"
 
 // class Image{
 // public:
@@ -17,6 +18,8 @@ class TextureImageRegion;
 class TextureImage{
 public:
     TextureImage(std::shared_ptr<TextureInfo> textureInfo);
+
+    Rect getRect();
 
     virtual int getWidth();
     virtual int getHeight();
