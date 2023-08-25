@@ -114,11 +114,22 @@ ${BUILD_DIR}/life_game.o:${SRC_DIR}/game/life_game.cpp ${SRC_DIR}/game/life_game
 ${BUILD_DIR}/custom_shader_demo.o:${SRC_DIR}/game/custom_shader_demo.cpp ${SRC_DIR}/game/custom_shader_demo.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/custom_shader_demo.cpp -o ${BUILD_DIR}/custom_shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
 
-${BUILD_DIR}/ninjia_game.o:${SRC_DIR}/game/ninjia/ninjia_game.cpp \
-		${SRC_DIR}/game/ninjia/ninjia_game.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} \
-		-o ${BUILD_DIR}/ninjia_game.o -I ${INCLUDE_DIR} -I ${SRC_DIR} \
-		${SRC_DIR}/game/ninjia/ninjia_game.cpp 
+${BUILD_DIR}/ninjia_game.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_game.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_game.cpp \
+		${BUILD_DIR}/ninjia_sprite.o \
+		${BUILD_DIR}/ninjia_background.o
+	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_game.cpp -o ${BUILD_DIR}/ninjia_game.o
+
+${BUILD_DIR}/ninjia_sprite.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_sprite.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_sprite.cpp 
+	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_sprite.cpp -o ${BUILD_DIR}/ninjia_sprite.o
+
+${BUILD_DIR}/ninjia_background.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_background.hpp \
+		${SRC_DIR}/game/ninjia/ninjia_background.cpp 
+	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_background.cpp -o ${BUILD_DIR}/ninjia_background.o
 		
 
 # ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \

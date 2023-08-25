@@ -9,6 +9,8 @@
 #include "input/input_manager.hpp"
 #include "audio/audio.hpp"
 #include "widget/timer.hpp"
+#include "ninjia_background.hpp"
+#include "ninjia_sprite.hpp"
 
 
 void NinjiaGame::init(){
@@ -30,10 +32,24 @@ void NinjiaGame::init(){
 }
 
 void NinjiaGame::gameInit(){
+
+    camera_ = std::make_shared<Camera>(this);
+    skybg_ = std::make_shared<SkyBackground>(this);
+    terrain_ = std::make_shared<Terrain>(this);
+    player_ = std::make_shared<NinjiaPlayer>(this);
+
+    camera_->init();
+    skybg_->init();
+    terrain_->init();
+    player_->init();
+
     splashImage_ = BuildImageByAsset("sprite/splash.png");
     splashIsPressed = false;
+    splashDeltaTime_ = 0.0f;
     AudioManager::getInstance()->loadAudio("audio/hit.mp3",AUDIO_HIT);
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
+
+    gameState_ = Splash;
 }
 
 void NinjiaGame::gameStartPrepare(){
@@ -50,12 +66,22 @@ void NinjiaGame::tick(){
         renderSplash();
         break;
         case Running:
+        renderRunning();
         break;
     }//end switch
 }
 
 void NinjiaGame::dispose(){
-    AudioManager::getInstance()->dispose();
+    if(skybg_ != nullptr){
+        skybg_->dispose();
+    }
+    if(terrain_ != nullptr){
+        terrain_->dispose();
+    }
+    if(player_ != nullptr){
+        player_->dispose();
+    }
+    // AudioManager::getInstance()->dispose();
 }
 
 bool NinjiaGame::onEventAction(int action , float x , float y){
@@ -81,6 +107,12 @@ bool NinjiaGame::onEventAction(int action , float x , float y){
     return false;
 }
 
+void NinjiaGame::renderRunning(){
+    skybg_->render();// sky background render
+    terrain_->render();
+    player_->render();
+}
+
 void NinjiaGame::renderSplash(){
     Rect screenRect;
     screenRect.left = 0.0f;
@@ -93,7 +125,6 @@ void NinjiaGame::renderSplash(){
     Rect splashSrcRect = splashImage_->getRect();
     batch->renderImage(splashImage_ , splashSrcRect , screenRect);
     batch->end();
-
 
     splashTextAlpha_ = glm::sin(splashDeltaTime_) + 1.0f;
     if(splashIsPressed){

@@ -45,6 +45,8 @@ public:
     
     void clear();
 
+    void freeTexture(TextureInfo &info);
+
     std::shared_ptr<TextureInfo> acquireTexture(std::string textureFilePath , bool needFlip = false);
 
     std::shared_ptr<TextureInfo> loadTexture(std::string textureFilePath ,bool needFlip = false);

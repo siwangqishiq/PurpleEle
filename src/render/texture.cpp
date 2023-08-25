@@ -23,6 +23,19 @@ std::shared_ptr<TextureManager> TextureManager::getInstance(){
     return instance_;
 }
 
+void TextureManager::freeTexture(TextureInfo &info){
+    if(textureBank_.find(info.name) == textureBank_.end()){
+        return;
+    }
+    auto texInfoPtr = textureBank_[info.name];
+    // Logi("texture_manager" , "texture del %s" , (texInfoPtr->name).c_str());
+    if(texInfoPtr != nullptr){
+        glDeleteTextures(1 , &(texInfoPtr->textureId));
+    }
+    textureBank_.erase(info.name);
+    Logi("texture_manager" , "texture  %s is free!" , info.name.c_str());
+}
+
 void TextureManager::clear(){
     for(auto pair : textureBank_){
         auto texInfoPtr= pair.second;

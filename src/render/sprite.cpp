@@ -33,6 +33,14 @@ int TextureImage::getHeight(){
     return textureInfo_ != nullptr? textureInfo_->height : 0;
 }
 
+void TextureImage::dispose(){
+    if(textureInfo_ == nullptr){
+        return;
+    }
+    
+    TextureManager::getInstance()->freeTexture(*textureInfo_);
+}
+
 unsigned int TextureImage::getTextureId(){
     return textureInfo_ != nullptr? textureInfo_->textureId : 0;
 }

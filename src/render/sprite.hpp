@@ -25,6 +25,8 @@ public:
     virtual int getHeight();
     virtual unsigned int getTextureId();
 
+    virtual void dispose();
+
     std::shared_ptr<TextureImageRegion> createImageRegion(float offsetX , float offsetY,
         float regionWidth , float regionHeight);
 

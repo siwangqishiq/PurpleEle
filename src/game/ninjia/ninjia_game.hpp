@@ -4,21 +4,19 @@
 #include "utils.hpp"
 #include "render/ui/view.hpp"
 #include <memory>
+#include "ninjia_game_base.hpp"
+#include "ninjia_sprite.hpp"
+#include "ninjia_background.hpp"
 
+class NinjiaGame;
 class TextureImage;
+class Camera;
+class NinjiaPlayer;
 
 enum GameState{
     Splash, //
     Running,
     End
-};
-
-class Player{
-
-};
-
-class Camera{
-
 };
 
 class NinjiaGame : public IScene,EventActionCallback {
@@ -47,19 +45,26 @@ public:
 
     void renderSplash();
 
+    void renderRunning();
+
     const std::string AUDIO_HIT = "hit";
 
     const std::string AUDIO_BGM = "bgm";
-private:
-    Application *appContext;
 
     int viewWidth_;
     int viewHeight_;
 
     std::shared_ptr<RenderEngine> renderEngine_;
 
+    std::shared_ptr<Camera> camera_;
+    std::shared_ptr<SkyBackground> skybg_;
+    std::shared_ptr<Terrain> terrain_;
+    std::shared_ptr<NinjiaPlayer> player_;
+private:
+    Application *appContext;
+
     std::shared_ptr<TextureImage> splashImage_;
-    float splashDeltaTime_;
-    float splashTextAlpha_ = 0.0f;
+    float splashDeltaTime_ = 0.0f;
+    float splashTextAlpha_ = 1.0f;
     bool splashIsPressed = false;
 };
