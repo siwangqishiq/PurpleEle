@@ -22,7 +22,7 @@ public:
     }
 
     void init();
-
+    
     void render();
 
     void dispose();
@@ -30,7 +30,7 @@ public:
     float terrainHeight_;
     float forestBgHeight_;
     float forestTop_;
-    
+
 private:
     std::shared_ptr<TextureImage> terrainImage_;
     std::shared_ptr<TextureImage> forestImage_;

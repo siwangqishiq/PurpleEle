@@ -22,13 +22,12 @@ void NinjiaGame::init(){
     appContext->isShowFps = true;
     
     //
+    gameInit();
 
     if(isInited){
         return;
     }
     isInited = true;
-
-    gameInit();
 }
 
 void NinjiaGame::gameInit(){
@@ -49,11 +48,11 @@ void NinjiaGame::gameInit(){
     AudioManager::getInstance()->loadAudio("audio/hit.mp3",AUDIO_HIT);
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
 
-    gameState_ = Splash;
+    gameState_ = Running;
 }
 
 void NinjiaGame::gameStartPrepare(){
-    AudioManager::getInstance()->playAudio(AUDIO_BGM);
+    // AudioManager::getInstance()->playAudio(AUDIO_BGM);
 }
 
 void NinjiaGame::buildViews(){
