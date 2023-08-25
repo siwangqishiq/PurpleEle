@@ -49,6 +49,7 @@ void NinjiaGame::gameInit(){
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
 
     gameState_ = Running;
+    gameState_ = Splash;
 }
 
 void NinjiaGame::gameStartPrepare(){
@@ -65,6 +66,7 @@ void NinjiaGame::tick(){
         renderSplash();
         break;
         case Running:
+        runningUpdate();
         renderRunning();
         break;
     }//end switch
@@ -98,12 +100,16 @@ bool NinjiaGame::onEventAction(int action , float x , float y){
                 gameState_ = Running;
                 splashIsPressed = false;
                 gameStartPrepare();
-            } , 3000);
+            } , 1500);
         }
         break;
     }//end switch
 
     return false;
+}
+
+void NinjiaGame::runningUpdate(){
+    player_->update();
 }
 
 void NinjiaGame::renderRunning(){

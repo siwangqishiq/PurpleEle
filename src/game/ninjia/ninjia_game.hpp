@@ -45,6 +45,7 @@ public:
 
     void renderSplash();
 
+    void runningUpdate();
     void renderRunning();
 
     const std::string AUDIO_HIT = "hit";
