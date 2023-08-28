@@ -63,7 +63,7 @@ public:
     std::shared_ptr<NinjiaPlayer> player_;
 private:
     Application *appContext;
-
+    
     std::shared_ptr<TextureImage> splashImage_;
     float splashDeltaTime_ = 0.0f;
     float splashTextAlpha_ = 1.0f;

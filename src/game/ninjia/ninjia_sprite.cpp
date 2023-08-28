@@ -7,10 +7,24 @@
 #include "render/texture.hpp"
 
 void Camera::init(){
-    
+    cameraViewWidth_ = gameContext_->viewWidth_;
+    cameraViewHeight_ = gameContext_->viewHeight_;
+
+    cameraTop_ = cameraViewHeight_;
+    camerLeft_ = 0.0f;
 }
 
 void Camera::update(){
+    float leftLimit = cameraViewWidth_ / 2.0f;
+    auto playerRect = gameContext_->player_->getPlayerRect();
+    float playerX = playerRect.left;
+
+    //update the camera position
+    if(playerX <= leftLimit){
+        camerLeft_ = 0.0f;
+    }else{
+        camerLeft_ = playerX - leftLimit;
+    }
 
 }
 
@@ -42,6 +56,8 @@ void NinjiaPlayer::update(){
         velocityX_ = 20.0f;
     }
 
+    frameLimit = velocityX_ <= 10.0f?2:4;
+    
     playerRect_.left += velocityX_ * deltaTime;
     playerRect_.top += velocityY_ * deltaTime;
 
@@ -70,7 +86,7 @@ void NinjiaPlayer::update(){
         break;
     case Run:
         runWaitFrame_++;
-        if(runWaitFrame_ >= FrameLimit){
+        if(runWaitFrame_ >= frameLimit){
             runIndex_ = (runIndex_+ 1) % RunImageCount;
             runWaitFrame_ = 0;
         }
@@ -79,6 +95,38 @@ void NinjiaPlayer::update(){
         break;
     }//end switch
     
+}
+
+void NinjiaPlayer::renderByCamera(Camera &camera){
+    Rect dstRect = playerRect_;
+    float limitX = gameContext_->viewWidth_ / 2.0f;
+    if(dstRect.getRight() >= limitX){
+        dstRect.left = limitX - dstRect.width;
+    }
+
+    if(playerState_ == Falling){
+        auto batch = gameContext_->renderEngine_->getSpriteBatch();
+        batch->begin();
+        auto srcRect = ninjiaIdleImage_->getRect();
+        batch->renderImage(ninjiaIdleImage_ , srcRect, dstRect);
+        batch->end();
+    } else if(playerState_ == WaitRun){
+        auto batch = gameContext_->renderEngine_->getSpriteBatch();
+        batch->begin();
+        auto srcRect = ninjiaIdleImage_->getRect();
+        batch->renderImage(ninjiaIdleImage_ , srcRect, dstRect);
+        batch->end();
+    }else if(playerState_ == Run){
+        auto batch = gameContext_->renderEngine_->getSpriteBatch();
+        batch->begin();
+        auto srcRect = ninjiaRunImage_->getRect();
+
+        float runImageWidth = static_cast<float>(ninjiaRunImage_->getWidth()) / RunImageCount;
+        srcRect.left = runImageWidth * runIndex_;
+        srcRect.width = runImageWidth;
+        batch->renderImage(ninjiaRunImage_ , srcRect, dstRect);
+        batch->end();
+    }
 }
 
 void NinjiaPlayer::render(){

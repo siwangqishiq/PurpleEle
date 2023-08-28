@@ -12,6 +12,11 @@ public:
     void init();
 
     void update();
+
+    float camerLeft_;
+    float cameraTop_;
+    float cameraViewWidth_;
+    float cameraViewHeight_;
 };
 
 
@@ -35,7 +40,14 @@ public:
 
     void render();
 
+    //render this player from camera view
+    void renderByCamera(Camera &camera);
+
     void dispose();
+
+    Rect getPlayerRect(){
+        return playerRect_;
+    }
 private:
     Rect playerRect_;
 
@@ -44,7 +56,7 @@ private:
 
     float velocityX_ = 0.0f;
     float velocityY_ = 0.0f;
-
+    
     float accleX_ = 0.0f;
     float accleY_ = 0.0f;
 
@@ -52,7 +64,7 @@ private:
     float playerTextureHeight_ = 128.0f;
 
     const int RunImageCount = 6;
-    const int FrameLimit = 4;
+    int frameLimit = 4;
     int runIndex_;
     int runWaitFrame_;//控制帧动画速率
 

@@ -47,6 +47,65 @@ void Terrain::init(){
 
     forestBgHeight_ = ratio * static_cast<float>(forestImage_->getHeight());
     forestTop_ = terrainHeight_ + forestBgHeight_ - 4.0f;
+
+    firstTileX_ = 0.0f;
+    secondTileX_ = gameContext_->viewWidth_;
+
+    lastPlayerPosX_ = gameContext_->player_->getPlayerRect().left;
+}
+
+void Terrain::update(){
+    float deltaX = gameContext_->player_->getPlayerRect().left - lastPlayerPosX_;
+    
+    firstTileX_ += -deltaX;
+    if(firstTileX_ < -gameContext_->camera_->cameraViewWidth_){
+        firstTileX_ = 0.0f;
+    }
+
+    secondTileX_ = firstTileX_ + gameContext_->camera_->cameraViewWidth_;
+
+    lastPlayerPosX_ = gameContext_->player_->getPlayerRect().left;
+}
+
+void Terrain::renderByCamera(Camera &cam){
+    auto batch = gameContext_->renderEngine_->getSpriteBatch();
+
+    Rect firstForestDstRect;
+    firstForestDstRect.left = firstTileX_;
+    firstForestDstRect.top = forestTop_;
+    firstForestDstRect.width = gameContext_->viewWidth_;
+    firstForestDstRect.height = forestBgHeight_;
+
+    Rect secondForestDstRect;
+    secondForestDstRect.left = secondTileX_;
+    secondForestDstRect.top = forestTop_;
+    secondForestDstRect.width = gameContext_->viewWidth_;
+    secondForestDstRect.height = forestBgHeight_;
+
+    batch->begin();
+    auto forestRect = forestImage_->getRect();
+    // forestRect.width = forestRect.height * ((forestDstRect.width / forestDstRect.height));
+    batch->renderImage(forestImage_ , forestRect, firstForestDstRect);
+    batch->renderImage(forestImage_ , forestRect, secondForestDstRect);
+    batch->end();
+
+    Rect firstTerrainDstRect;
+    firstTerrainDstRect.left = firstTileX_;
+    firstTerrainDstRect.top = terrainHeight_;
+    firstTerrainDstRect.width = gameContext_->viewWidth_;
+    firstTerrainDstRect.height = terrainHeight_;
+
+    Rect secondTerrainDstRect;
+    secondTerrainDstRect.left = secondTileX_;
+    secondTerrainDstRect.top = terrainHeight_;
+    secondTerrainDstRect.width = gameContext_->viewWidth_;
+    secondTerrainDstRect.height = terrainHeight_;
+    // srcRect.width = srcRect.height *(terrainDstRect.width / terrainDstRect.height);
+    batch->begin();
+    Rect srcRect = terrainImage_->getRect();
+    batch->renderImage(terrainImage_ , srcRect , firstTerrainDstRect);
+    batch->renderImage(terrainImage_ , srcRect , secondTerrainDstRect);
+    batch->end();
 }
 
 void Terrain::render(){

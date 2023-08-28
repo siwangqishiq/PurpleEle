@@ -22,6 +22,10 @@ public:
     }
 
     void init();
+
+    void update();
+
+    void renderByCamera(Camera &cam);
     
     void render();
 
@@ -31,7 +35,13 @@ public:
     float forestBgHeight_;
     float forestTop_;
 
+    float firstTileX_;
+    float secondTileX_;
+
+    float lastPlayerPosX_ = 0.0f;
 private:
     std::shared_ptr<TextureImage> terrainImage_;
     std::shared_ptr<TextureImage> forestImage_;
+
+    float posX_ = 0.0f;
 };
