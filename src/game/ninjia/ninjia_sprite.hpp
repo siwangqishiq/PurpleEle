@@ -27,6 +27,10 @@ enum NinjaPlayerState{
     Dead
 };
 
+
+const float NINJA_MAX_VELOCITY = 12.0f;
+const float GRAVITY = -0.5f;
+
 class NinjiaPlayer : public GameBaseObject {
 public:
     NinjiaPlayer(NinjiaGame *game): GameBaseObject(game){
@@ -43,6 +47,8 @@ public:
     //render this player from camera view
     void renderByCamera(Camera &camera);
 
+    bool jump();
+
     void dispose();
 
     Rect getPlayerRect(){
@@ -56,7 +62,7 @@ private:
 
     float velocityX_ = 0.0f;
     float velocityY_ = 0.0f;
-    
+
     float accleX_ = 0.0f;
     float accleY_ = 0.0f;
 
@@ -70,4 +76,6 @@ private:
 
     std::shared_ptr<TextureImage> ninjiaIdleImage_;
     std::shared_ptr<TextureImage> ninjiaRunImage_;
+
+    bool isJumping = false;
 };

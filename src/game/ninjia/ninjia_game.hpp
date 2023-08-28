@@ -25,7 +25,7 @@ public:
         appContext = app;
     }
 
-    GameState gameState_ = Splash;
+    GameState gameState_;
 
     bool isInited = false;
     
@@ -49,7 +49,7 @@ public:
     void renderRunning();
 
     const std::string AUDIO_HIT = "hit";
-
+    const std::string AUDIO_JUMP = "jump";
     const std::string AUDIO_BGM = "bgm";
 
     int viewWidth_;
@@ -63,7 +63,7 @@ public:
     std::shared_ptr<NinjiaPlayer> player_;
 private:
     Application *appContext;
-    
+
     std::shared_ptr<TextureImage> splashImage_;
     float splashDeltaTime_ = 0.0f;
     float splashTextAlpha_ = 1.0f;

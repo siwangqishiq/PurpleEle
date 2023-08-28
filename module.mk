@@ -135,3 +135,10 @@ ${BUILD_DIR}/ninjia_background.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
 # ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \
 # 				${SRC_DIR}/audio/audio_impl.hpp
 # 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio_impl.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_impl.o 
+
+
+clean_game:
+	rm -f ${BUILD_DIR}/ninjia_sprite.o 
+	rm -f ${BUILD_DIR}/ninjia_background.o 
+	rm -f ${BUILD_DIR}/ninjia_game.o 
+	rm -f ${BUILD_DIR}/main.exe

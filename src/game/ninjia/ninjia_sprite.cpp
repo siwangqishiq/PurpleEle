@@ -44,7 +44,7 @@ void NinjiaPlayer::init(){
 
     baseLine_ = gameContext_->terrain_->terrainHeight_ + playerRect_.height;
 
-    accleY_ = -0.5f;
+    accleY_ = GRAVITY;
 }
 
 void NinjiaPlayer::update(){
@@ -52,24 +52,26 @@ void NinjiaPlayer::update(){
     velocityX_ += accleX_ * deltaTime;
     velocityY_ += accleY_ * deltaTime;
 
-    if(velocityX_ > 20.0f){
-        velocityX_ = 20.0f;
+    if(velocityX_ > NINJA_MAX_VELOCITY){
+        velocityX_ = NINJA_MAX_VELOCITY;
     }
 
     frameLimit = velocityX_ <= 10.0f?2:4;
-    
+
     playerRect_.left += velocityX_ * deltaTime;
     playerRect_.top += velocityY_ * deltaTime;
+
+    std::cout << "  vy = " << velocityY_ << " pos " << playerRect_.top << std::endl;
 
     //logic update
     switch (playerState_){
     case Falling:
-        if(playerRect_.getBottom() <= baseLine_){
+        if(playerRect_.top <= gameContext_->terrain_->terrainHeight_ + playerRect_.height){
             playerRect_.top = gameContext_->terrain_->terrainHeight_ + playerRect_.height;
             playerState_ = WaitRun;
             accleX_ = 0.0f;
-
             accleY_ = 0.0f;
+
             velocityY_ = 0.0f;
         }
         break;
@@ -77,18 +79,34 @@ void NinjiaPlayer::update(){
         waitRunTime_ += deltaTime;
         if(waitRunTime_ > 20.0f){
             playerState_ = Run;
-            accleY_ = 0.0f;
-            velocityY_ = 0.0f;
+            
             accleX_ = 0.04f;
+            accleY_ = 0.0f;
+
+            velocityY_ = 0.0f;
 
             runIndex_ = 0;
         }
         break;
     case Run:
-        runWaitFrame_++;
-        if(runWaitFrame_ >= frameLimit){
-            runIndex_ = (runIndex_+ 1) % RunImageCount;
-            runWaitFrame_ = 0;
+        std::cout << "runIndex_ = " << runIndex_<<std::endl;
+        if(!isJumping){
+            runWaitFrame_++;
+            if(runWaitFrame_ >= frameLimit){
+                runIndex_ = (runIndex_+ 1) % RunImageCount;
+                runWaitFrame_ = 0;
+            }
+        }else{
+            runIndex_ = 0;
+        }
+
+        if(playerRect_.top <= gameContext_->terrain_->terrainHeight_ + playerRect_.height){
+            // std::cout <<playerRect_.getBottom() << "  baseline " << baseLine_
+            //     << " playerRect_.getBottom() <= baseLine_ " << std::endl;
+            playerRect_.top = gameContext_->terrain_->terrainHeight_ + playerRect_.height;
+            accleY_ = 0.0f;
+            velocityY_ = 0.0f;
+            isJumping = false;
         }
         break;
     default:
@@ -127,6 +145,21 @@ void NinjiaPlayer::renderByCamera(Camera &camera){
         batch->renderImage(ninjiaRunImage_ , srcRect, dstRect);
         batch->end();
     }
+}
+
+bool NinjiaPlayer::jump(){
+    if(isJumping){
+        return false;
+    }
+
+    //I = m * v;
+    accleY_ = GRAVITY;
+    velocityY_ = 12.0f;
+    // playerRect_.top += velocityY_;
+
+    Logi("ninjia" , "ninja jump!");
+    isJumping = true;
+    return true;
 }
 
 void NinjiaPlayer::render(){

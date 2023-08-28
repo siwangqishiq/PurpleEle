@@ -40,20 +40,22 @@ void NinjiaGame::gameInit(){
     camera_->init();
     skybg_->init();
     terrain_->init();
+    
     player_->init();
-
+  
     splashImage_ = BuildImageByAsset("sprite/splash.png");
     splashIsPressed = false;
     splashDeltaTime_ = 0.0f;
     AudioManager::getInstance()->loadAudio("audio/hit.mp3",AUDIO_HIT);
+    AudioManager::getInstance()->loadAudio("audio/jump.wav",AUDIO_JUMP);
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
 
-    gameState_ = Running;
-    // gameState_ = Splash;
+    // gameState_ = Running;
+    gameState_ = Splash;
 }
 
 void NinjiaGame::gameStartPrepare(){
-    // AudioManager::getInstance()->playAudio(AUDIO_BGM);
+    AudioManager::getInstance()->playAudio(AUDIO_BGM);
 }
 
 void NinjiaGame::buildViews(){
@@ -101,6 +103,16 @@ bool NinjiaGame::onEventAction(int action , float x , float y){
                 splashIsPressed = false;
                 gameStartPrepare();
             } , 1500);
+        }
+        break;
+        case Running:
+        if(action == ACTION_DOWN){
+            if(player_ != nullptr){
+                auto success = player_->jump();
+                if(success){
+                    AudioManager::getInstance()->playAudio(AUDIO_JUMP);
+                }
+            }
         }
         break;
     }//end switch

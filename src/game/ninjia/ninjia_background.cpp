@@ -106,6 +106,8 @@ void Terrain::renderByCamera(Camera &cam){
     batch->renderImage(terrainImage_ , srcRect , firstTerrainDstRect);
     batch->renderImage(terrainImage_ , srcRect , secondTerrainDstRect);
     batch->end();
+
+    std::cout << "terrainHeight_ : " << terrainHeight_ << std::endl;
 }
 
 void Terrain::render(){
@@ -134,6 +136,8 @@ void Terrain::render(){
     batch->begin();
     batch->renderImage(terrainImage_ , srcRect , terrainDstRect);
     batch->end();
+
+    // std::cout << "terrainHeight_ : " << terrainHeight_ << std::endl;
 }
 
 void Terrain::dispose(){
