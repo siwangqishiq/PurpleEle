@@ -76,6 +76,15 @@ void Terrain::init(){
     secondTileX_ = gameContext_->viewWidth_;
 
     lastPlayerPosX_ = 0.0f;
+
+    storesImage_ = BuildImageByAsset("sprite/stones.png");
+
+    storeImageList_.push_back(storesImage_->createImageRegion(0 , storesImage_->getHeight() , 53.0f , 78.0f));
+    storeImageList_.push_back(storesImage_->createImageRegion(55.0f , storesImage_->getHeight() , 62.0f , 50.0f));
+    storeImageList_.push_back(storesImage_->createImageRegion(120.0f , storesImage_->getHeight() , 43.0f , 47.0f));
+    storeImageList_.push_back(storesImage_->createImageRegion(163.0f , storesImage_->getHeight() , 46.0f , 42.0f));
+    storeImageList_.push_back(storesImage_->createImageRegion(214.0f , storesImage_->getHeight() , 42.0f , 48.0f));
+    storeImageList_.push_back(storesImage_->createImageRegion(260.0f , storesImage_->getHeight() , 50.0f , 90.0f));
 }
 
 void Terrain::update(){
@@ -135,6 +144,21 @@ void Terrain::renderByCamera(Camera &cam){
     //      << "  firstForestDstRect.width : " << firstForestDstRect.width
     //      << " firstForestDstRect.left " << firstForestDstRect.left
     //      << "  firstTileX_ " << firstTileX_ <<  std::endl;
+
+
+    //for test
+    batch->begin();
+    Rect rect;
+    rect.left = 0.0f;
+    rect.top = terrainHeight_;
+    rect.width = 128.0f;
+    rect.height = terrainHeight_;
+
+    for(auto img : storeImageList_){
+        batch->renderRegionImage(*img , rect);
+        rect.left += rect.width + 20.0f;
+    }
+    batch->end();
 }
 
 void Terrain::render(){

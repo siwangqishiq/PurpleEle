@@ -1,6 +1,7 @@
 #pragma once
 
 class TextureImage;
+class TextureImageRegion;
 
 class SkyBackground : public GameBaseObject{
 public:
@@ -19,7 +20,7 @@ public:
 private:
     std::shared_ptr<TextureImage> skyBackgroundImage_;
     float offset_;
-    
+
     const float SCROLL_SPEED_RATIO = 0.1f;
 };
 
@@ -49,6 +50,9 @@ public:
 private:
     std::shared_ptr<TextureImage> terrainImage_;
     std::shared_ptr<TextureImage> forestImage_;
+    std::shared_ptr<TextureImage> storesImage_;
+
+    std::vector<std::shared_ptr<TextureImageRegion>> storeImageList_;
 
     float posX_ = 0.0f;
 };

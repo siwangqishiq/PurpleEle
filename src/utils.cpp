@@ -1,6 +1,7 @@
 #include "glm/vec4.hpp"
 #include "utils.hpp"
 
+
 std::string& StringTrim(std::string &s, std::string suffix){
     if (s.empty()) 
         return s;
@@ -43,4 +44,15 @@ std::string FindDirectoryPath(std::string path){
 
 glm::vec4 ConvertColor(int red , int green , int blue , int alpha){
     return glm::vec4(red / 255.0f , green / 255.0f , blue / 255.0f , alpha / 255.0f);
+}
+
+// check two rectangle is intersect
+bool CheckRectIntersect(Rect &rectA , Rect &rectB){
+    bool xOverlap = ValueInRange(rectA.left, rectB.left, rectB.left + rectB.width) ||
+                    ValueInRange(rectB.left, rectA.left, rectA.left + rectA.width);
+    
+    bool yOverlap = ValueInRange(rectA.top, rectB.top - rectB.width, rectB.top) ||
+                    ValueInRange(rectB.top, rectA.top - rectA.width, rectA.top);
+
+    return xOverlap && yOverlap;
 }

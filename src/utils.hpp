@@ -5,6 +5,7 @@
 #include <random>
 #include <chrono>
 #include "glm/vec4.hpp"
+#include "render/common.hpp"
 
 const double PI = 3.141592653589793238463;
 
@@ -46,5 +47,12 @@ inline int GenRandomInt(int min , int max){
     std::uniform_int_distribution<int> ud(min , max);
     return ud(rndEngine);
 }
+
+inline bool ValueInRange(float value, float min, float max){
+    return (value >= min) && (value <= max);
+}
+
+// check two rectangle is intersect
+bool CheckRectIntersect(Rect &rectA , Rect &rectB);
 
 

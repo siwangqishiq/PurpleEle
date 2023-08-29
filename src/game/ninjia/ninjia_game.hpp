@@ -48,7 +48,7 @@ public:
     void runningUpdate();
     void renderRunning();
     
-    void renderNinjaDistanceMud();
+    void renderNinjaDistanceHud();
 
     const std::string AUDIO_HIT = "hit";
     const std::string AUDIO_JUMP = "jump";
@@ -71,5 +71,5 @@ private:
     float splashTextAlpha_ = 1.0f;
     bool splashIsPressed = false;
 
-    TextPaint distanceMudTextPaint;
+    TextPaint distanceHudTextPaint;
 };
