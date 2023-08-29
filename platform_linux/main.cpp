@@ -14,6 +14,8 @@ static bool MouseActionDown = false;
 static int mouseX = 0;
 static int mouseY = 0;
 
+static bool isFullScreen = true;
+
 int main(int argc , char *argv[]){
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -22,6 +24,8 @@ int main(int argc , char *argv[]){
     
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    GLFWmonitor *mointor = isFullScreen?glfwGetPrimaryMonitor():nullptr;
+
     //todo create instance
     std::shared_ptr<LinuxApplication> app = std::make_shared<LinuxApplication>();
 
@@ -29,7 +33,7 @@ int main(int argc , char *argv[]){
     GLFWwindow* window = glfwCreateWindow(
                             app->viewWidth_, 
                             app->viewHeight_, 
-                            "run", nullptr, nullptr);
+                            "run", mointor, nullptr);
     // char *buf;
     // glfwGetError((const char **)&buf);
     // std::cout << buf << std::endl;
@@ -73,6 +77,13 @@ int main(int argc , char *argv[]){
             app->onEventAction(ACTION_MOVE , mouseX , mouseY);
         }
         // std::cout << "pos: " << mouseX << "  " << mouseY << std::endl;
+    });
+
+    glfwSetKeyCallback(window , [](GLFWwindow* windows_,int key,int scancode,int action,int mods){
+        // std::cout << "key " << key << "  scancode " << scancode << " action " << action << std::endl;
+        if(glfwGetKey(windows_, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(windows_, true);
+        }
     });
 
     // glad: load all OpenGL function pointers
