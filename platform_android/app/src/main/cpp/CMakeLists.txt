@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
-project("textrender")
+project("purple")
 
 set(DIR "../../../../..") #工程目录
 set(SRC_DIR "../../../../../src")  #源码
@@ -25,7 +25,7 @@ file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
 #        )
 
 add_library( # Sets the name of the library.
-        textrender
+        purple
         SHARED
         libapp.cpp
         ${SRC_DIR}/application.cpp
@@ -60,7 +60,7 @@ set(opengl_lib GLESv3)
 find_library(log_lib log)
 
 target_link_libraries( # Specifies the target library.
-        textrender
+        purple
         ${log_lib}
         ${opengl_lib}
         android

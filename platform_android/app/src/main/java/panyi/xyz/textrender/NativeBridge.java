@@ -5,7 +5,7 @@ import android.content.res.AssetManager;
 public final class NativeBridge {
     // Used to load the 'textrender' library on application startup.
     static {
-        System.loadLibrary("textrender");
+        System.loadLibrary("purple");
     }
 
     public static native void init();
