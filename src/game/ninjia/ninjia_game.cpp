@@ -124,13 +124,14 @@ void NinjiaGame::runningUpdate(){
     player_->update();
     camera_->update();
 
+    skybg_->update();
     terrain_->update();
 }
 
 void NinjiaGame::renderRunning(){
     auto camera = *camera_;
 
-    skybg_->render();// sky background render
+    skybg_->renderByCamera(camera);// sky background render
     terrain_->renderByCamera(camera);
     player_->renderByCamera(camera);
 }

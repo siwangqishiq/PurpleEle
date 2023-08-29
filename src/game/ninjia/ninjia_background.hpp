@@ -9,11 +9,18 @@ public:
 
     void init();
 
+    void update();
+
     void render();
+
+    void renderByCamera(Camera &cam);
 
     void dispose();
 private:
     std::shared_ptr<TextureImage> skyBackgroundImage_;
+    float offset_;
+    
+    const float SCROLL_SPEED_RATIO = 0.1f;
 };
 
 class Terrain : public GameBaseObject{

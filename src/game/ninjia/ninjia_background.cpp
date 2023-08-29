@@ -8,17 +8,41 @@
 
 void SkyBackground::init(){
     skyBackgroundImage_ = BuildImageByAsset("sprite/sky_bg.png");
+    offset_ = 0.0f;
+}
+
+void SkyBackground::update(){
+    //do nothing
+}
+
+void SkyBackground::renderByCamera(Camera &cam){
+    float skyBgRealOffset = SCROLL_SPEED_RATIO * gameContext_->player_->getPlayerRect().left;
+    int num = static_cast<int>(skyBgRealOffset) / static_cast<int>(gameContext_->viewWidth_);
+    offset_ = skyBgRealOffset - num * gameContext_->viewWidth_;
+
+    Rect dstRect;
+    dstRect.top = gameContext_->viewHeight_;
+    dstRect.width = 2.0f * gameContext_->viewWidth_;
+    dstRect.height = gameContext_->viewHeight_;
+    dstRect.left = -offset_;
+
+    Rect srcRect = skyBackgroundImage_->getRect();
+
+    auto batch = gameContext_->renderEngine_->getSpriteBatch();
+    batch->begin();
+    batch->renderImage(skyBackgroundImage_ , srcRect , dstRect);
+    batch->end();
 }
 
 void SkyBackground::render(){
     Rect screenRect;
     screenRect.left = 0.0f;
     screenRect.top = gameContext_->viewHeight_;
-    screenRect.width = gameContext_->viewWidth_;
+    screenRect.width = 2.0f * gameContext_->viewWidth_;
     screenRect.height = gameContext_->viewHeight_;
 
     Rect srcRect = skyBackgroundImage_->getRect();
-    srcRect.width = srcRect.width / 2.0f;
+    // srcRect.width = srcRect.width / 2.0f;
 
     auto batch = gameContext_->renderEngine_->getSpriteBatch();
     batch->begin();
@@ -56,7 +80,7 @@ void Terrain::init(){
 
 void Terrain::update(){
     float deltaX = gameContext_->player_->getPlayerRect().left - lastPlayerPosX_;
-    
+
     firstTileX_ += -deltaX;
     if(firstTileX_ < -gameContext_->camera_->cameraViewWidth_){
         firstTileX_ = 0.0f;
@@ -106,7 +130,7 @@ void Terrain::renderByCamera(Camera &cam){
     batch->renderImage(terrainImage_ , srcRect , firstTerrainDstRect);
     batch->renderImage(terrainImage_ , srcRect , secondTerrainDstRect);
     batch->end();
-    
+
     //  std::cout << "forestBgHeight_ : " << forestBgHeight_
     //      << "  firstForestDstRect.width : " << firstForestDstRect.width
     //      << " firstForestDstRect.left " << firstForestDstRect.left
