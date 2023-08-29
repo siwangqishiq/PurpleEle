@@ -31,6 +31,8 @@ void Camera::update(){
 void NinjiaPlayer::init(){
     playerState_ = NinjaPlayerState::Falling;
 
+    runWaitFrame_ = 0;
+
     ninjiaIdleImage_ = BuildImageByAsset("sprite/ninjia_idle.png");
     ninjiaRunImage_ = BuildImageByAsset("sprite/ninjia_run.png");
 
@@ -45,6 +47,10 @@ void NinjiaPlayer::init(){
     baseLine_ = gameContext_->terrain_->terrainHeight_ + playerRect_.height;
 
     accleY_ = GRAVITY;
+    
+    jumpMaxVelocity_ = glm::sqrt(2.0f * glm::abs(GRAVITY) * (gameContext_->viewHeight_ / 4.0f));
+
+    ninjiaMaxVelocity_ = jumpMaxVelocity_;
 }
 
 void NinjiaPlayer::update(){
@@ -52,16 +58,16 @@ void NinjiaPlayer::update(){
     velocityX_ += accleX_ * deltaTime;
     velocityY_ += accleY_ * deltaTime;
 
-    if(velocityX_ > NINJA_MAX_VELOCITY){
-        velocityX_ = NINJA_MAX_VELOCITY;
+    if(velocityX_ > ninjiaMaxVelocity_){
+        velocityX_ = ninjiaMaxVelocity_;
     }
 
-    frameLimit = velocityX_ <= 10.0f?2:4;
+    frameLimit = velocityX_ <= 10.0f?4:2;
 
     playerRect_.left += velocityX_ * deltaTime;
     playerRect_.top += velocityY_ * deltaTime;
 
-    std::cout << "  vy = " << velocityY_ << " pos " << playerRect_.top << std::endl;
+    // std::cout << "  vy = " << velocityY_ << " pos " << playerRect_.top << std::endl;
 
     //logic update
     switch (playerState_){
@@ -89,10 +95,12 @@ void NinjiaPlayer::update(){
         }
         break;
     case Run:
-        std::cout << "runIndex_ = " << runIndex_<<std::endl;
+        // std::cout << "runIndex_ = " << runIndex_<<std::endl;
         if(!isJumping){
             runWaitFrame_++;
+            // std::cout << "runWaitFrame_ = " << runWaitFrame_<<std::endl;
             if(runWaitFrame_ >= frameLimit){
+                // std::cout << "runIndex_++ = " << runIndex_<<std::endl;
                 runIndex_ = (runIndex_+ 1) % RunImageCount;
                 runWaitFrame_ = 0;
             }
@@ -154,7 +162,7 @@ bool NinjiaPlayer::jump(){
 
     //I = m * v;
     accleY_ = GRAVITY;
-    velocityY_ = 12.0f;
+    velocityY_ = jumpMaxVelocity_;
     // playerRect_.top += velocityY_;
 
     Logi("ninjia" , "ninja jump!");

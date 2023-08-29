@@ -68,4 +68,5 @@ private:
     float splashDeltaTime_ = 0.0f;
     float splashTextAlpha_ = 1.0f;
     bool splashIsPressed = false;
+
 };

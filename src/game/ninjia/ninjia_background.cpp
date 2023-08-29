@@ -51,7 +51,7 @@ void Terrain::init(){
     firstTileX_ = 0.0f;
     secondTileX_ = gameContext_->viewWidth_;
 
-    lastPlayerPosX_ = gameContext_->player_->getPlayerRect().left;
+    lastPlayerPosX_ = 0.0f;
 }
 
 void Terrain::update(){
@@ -106,8 +106,11 @@ void Terrain::renderByCamera(Camera &cam){
     batch->renderImage(terrainImage_ , srcRect , firstTerrainDstRect);
     batch->renderImage(terrainImage_ , srcRect , secondTerrainDstRect);
     batch->end();
-
-    std::cout << "terrainHeight_ : " << terrainHeight_ << std::endl;
+    
+    //  std::cout << "forestBgHeight_ : " << forestBgHeight_
+    //      << "  firstForestDstRect.width : " << firstForestDstRect.width
+    //      << " firstForestDstRect.left " << firstForestDstRect.left
+    //      << "  firstTileX_ " << firstTileX_ <<  std::endl;
 }
 
 void Terrain::render(){

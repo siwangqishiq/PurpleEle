@@ -109,7 +109,7 @@ void Application::onInit(){
     timeStamp_ = currentTimeMicro();
 
     createRootView();
-
+    
     onCreate();
 }
 

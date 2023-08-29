@@ -50,7 +50,7 @@ void ShapeBatch::init(){
     glVertexAttribPointer(3 , 4 , GL_FLOAT , GL_FALSE , attrCountPerVertex_ * sizeof(float) ,
                           reinterpret_cast<void *>(vboOffset_ + (3 + 4 + 4)* sizeof(float)));
     glBindVertexArray(0);
-
+    
     shader_ = ShaderManager::getInstance()->loadAssetShader("shape_batch_render",
                     "shader/shape_batch_vertex.glsl", "shader/shape_batch_frag.glsl");
 }
@@ -371,6 +371,8 @@ void SpriteBatch::executeGlCommands(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
+    glEnable(GL_DEPTH_TEST);
+
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
                     index_ * sizeof(float) , vertexBuffer_.data());
@@ -438,6 +440,8 @@ void SpriteBatch::updateVertexData(float texWidth , float texHeight ,
         float rotateOriginX , float rotateOriginY ,
         float rotateAngle){
     float depth = renderEngine_->getAndChangeDepthValue();
+
+    // std::cout << "depth value = " << depth << std::endl;
 
     //v1
     putVertexAttribute(0 , 

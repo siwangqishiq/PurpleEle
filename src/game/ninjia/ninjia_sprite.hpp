@@ -28,8 +28,8 @@ enum NinjaPlayerState{
 };
 
 
-const float NINJA_MAX_VELOCITY = 12.0f;
-const float GRAVITY = -0.5f;
+// const float NINJA_MAX_VELOCITY = 12.0f;
+const float GRAVITY = -0.7f;
 
 class NinjiaPlayer : public GameBaseObject {
 public:
@@ -72,10 +72,13 @@ private:
     const int RunImageCount = 6;
     int frameLimit = 4;
     int runIndex_;
-    int runWaitFrame_;//控制帧动画速率
+    int runWaitFrame_ = 0;//控制帧动画速率
 
     std::shared_ptr<TextureImage> ninjiaIdleImage_;
     std::shared_ptr<TextureImage> ninjiaRunImage_;
 
     bool isJumping = false;
+
+    float jumpMaxVelocity_;
+    float ninjiaMaxVelocity_ = 12.0f;
 };

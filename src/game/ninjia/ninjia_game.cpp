@@ -50,8 +50,8 @@ void NinjiaGame::gameInit(){
     AudioManager::getInstance()->loadAudio("audio/jump.wav",AUDIO_JUMP);
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
 
-    // gameState_ = Running;
-    gameState_ = Splash;
+    gameState_ = Running;
+    // gameState_ = Splash;
 }
 
 void NinjiaGame::gameStartPrepare(){
@@ -132,7 +132,6 @@ void NinjiaGame::renderRunning(){
 
     skybg_->render();// sky background render
     terrain_->renderByCamera(camera);
-    // player_->render();
     player_->renderByCamera(camera);
 }
 

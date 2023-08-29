@@ -62,12 +62,13 @@ void RenderEngine::init(){
     // Logi(TAG , "render engine init end");
     
     loadShapeShader();
-    
     shapeBatch_ = std::make_shared<ShapeBatch>(this);//std::shared_ptr<RenderEngine>(this)
     shapeBatch_->init();
 
     spriteBatch_ = std::make_shared<SpriteBatch>(this);
     spriteBatch_->init();
+
+    clearRenderCommands();
 }
 
 void RenderEngine::loadTextRenderResource(){
@@ -353,7 +354,7 @@ std::shared_ptr<SpriteBatch> RenderEngine::getSpriteBatch(){
 
 float RenderEngine::getAndChangeDepthValue(){
     float result = depthValue;
-    depthValue -= 0.0001f;
+    depthValue -= 0.001f;
     return result;    
 }
 
