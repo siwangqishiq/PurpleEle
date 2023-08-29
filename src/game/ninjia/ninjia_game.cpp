@@ -37,6 +37,9 @@ void NinjiaGame::gameInit(){
     terrain_ = std::make_shared<Terrain>(this);
     player_ = std::make_shared<NinjiaPlayer>(this);
 
+    distanceMudTextPaint.textColor = ConvertColor(33,150,243,255);
+    distanceMudTextPaint.textGravity = TopLeft;
+
     camera_->init();
     skybg_->init();
     terrain_->init();
@@ -134,6 +137,25 @@ void NinjiaGame::renderRunning(){
     skybg_->renderByCamera(camera);// sky background render
     terrain_->renderByCamera(camera);
     player_->renderByCamera(camera);
+
+    renderNinjaDistanceMud();
+}
+
+void NinjiaGame::renderNinjaDistanceMud(){
+    Rect outputRect;
+    outputRect.left = 10.0f;
+    outputRect.top = viewHeight_ - 10.0f;
+    outputRect.width = viewWidth_ / 2.0f;
+    outputRect.height = viewHeight_ / 5.0f;
+
+    distanceMudTextPaint.setTextSize(outputRect.height * 0.45f);
+
+    int distance = static_cast<int>(player_->getPlayerRect().left / 100.0f);
+    std::wstring str = L"路程 ";
+    str += std::to_wstring(distance);
+    str += L"米";
+    
+    renderEngine_->renderTextWithRect(str , outputRect , distanceMudTextPaint , nullptr);
 }
 
 void NinjiaGame::renderSplash(){
