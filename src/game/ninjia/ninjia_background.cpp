@@ -92,6 +92,7 @@ void Terrain::update(){
 
     firstTileX_ += -deltaX;
     if(firstTileX_ < -gameContext_->camera_->cameraViewWidth_){
+        showForest = !showForest;
         firstTileX_ = 0.0f;
     }
 
@@ -118,8 +119,8 @@ void Terrain::renderByCamera(Camera &cam){
     batch->begin();
     auto forestRect = forestImage_->getRect();
     // forestRect.width = forestRect.height * ((forestDstRect.width / forestDstRect.height));
-    batch->renderImage(forestImage_ , forestRect, firstForestDstRect);
-    batch->renderImage(forestImage_ , forestRect, secondForestDstRect);
+    // batch->renderImage(forestImage_ , forestRect, firstForestDstRect);
+    // batch->renderImage(forestImage_ , forestRect, secondForestDstRect);
     batch->end();
 
     Rect firstTerrainDstRect;
@@ -147,18 +148,18 @@ void Terrain::renderByCamera(Camera &cam){
 
 
     //for test
-    batch->begin();
-    Rect rect;
-    rect.left = 0.0f;
-    rect.top = terrainHeight_;
-    rect.width = 128.0f;
-    rect.height = terrainHeight_;
+    // batch->begin();
+    // Rect rect;
+    // rect.left = 0.0f;
+    // rect.top = terrainHeight_;
+    // rect.width = 128.0f;
+    // rect.height = terrainHeight_;
 
-    for(auto img : storeImageList_){
-        batch->renderRegionImage(*img , rect);
-        rect.left += rect.width + 20.0f;
-    }
-    batch->end();
+    // for(auto img : storeImageList_){
+    //     batch->renderRegionImage(*img , rect);
+    //     rect.left += rect.width + 20.0f;
+    // }
+    // batch->end();
 }
 
 void Terrain::render(){

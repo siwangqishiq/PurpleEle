@@ -47,6 +47,8 @@ public:
     float secondTileX_;
 
     float lastPlayerPosX_ = 0.0f;
+
+    bool showForest = true;
 private:
     std::shared_ptr<TextureImage> terrainImage_;
     std::shared_ptr<TextureImage> forestImage_;
