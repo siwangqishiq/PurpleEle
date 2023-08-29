@@ -95,6 +95,9 @@ int main(int argc , char *argv[]){
 
     glfwSetKeyCallback(window , [](GLFWwindow* windows_,int key,int scancode,int action,int mods){
         // std::cout << "key " << key << "  scancode " << scancode << " action " << action << std::endl;
+        if(glfwGetKey(windows_, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(windows_, true);
+        }
     });
 
     // glad: load all OpenGL function pointers

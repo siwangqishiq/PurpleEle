@@ -119,8 +119,8 @@ void Terrain::renderByCamera(Camera &cam){
     batch->begin();
     auto forestRect = forestImage_->getRect();
     // forestRect.width = forestRect.height * ((forestDstRect.width / forestDstRect.height));
-    // batch->renderImage(forestImage_ , forestRect, firstForestDstRect);
-    // batch->renderImage(forestImage_ , forestRect, secondForestDstRect);
+    batch->renderImage(forestImage_ , forestRect, firstForestDstRect);
+    batch->renderImage(forestImage_ , forestRect, secondForestDstRect);
     batch->end();
 
     Rect firstTerrainDstRect;
