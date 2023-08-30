@@ -128,7 +128,7 @@ void NinjiaGame::runningUpdate(){
     camera_->update();
 
     skybg_->update();
-    terrain_->update();
+    terrain_->update(*camera_);
 }
 
 void NinjiaGame::renderRunning(){
