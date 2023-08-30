@@ -29,7 +29,8 @@ enum NinjaPlayerState{
 
 
 // const float NINJA_MAX_VELOCITY = 12.0f;
-const float GRAVITY = -0.7f;
+const float GRAVITY = -3.0f;
+const float ACCELERATION_X = 0.5f;
 
 class NinjiaPlayer : public GameBaseObject {
 public:
@@ -48,6 +49,8 @@ public:
     void renderByCamera(Camera &camera);
 
     bool jump();
+
+    void hitted();
 
     void dispose();
 
@@ -80,5 +83,7 @@ private:
     bool isJumping = false;
 
     float jumpMaxVelocity_;
-    float ninjiaMaxVelocity_ = 12.0f;
+    float ninjiaMaxVelocity_;
+
+    int lifeCount = 3;
 };

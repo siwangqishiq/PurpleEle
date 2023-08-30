@@ -51,8 +51,8 @@ bool CheckRectIntersect(Rect &rectA , Rect &rectB){
     bool xOverlap = ValueInRange(rectA.left, rectB.left, rectB.left + rectB.width) ||
                     ValueInRange(rectB.left, rectA.left, rectA.left + rectA.width);
     
-    bool yOverlap = ValueInRange(rectA.top, rectB.top - rectB.width, rectB.top) ||
-                    ValueInRange(rectB.top, rectA.top - rectA.width, rectA.top);
+    bool yOverlap = ValueInRange(rectA.top, rectB.top - rectB.height, rectB.top) ||
+                    ValueInRange(rectB.top, rectA.top - rectA.height, rectA.top);
 
     return xOverlap && yOverlap;
 }

@@ -5,6 +5,7 @@
 #include "resource/asset_manager.hpp"
 #include "render/sprite.hpp"
 #include "render/texture.hpp"
+#include "audio/audio.hpp"
 
 void Camera::init(){
     cameraViewWidth_ = gameContext_->viewWidth_;
@@ -15,7 +16,7 @@ void Camera::init(){
 }
 
 void Camera::update(){
-    float leftLimit = cameraViewWidth_ / 2.0f;
+    float leftLimit = cameraViewWidth_ / 2.5f;
     auto playerRect = gameContext_->player_->getPlayerRect();
     float playerX = playerRect.left;
 
@@ -48,9 +49,10 @@ void NinjiaPlayer::init(){
 
     accleY_ = GRAVITY;
     
-    jumpMaxVelocity_ = glm::sqrt(2.0f * glm::abs(GRAVITY) * (gameContext_->viewHeight_ / 4.0f));
+    jumpMaxVelocity_ = glm::sqrt(2.0f * glm::abs(GRAVITY) * (gameContext_->viewHeight_ / 3.0f));
 
-    ninjiaMaxVelocity_ = jumpMaxVelocity_;
+    // ninjiaMaxVelocity_ = jumpMaxVelocity_;
+    ninjiaMaxVelocity_ = playerRect_.width / 7.0f;
 }
 
 void NinjiaPlayer::update(){
@@ -86,7 +88,7 @@ void NinjiaPlayer::update(){
         if(waitRunTime_ > 20.0f){
             playerState_ = Run;
             
-            accleX_ = 0.04f;
+            accleX_ = ACCELERATION_X;
             accleY_ = 0.0f;
 
             velocityY_ = 0.0f;
@@ -120,15 +122,20 @@ void NinjiaPlayer::update(){
     default:
         break;
     }//end switch
-    
+
+    if(gameContext_->terrain_->collisionDetect()){
+        this->hitted();
+    }
 }
 
 void NinjiaPlayer::renderByCamera(Camera &camera){
     Rect dstRect = playerRect_;
-    float limitX = gameContext_->viewWidth_ / 2.0f;
-    if(dstRect.getRight() >= limitX){
-        dstRect.left = limitX - dstRect.width;
-    }
+    // float limitX = gameContext_->viewWidth_ / 2.0f;
+    // if(dstRect.getRight() >= limitX){
+    //     dstRect.left = limitX - dstRect.width;
+    // }
+
+    dstRect.left = dstRect.left - camera.camerLeft_;
 
     if(playerState_ == Falling){
         auto batch = gameContext_->renderEngine_->getSpriteBatch();
@@ -152,6 +159,14 @@ void NinjiaPlayer::renderByCamera(Camera &camera){
         srcRect.width = runImageWidth;
         batch->renderImage(ninjiaRunImage_ , srcRect, dstRect);
         batch->end();
+
+        //for debug
+//        auto shapeBatch = gameContext_->renderEngine_->getShapeBatch();
+//        shapeBatch->begin();
+//        Paint paint;
+//        paint.color = glm::vec4 (1.0f , 0.0f , 0.0f , 0.3f);
+//        shapeBatch->renderRect(dstRect , paint);
+//        shapeBatch->end();
     }
 }
 
@@ -165,9 +180,22 @@ bool NinjiaPlayer::jump(){
     velocityY_ = jumpMaxVelocity_;
     // playerRect_.top += velocityY_;
 
-    Logi("ninjia" , "ninja jump!");
+    // Logi("ninjia" , "ninja jump!");
     isJumping = true;
     return true;
+}
+
+void NinjiaPlayer::hitted() {
+    AudioManager::getInstance()->playAudio(gameContext_->AUDIO_STONE_HIT);
+    velocityY_ = 0.0f;
+    velocityX_ = 0.0f;
+
+    lifeCount--;
+    if(lifeCount <= 0 ){
+        gameContext_->gameState_ = End;
+        AudioManager::getInstance()->stopAudio(gameContext_->AUDIO_BGM);
+        AudioManager::getInstance()->playAudio(gameContext_->AUDIO_GAME_OVER);
+    }
 }
 
 void NinjiaPlayer::render(){

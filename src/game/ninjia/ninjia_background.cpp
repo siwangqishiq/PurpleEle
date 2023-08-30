@@ -88,22 +88,54 @@ void Terrain::init(){
     storeImageList_.push_back(storesImage_->createImageRegion(214.0f , storesImage_->getHeight() , 42.0f , 48.0f));
     storeImageList_.push_back(storesImage_->createImageRegion(260.0f , storesImage_->getHeight() , 50.0f , 90.0f));
 
-    initTerrianMapData();
+    initTerrainMapData();
 }
 
-void Terrain::initTerrianMapData(){
+void Terrain::initTerrainMapData(){
     tileData_.clear();
 
-    for(int i = 0 ; i < 100 ;i++){
-        TerrianTile tile;
+    for(int i = 0 ; i < 200 ;i++){
+        TerrainTile tile;
+        tile.obstraces = std::make_shared<std::vector<Obstrace>>();
         if((i % 3 == 0 || i % 5 == 0) && i != 0){
             tile.type = TERRAIN_TILE_TYPE_NOFOREST;
         }else{
             tile.type = TERRAIN_TILE_TYPE_FOREST;
         }
+
+        if(i > 1){
+            addObstraceToTile(tile , i);//add obstraces
+        }
         tileData_.push_back(tile);
     }//end for i
 }
+
+ void Terrain::addObstraceToTile(TerrainTile &tile , int index){
+    float offset = index * gameContext_->viewWidth_;
+    float obsWidth = terrainHeight_ * 0.8f;
+    int obsCount = GenRandomInt(0 , 2);
+    // std::cout << "debug obsCount = " << obsCount << std::endl;
+    for(int i = 0 ; i < obsCount ; i++){
+        Obstrace obs;
+
+        float x = GenRandom(offset , offset + gameContext_->viewWidth_ - obsWidth);
+        obs.type = GenRandomInt(0 , storeImageList_.size() - 1);
+//        obs.type = 3;
+
+        auto obsImage = storeImageList_[obs.type];
+        float radio = obsImage->getWidth() / obsImage->getHeight();
+        
+        float obsHeight = obsWidth / radio;
+        float y = obsHeight + terrainHeight_ - obsHeight / 2.0f;
+        
+        obs.position = glm::vec2(x , y);
+        obs.size = glm::vec2(obsWidth , obsHeight);
+
+        const float padding = 10.0f;
+        obs.hitRect = Rect(x - padding , y - padding , obsWidth/2.0f , obsHeight - padding);
+        tile.obstraces->push_back(obs);
+    }//end for i
+ }
 
 void Terrain::update(Camera &cam){
     // float deltaX = gameContext_->player_->getPlayerRect().left - lastPlayerPosX_;
@@ -138,17 +170,34 @@ void Terrain::update(Camera &cam){
     }//end while
 }
 
+bool Terrain::collisionDetect(){
+    Rect playerRect = gameContext_->player_->getPlayerRect();
+    for(int index : renderTileList_){
+        auto obs = tileData_[index].obstraces;
+        for(auto &ob : *obs){
+            if(ob.state != Normal){
+                continue;
+            }
+
+            if(CheckRectIntersect(playerRect , ob.hitRect)){
+                ob.state = Hitted;
+                return true;
+            }
+        }//end for each
+    }//end for each index
+    return false;
+}
+
 void Terrain::renderByCamera(Camera &cam){
     auto batch = gameContext_->renderEngine_->getSpriteBatch();
     batch->begin();
 
     float tileWidth = gameContext_->viewWidth_;
     for(int renderIndex : renderTileList_){
-        TerrianTile tile = tileData_[renderIndex];
+        TerrainTile tile = tileData_[renderIndex];
         float tileX = renderIndex * tileWidth;
-
         float screenX = tileX - cam.camerLeft_;
-        
+
         Rect dstRect;
         dstRect.left = screenX;
         dstRect.top = forestTop_;
@@ -158,20 +207,40 @@ void Terrain::renderByCamera(Camera &cam){
         if(tile.type == TERRAIN_TILE_TYPE_FOREST){
             auto forestRect = forestImage_->getRect();
             batch->renderImage(forestImage_ , forestRect, dstRect);
-            auto srcRect = terrainImage_->getRect();
-            dstRect.top = terrainHeight_;
-            dstRect.width = tileWidth;
-            dstRect.height = terrainHeight_;
-            batch->renderImage(terrainImage_ , srcRect , dstRect);
-        }else{
-            auto srcRect = terrainImage_->getRect();
-            dstRect.top = terrainHeight_;
-            dstRect.width = tileWidth;
-            dstRect.height = terrainHeight_;
-            batch->renderImage(terrainImage_ , srcRect , dstRect);
         }
+
+        //render obstracer
+        for(int i = 0 ; i < tile.obstraces->size() ; i++){
+            auto obs = tile.obstraces->at(i);
+
+            if(obs.state != Normal){
+                continue;
+            }
+            Rect obsDstRect;
+            obsDstRect.left = obs.position[0] - cam.camerLeft_;
+            obsDstRect.top = obs.position[1];
+            obsDstRect.width = obs.size[0];
+            obsDstRect.height = obs.size[1];
+
+            batch->renderRegionImage(*storeImageList_[obs.type] , obsDstRect);
+
+            //debug
+//            auto shapeBatch = gameContext_->renderEngine_->getShapeBatch();
+//            shapeBatch->begin();
+//            Paint paint;
+//            paint.color = glm::vec4 (1.0f , 0.0f , 0.0f , 0.3f);
+//            shapeBatch->renderRect(obsDstRect , paint);
+//            shapeBatch->end();
+        }//end for i
+
+        auto srcRect = terrainImage_->getRect();
+        dstRect.top = terrainHeight_;
+        dstRect.width = tileWidth;
+        dstRect.height = terrainHeight_;
+
+        batch->renderImage(terrainImage_ , srcRect , dstRect);
     }//end for each
-    
+
     batch->end();
 
     // Rect firstForestDstRect;

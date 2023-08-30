@@ -51,14 +51,17 @@ void NinjiaGame::gameInit(){
     splashDeltaTime_ = 0.0f;
     AudioManager::getInstance()->loadAudio("audio/hit.mp3",AUDIO_HIT);
     AudioManager::getInstance()->loadAudio("audio/jump.wav",AUDIO_JUMP);
-    AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM);
+    AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM , true);
+    AudioManager::getInstance()->loadAudio("audio/falldown.mp3" , AUDIO_STONE_HIT);
+    AudioManager::getInstance()->loadAudio("audio/gameover.mp3" , AUDIO_GAME_OVER);
 
-    gameState_ = Running;
-    // gameState_ = Splash;
+//    gameState_ = Running;
+     gameState_ = Splash;
 }
 
 void NinjiaGame::gameStartPrepare(){
     AudioManager::getInstance()->playAudio(AUDIO_BGM);
+    AudioManager::getInstance()->playAudio(AUDIO_JUMP);
 }
 
 void NinjiaGame::buildViews(){
@@ -68,12 +71,15 @@ void NinjiaGame::buildViews(){
 void NinjiaGame::tick(){
     switch(gameState_){
         case Splash:
-        renderSplash();
-        break;
+            renderSplash();
+            break;
         case Running:
-        runningUpdate();
-        renderRunning();
-        break;
+            runningUpdate();
+            renderRunning();
+            break;
+        case End:
+            renderEnded();
+            break;
     }//end switch
 }
 
@@ -118,6 +124,11 @@ bool NinjiaGame::onEventAction(int action , float x , float y){
             }
         }
         break;
+        case End:
+            if(action == ACTION_DOWN){ //RESTART
+                gameInit();
+            }
+            break;
     }//end switch
 
     return false;
@@ -139,6 +150,29 @@ void NinjiaGame::renderRunning(){
     player_->renderByCamera(camera);
 
     renderNinjaDistanceHud();
+}
+
+void NinjiaGame::renderEnded() {
+    auto camera = *camera_;
+    skybg_->renderByCamera(camera);// sky background render
+    terrain_->renderByCamera(camera);
+
+    renderNinjaDistanceHud();
+
+    //write die
+    TextPaint textPaint;
+    textPaint.textColor = ConvertColor(255 , 42,44,160);
+    textPaint.textGravity = Center;
+
+    Rect dstRect;
+    dstRect.height = viewHeight_;
+    dstRect.width = viewHeight_;
+    dstRect.top = viewHeight_;
+    dstRect.left = viewWidth_ / 2.0f - viewHeight_ / 2.0f;
+
+    textPaint.setTextSize(dstRect.height * 0.5f);
+
+    renderEngine_->renderTextWithRect(L"死" , dstRect , textPaint ,nullptr);
 }
 
 void NinjiaGame::renderNinjaDistanceHud(){

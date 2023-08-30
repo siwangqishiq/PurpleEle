@@ -24,11 +24,26 @@ private:
     const float SCROLL_SPEED_RATIO = 0.05f;
 };
 
+enum ObstraceState{
+    Normal,
+    Hitted
+};
+
+struct Obstrace{
+    int type;
+    glm::vec2 position;
+    glm::vec2 size;
+    ObstraceState state = Normal;
+    Rect hitRect;
+};
+
 const int TERRAIN_TILE_TYPE_FOREST = 1;
 const int TERRAIN_TILE_TYPE_NOFOREST = 2;
 
-struct TerrianTile{
+
+struct TerrainTile{
     int type;
+    std::shared_ptr<std::vector<Obstrace>> obstraces;
 };
 
 class Terrain : public GameBaseObject{
@@ -45,6 +60,8 @@ public:
     void render();
 
     void dispose();
+
+    bool collisionDetect();
 
     float terrainHeight_;
     float forestBgHeight_;
@@ -65,9 +82,11 @@ private:
 
     float posX_ = 0.0f;
 
-    void initTerrianMapData();
+    void initTerrainMapData();
 
-    std::vector<TerrianTile> tileData_;
+    void addObstraceToTile(TerrainTile &tile , int index);
+
+    std::vector<TerrainTile> tileData_;
 
     std::vector<int> renderTileList_;
 };

@@ -41,6 +41,10 @@ inline float GenRandomFloat(){
     return ud(rndEngine);
 }
 
+inline float GenRandom(float min , float max){
+  return min + (max - min) * GenRandomFloat();  
+}
+
 // min ~ max 随机整数
 inline int GenRandomInt(int min , int max){
     static std::default_random_engine  rndEngine(CurrentTimeMillis());

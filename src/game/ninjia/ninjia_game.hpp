@@ -47,12 +47,16 @@ public:
 
     void runningUpdate();
     void renderRunning();
+
+    void renderEnded();
     
     void renderNinjaDistanceHud();
 
     const std::string AUDIO_HIT = "hit";
     const std::string AUDIO_JUMP = "jump";
     const std::string AUDIO_BGM = "bgm";
+    const std::string AUDIO_STONE_HIT = "stone_hit";
+    const std::string AUDIO_GAME_OVER = "game_over";
 
     int viewWidth_;
     int viewHeight_;
