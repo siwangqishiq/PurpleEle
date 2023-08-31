@@ -16,7 +16,7 @@ float stokeRect(vec2 pos){
     float right = (1.0f - step(uRect.x + uRect.z , pos.x)) * step(uRect.x + uRect.z - uStrokenWidth , pos.x);
     float top = (1.0f - step(uRect.y , pos.y)) * step(uRect.y - uStrokenWidth , pos.y);
     float bottom = step(uRect.y - uRect.w , pos.y) * (1.0f - step(uRect.y - uRect.w + uStrokenWidth ,pos.y));
-
+    
     return min(1.0f , left + right + top + bottom);
 }
 

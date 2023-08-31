@@ -82,17 +82,17 @@ void RenderEngine::loadTextRenderResource(){
 void RenderEngine::loadShapeShader(){
     Logi(TAG , "render init loadShapeShader");
     
-    ShaderManager::getInstance()->loadAssetShader("shape_rect" , 
-        "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
+    // ShaderManager::getInstance()->loadAssetShader("shape_rect" , 
+    //     "shader/shape_vert.glsl", "shader/shape_rect_frag.glsl");
+    // ShaderManager::getInstance()->loadAssetShader("shape_circle" , 
+    //     "shader/shape_vert.glsl", "shader/shape_circle_frag.glsl");
+    // ShaderManager::getInstance()->loadAssetShader("shape_oval" , 
+    //     "shader/shape_vert.glsl", "shader/shape_oval_frag.glsl");
+    // ShaderManager::getInstance()->loadAssetShader("shape_round_rect" , 
+    //     "shader/shape_vert.glsl", "shader/shape_round_rect_frag.glsl");
 
-    ShaderManager::getInstance()->loadAssetShader("shape_circle" , 
-        "shader/shape_vert.glsl", "shader/shape_circle_frag.glsl");
-
-    ShaderManager::getInstance()->loadAssetShader("shape_oval" , 
-        "shader/shape_vert.glsl", "shader/shape_oval_frag.glsl");
-
-    ShaderManager::getInstance()->loadAssetShader("shape_round_rect" , 
-        "shader/shape_vert.glsl", "shader/shape_round_rect_frag.glsl");
+    ShaderManager::getInstance()->loadAssetShader("primitive_rect" , 
+        "shader/primitive_vert.glsl", "shader/primitive_rect_frag.glsl");
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -492,4 +492,12 @@ void TextRenderHelper::layoutText(std::wstring &content,
     for(int i = 0 ; i < realRenderCharCount ;i++){
         renderCmd->updateVertexPositionData(buf , i , translateX , translateY);
     }//end for i
+}
+
+void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat , 
+        Paint &paint){
+    RectRenderCommand cmd(this);
+    Shader rectShader = ShaderManager::getInstance()->getShaderByName("primitive_rect");
+    cmd.putParams(rectShader , rect ,transMat, paint);
+    cmd.runCommands();
 }

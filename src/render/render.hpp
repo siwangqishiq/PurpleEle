@@ -65,6 +65,9 @@ public:
 
     //==============render api ================
 
+    //绘制单独的一个矩形
+    void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
+
     //绘制文字
     void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
 
@@ -95,7 +98,7 @@ public:
     std::shared_ptr<SpriteBatch> getSpriteBatch();
 
     float getAndChangeDepthValue();
-
+    
     void resetDepth();
 
     std::shared_ptr<VRamManager> vramManager_;

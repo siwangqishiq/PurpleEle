@@ -127,3 +127,23 @@ private:
     Paint paint_;
 };
 
+class RectRenderCommand: public RenderCommand{
+public:
+    RectRenderCommand(RenderEngine *engine) 
+        :RenderCommand(engine){
+    }
+
+    virtual void putParams(Shader shader, Rect &rect ,glm::mat4 &matrix
+        ,Paint &paint);
+
+    virtual void runCommands() override;
+protected:
+    void buildGlCommands(std::vector<float> &buf);
+private:
+    Shader shader_;
+    Rect rect_;
+    Paint paint_;
+
+    glm::mat4 modelMat_;
+};
+
