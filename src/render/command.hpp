@@ -25,6 +25,8 @@ public:
 
     int vertexCount_;
     int attrCount_;
+
+    virtual void buildGlCommands(std::vector<float> &buf);
 protected:
     unsigned int vbo_;
     unsigned int vao_;
@@ -65,6 +67,8 @@ public:
     
     void updateVertexPositionData(std::vector<float> &buf, int index, 
                             float x ,float y);
+
+    virtual void buildGlCommands(std::vector<float> &buf);
 private:
     
     glm::vec4 textColor_;
@@ -76,7 +80,6 @@ private:
     
     unsigned int fontTextureId_ = -1;
 
-    void buildGlCommands(std::vector<float> &buf);
 
     void fillTextVertData(std::wstring &text , float left , float bottom , 
             TextPaint &paint = defaultTextPaint);
@@ -105,13 +108,13 @@ public:
     
     //set shader params
     virtual void fillShader();
+
+    virtual void buildGlCommands(std::vector<float> &buf);
 protected:
     Shader shader_;
     Rect rect_;
 
     std::function<void(void)> preRenderCallback_ = nullptr;
-
-    void buildGlCommands(std::vector<float> &buf);
 };
 
 class ShapeRenderCommand : public ShaderRenderCommand {
@@ -137,8 +140,6 @@ public:
         ,Paint &paint);
 
     virtual void runCommands() override;
-protected:
-    void buildGlCommands(std::vector<float> &buf);
 private:
     Shader shader_;
     Rect rect_;
@@ -146,4 +147,27 @@ private:
 
     glm::mat4 modelMat_;
 };
+
+class LinesRenderCommand: public RenderCommand{
+public:
+    LinesRenderCommand(RenderEngine *engine) 
+        :RenderCommand(engine){
+    }
+
+    virtual void putParams(Shader shader,std::vector<float> &points ,Paint &paint);
+
+    virtual void runCommands() override;
+
+    void renderByglLines(std::vector<float> &points);
+
+    void renderByRects(std::vector<float> &points);
+private:
+    Shader shader_;
+    Paint paint_;
+
+    bool renderByLines = true;
+};
+
+
+
 

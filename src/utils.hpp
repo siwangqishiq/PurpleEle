@@ -4,7 +4,6 @@
 #include <vector>
 #include <random>
 #include <chrono>
-#include "glm/vec4.hpp"
 #include "render/common.hpp"
 
 const double PI = 3.141592653589793238463;
@@ -58,5 +57,7 @@ inline bool ValueInRange(float value, float min, float max){
 
 // check two rectangle is intersect
 bool CheckRectIntersect(Rect &rectA , Rect &rectB);
+
+// glm::vec2 rotateVec2(glm::vec2& vec, float angle);
 
 

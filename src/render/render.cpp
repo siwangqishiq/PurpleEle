@@ -91,8 +91,13 @@ void RenderEngine::loadShapeShader(){
     // ShaderManager::getInstance()->loadAssetShader("shape_round_rect" , 
     //     "shader/shape_vert.glsl", "shader/shape_round_rect_frag.glsl");
 
+    //实心矩形
     ShaderManager::getInstance()->loadAssetShader("primitive_rect" , 
         "shader/primitive_vert.glsl", "shader/primitive_rect_frag.glsl");
+
+    // GL_LINES 方式画线
+    ShaderManager::getInstance()->loadAssetShader("primitive_lines" , 
+        "shader/primitive_lines_vert.glsl", "shader/primitive_lines_frag.glsl");
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -499,5 +504,12 @@ void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat ,
     RectRenderCommand cmd(this);
     Shader rectShader = ShaderManager::getInstance()->getShaderByName("primitive_rect");
     cmd.putParams(rectShader , rect ,transMat, paint);
+    cmd.runCommands();
+}
+
+void RenderEngine::renderLines(std::vector<float> &points , Paint &paint){
+    LinesRenderCommand cmd(this);
+    Shader shader = ShaderManager::getInstance()->getShaderByName("primitive_lines");
+    cmd.putParams(shader , points , paint);
     cmd.runCommands();
 }

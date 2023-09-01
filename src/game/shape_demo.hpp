@@ -32,4 +32,9 @@ private:
     int viewHeight_;
 
     std::shared_ptr<RenderEngine> renderEngine_;
+
+    void testRenderShapeRect();
+    void testRenderLines();
+    void testRenderLines2();
+    void testRenderLinesStar();
 };

@@ -1,6 +1,8 @@
-#include "glm/vec4.hpp"
+#include "render/common.hpp"
 #include "utils.hpp"
-
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 std::string& StringTrim(std::string &s, std::string suffix){
     if (s.empty()) 
@@ -56,3 +58,10 @@ bool CheckRectIntersect(Rect &rectA , Rect &rectB){
 
     return xOverlap && yOverlap;
 }
+
+// glm::vec2 rotateVec2(glm::vec2 &vec, float angle){
+//     glm::vec2 n = glm::normalize(vec);
+//     glm::mat2 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angle));
+//     glm::vec2 rotatedVec = rotationMatrix * n;
+//     return glm::normalize(rotatedVec);
+// }

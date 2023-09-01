@@ -13,6 +13,15 @@ unsigned int RenderCommand::allocatorVRam(int acquireSize , int &allocateSize){
     return vbo_;
 }
 
+void RenderCommand::buildGlCommands(std::vector<float> &buf){
+    glBindVertexArray(vao_);
+    glBindBuffer(GL_ARRAY_BUFFER , vbo_);
+    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,buf.size() * sizeof(float) , buf.data());
+    glBindBuffer(GL_ARRAY_BUFFER , 0);
+    glBindVertexArray(0);
+}
+
+
 float TextRenderCommand::findCharMaxHeight(std::wstring &text , TextPaint &paint){
     auto textRenderHelper = engine_->textRenderHelper_;
     float maxHeight = 0.0f;
@@ -425,13 +434,13 @@ void ShapeRenderCommand::fillShader(){
     shader_.setUniformFloat("uViewHeight" , viewHeight);
 }
 
-void RectRenderCommand::buildGlCommands(std::vector<float> &buf){
-    glBindVertexArray(vao_);
-    glBindBuffer(GL_ARRAY_BUFFER , vbo_);
-    glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,buf.size() * sizeof(float) , buf.data());
-    glBindBuffer(GL_ARRAY_BUFFER , 0);
-    glBindVertexArray(0);
-}
+// void RectRenderCommand::buildGlCommands(std::vector<float> &buf){
+//     glBindVertexArray(vao_);
+//     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
+//     glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,buf.size() * sizeof(float) , buf.data());
+//     glBindBuffer(GL_ARRAY_BUFFER , 0);
+//     glBindVertexArray(0);
+// }
 
 void RectRenderCommand::putParams(Shader shader,Rect &rect
             , glm::mat4 &matrix ,Paint &paint){
@@ -479,13 +488,14 @@ void RectRenderCommand::runCommands(){
     }
 
     //打开混合模式
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
     shader_.useShader();
     shader_.setUniformMat4("modelMat" , modelMat_);
     shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
     shader_.setUniformVec4("uColor" , paint_.color);
+    shader_.setUniformInt("uFillStyle" , paint_.fillStyle);
     // fillShader();
 
     glBindVertexArray(vao_);
@@ -497,3 +507,147 @@ void RectRenderCommand::runCommands(){
     glBindBuffer(GL_ARRAY_BUFFER , 0);
     glBindVertexArray(0);
 }
+
+void LinesRenderCommand::putParams(Shader shader,std::vector<float> &points, Paint &paint){
+    shader_ = shader;
+    paint_ = paint;
+
+    if(paint.stokenWidth < 1.1f){
+        renderByglLines(points);
+    }else{
+        renderByRects(points);
+    }
+}
+
+void LinesRenderCommand::renderByRects(std::vector<float> &points){
+    if(points.size() <= 2){
+        return;
+    }
+
+    renderByLines = false;
+
+    vertexCount_ = (points.size()/2 - 1) * 6;
+    attrCount_ = 3;
+
+    const float depth = engine_->getAndChangeDepthValue();
+
+    int requestSize = vertexCount_ * attrCount_ * sizeof(float);
+    int allocateSize = 0;
+    allocatorVRam(requestSize , allocateSize);
+    if(allocateSize < requestSize){
+        Logi("LinesRenderCommand" , "LinesRenderCommand renderByRects can not request vram buffer.");
+        return;
+    }
+
+    std::vector<float> vertexBuf(vertexCount_ * attrCount_);
+
+    float lineWidth = paint_.stokenWidth;
+    float lineHalfWidth = lineWidth / 2.0f;
+
+    glm::vec2 startPoint;
+    glm::vec2 endPoint;
+    int index = 2;
+    const float angle90 = glm::radians(90.0f);
+
+    uint32_t bufIdx = 0;
+    while(index < points.size()){
+        startPoint = glm::vec2(points[index - 2] , points[index -1]);
+        endPoint = glm::vec2(points[index] , points[index + 1]);
+
+        glm::vec2 dir = glm::normalize(endPoint - startPoint);
+        
+        glm::vec2 topDir(
+             glm::cos(angle90)* dir[0] + glm::sin(angle90) * dir[1],
+            -glm::sin(angle90)* dir[0] + glm::cos(angle90) * dir[1]
+        );
+        topDir = glm::normalize(topDir);
+
+        glm::vec2 downDir(
+            glm::cos(-angle90)* dir[0] + glm::sin(-angle90) * dir[1],
+            -glm::sin(-angle90)* dir[0] + glm::cos(-angle90) * dir[1]
+        );
+        downDir = glm::normalize(downDir);
+
+        // glm::vec2 topDir(0.0f , 1.0f);
+        // glm::vec2 downDir(0.0f , -1.0f);
+        
+        glm::vec2 p1 = startPoint + topDir * lineHalfWidth;
+        glm::vec2 p2 = endPoint + topDir * lineHalfWidth;
+        glm::vec2 p3 = endPoint + downDir * lineHalfWidth;
+        glm::vec2 p4 = startPoint + downDir * lineHalfWidth;
+
+        vertexBuf[bufIdx++] = p1[0];
+        vertexBuf[bufIdx++] = p1[1];
+        vertexBuf[bufIdx++] = depth;
+
+        vertexBuf[bufIdx++] = p4[0];
+        vertexBuf[bufIdx++] = p4[1];
+        vertexBuf[bufIdx++] = depth;
+
+        vertexBuf[bufIdx++] = p2[0];
+        vertexBuf[bufIdx++] = p2[1];
+        vertexBuf[bufIdx++] = depth;
+
+        vertexBuf[bufIdx++] = p4[0];
+        vertexBuf[bufIdx++] = p4[1];
+        vertexBuf[bufIdx++] = depth;
+
+        vertexBuf[bufIdx++] = p3[0];
+        vertexBuf[bufIdx++] = p3[1];
+        vertexBuf[bufIdx++] = depth;
+
+        vertexBuf[bufIdx++] = p2[0];
+        vertexBuf[bufIdx++] = p2[1];
+        vertexBuf[bufIdx++] = depth;
+
+        index += 2;
+    }//end while
+
+    buildGlCommands(vertexBuf);
+}
+
+void LinesRenderCommand::renderByglLines(std::vector<float> &points){
+    renderByLines = true;
+
+    vertexCount_ = points.size() / 2; 
+    attrCount_ = 3;
+
+    float depth = engine_->getAndChangeDepthValue();
+
+    int requestSize = vertexCount_ * attrCount_ * sizeof(float);
+    int allocateSize = 0;
+    allocatorVRam(requestSize , allocateSize);
+
+    std::vector<float> buf(vertexCount_ * attrCount_);
+    int originIdx = 0;
+    for(int i = 0 ; i < vertexCount_ ; i++){
+        buf[attrCount_ * i + 0] = points[originIdx++];
+        buf[attrCount_ * i + 1] = points[originIdx++];
+        buf[attrCount_ * i + 2] = depth;
+    }//end for i;
+    buildGlCommands(buf);
+}
+
+void LinesRenderCommand::runCommands(){
+    if(shader_.programId <= 0){
+        return;
+    }
+
+    shader_.useShader();
+    shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
+    shader_.setUniformVec4("uColor" , paint_.color);
+
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(paint_.stokenWidth);
+
+    glBindVertexArray(vao_);
+    glBindBuffer(GL_ARRAY_BUFFER , vbo_);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0 , 3 , GL_FLOAT , GL_FALSE , 
+        3 * sizeof(float) , 
+        reinterpret_cast<void *>(vboOffset_));
+    glDrawArrays(renderByLines?GL_LINE_STRIP:GL_TRIANGLES , 0 , vertexCount_);
+    glBindBuffer(GL_ARRAY_BUFFER , 0);
+    glBindVertexArray(0);
+}
+

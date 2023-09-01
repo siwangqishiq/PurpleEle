@@ -65,6 +65,9 @@ public:
 
     //==============render api ================
 
+    //画单色直线
+    void renderLines(std::vector<float> &points , Paint &paint);
+
     //绘制单独的一个矩形
     void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
 
