@@ -53,6 +53,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/game/ninjia/ninjia_game.cpp
         ${SRC_DIR}/game/ninjia/ninjia_sprite.cpp
         ${SRC_DIR}/game/ninjia/ninjia_background.cpp
+        ${SRC_DIR}/game/shape_demo.cpp
         )
 
 set(opengl_lib GLESv3)

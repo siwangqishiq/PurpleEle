@@ -359,7 +359,7 @@ std::shared_ptr<SpriteBatch> RenderEngine::getSpriteBatch(){
 
 float RenderEngine::getAndChangeDepthValue(){
     float result = depthValue;
-    depthValue -= 0.001f;
+    depthValue -= 0.000001f;
     return result;    
 }
 
