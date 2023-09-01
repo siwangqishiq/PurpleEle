@@ -35,6 +35,7 @@ struct Obstrace{
     glm::vec2 size;
     ObstraceState state = Normal;
     Rect hitRect;
+    bool addScore = false;
 };
 
 const int TERRAIN_TILE_TYPE_FOREST = 1;
@@ -62,6 +63,8 @@ public:
     void dispose();
 
     bool collisionDetect();
+
+    int scoreUpdate();
 
     float terrainHeight_;
     float forestBgHeight_;

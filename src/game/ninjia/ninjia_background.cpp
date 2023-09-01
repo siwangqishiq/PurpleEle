@@ -168,6 +168,8 @@ void Terrain::update(Camera &cam){
             break;
         }
     }//end while
+
+
 }
 
 bool Terrain::collisionDetect(){
@@ -186,6 +188,25 @@ bool Terrain::collisionDetect(){
         }//end for each
     }//end for each index
     return false;
+}
+
+int Terrain::scoreUpdate(){
+    int score = 0;
+    Rect playerRect = gameContext_->player_->getPlayerRect();
+    for(int index : renderTileList_){
+        auto obs = tileData_[index].obstraces;
+        for(auto &ob : *obs){
+            if(ob.state != Normal || ob.addScore){
+                continue;
+            }
+            
+            if(ob.hitRect.getRight() < playerRect.left){
+                score += 20;
+                ob.addScore = true;
+            }
+        }//end for each
+    }//end for each index
+    return score;
 }
 
 void Terrain::renderByCamera(Camera &cam){

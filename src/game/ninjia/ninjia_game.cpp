@@ -40,6 +40,9 @@ void NinjiaGame::gameInit(){
     distanceHudTextPaint.textColor = ConvertColor(33,150,243,255);
     distanceHudTextPaint.textGravity = TopLeft;
 
+    scoreTextPaint.textColor = ConvertColor(255,0,0,255);
+    scoreTextPaint.textGravity = Center;
+
     camera_->init();
     skybg_->init();
     terrain_->init();
@@ -55,7 +58,10 @@ void NinjiaGame::gameInit(){
     AudioManager::getInstance()->loadAudio("audio/falldown.mp3" , AUDIO_STONE_HIT);
     AudioManager::getInstance()->loadAudio("audio/gameover.mp3" , AUDIO_GAME_OVER);
 
-//    gameState_ = Running;
+    currentScore_ = 0;
+    targetScore_ = 0;
+
+    // gameState_ = Running;
      gameState_ = Splash;
 }
 
@@ -149,7 +155,12 @@ void NinjiaGame::renderRunning(){
     terrain_->renderByCamera(camera);
     player_->renderByCamera(camera);
 
+    renderHud();
+}
+
+void NinjiaGame::renderHud(){
     renderNinjaDistanceHud();
+    renderScore();
 }
 
 void NinjiaGame::renderEnded() {
@@ -157,7 +168,7 @@ void NinjiaGame::renderEnded() {
     skybg_->renderByCamera(camera);// sky background render
     terrain_->renderByCamera(camera);
 
-    renderNinjaDistanceHud();
+    renderHud();
 
     //write die
     TextPaint textPaint;
@@ -190,6 +201,32 @@ void NinjiaGame::renderNinjaDistanceHud(){
     str += L"米";
 
     renderEngine_->renderTextWithRect(str , outputRect , distanceHudTextPaint , nullptr);
+}
+
+void NinjiaGame::playerGetScore(int addScore){
+    this->targetScore_ += addScore;
+}
+
+void NinjiaGame::renderScore(){
+    if(currentScore_ < targetScore_){
+        currentScore_++;
+    }
+
+    //render
+    Rect outputRect;
+
+    outputRect.width = 400.0f;
+    outputRect.left = viewWidth_ / 2.0f - outputRect.width / 2.0f;
+    outputRect.top = viewHeight_;
+    outputRect.height = viewHeight_ / 5.0f;
+
+    scoreTextPaint.setTextSize(outputRect.height * 0.6f);
+
+    // int distance = static_cast<int>(player_->getPlayerRect().left / 100.0f);
+    std::wstring str = L"分数 ";
+    str += std::to_wstring(currentScore_);
+
+    renderEngine_->renderTextWithRect(str , outputRect , scoreTextPaint , nullptr);
 }
 
 void NinjiaGame::renderSplash(){

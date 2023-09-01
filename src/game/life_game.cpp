@@ -42,7 +42,7 @@ void LifeGame::gameInit(){
     gameZoneRect_.height = viewHeight_;
     gameZoneRect_.left = viewWidth_ / 2 - gameZoneRect_.width / 2;
     gameZoneRect_.top = gameZoneRect_.height;
-
+    
     const int cellNumPerRow = 40;
     
     cellSize_ = gameZoneRect_.width / cellNumPerRow;

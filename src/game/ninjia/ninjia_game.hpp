@@ -48,9 +48,15 @@ public:
     void runningUpdate();
     void renderRunning();
 
+    void renderHud();
+
     void renderEnded();
     
     void renderNinjaDistanceHud();
+
+    void renderScore();
+
+    void playerGetScore(int addScore);
 
     const std::string AUDIO_HIT = "hit";
     const std::string AUDIO_JUMP = "jump";
@@ -76,4 +82,9 @@ private:
     bool splashIsPressed = false;
 
     TextPaint distanceHudTextPaint;
+
+    int currentScore_ = 0;
+    int targetScore_ = 0;
+
+    TextPaint scoreTextPaint;
 };

@@ -126,6 +126,11 @@ void NinjiaPlayer::update(){
     if(gameContext_->terrain_->collisionDetect()){
         this->hitted();
     }
+
+    int addScore = gameContext_->terrain_->scoreUpdate();
+    if(addScore > 0){
+        gameContext_->playerGetScore(addScore);
+    }
 }
 
 void NinjiaPlayer::renderByCamera(Camera &camera){
