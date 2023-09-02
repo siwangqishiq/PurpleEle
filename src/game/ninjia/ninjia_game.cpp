@@ -215,7 +215,7 @@ void NinjiaGame::renderScore(){
     //render
     Rect outputRect;
 
-    outputRect.width = 400.0f;
+    outputRect.width = viewWidth_;
     outputRect.left = viewWidth_ / 2.0f - outputRect.width / 2.0f;
     outputRect.top = viewHeight_;
     outputRect.height = viewHeight_ / 5.0f;
@@ -223,7 +223,7 @@ void NinjiaGame::renderScore(){
     scoreTextPaint.setTextSize(outputRect.height * 0.6f);
 
     // int distance = static_cast<int>(player_->getPlayerRect().left / 100.0f);
-    std::wstring str = L"分数 ";
+    std::wstring str = L"分数: ";
     str += std::to_wstring(currentScore_);
 
     renderEngine_->renderTextWithRect(str , outputRect , scoreTextPaint , nullptr);

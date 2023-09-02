@@ -637,7 +637,6 @@ void LinesRenderCommand::runCommands(){
     shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
     shader_.setUniformVec4("uColor" , paint_.color);
 
-    glEnable(GL_LINE_SMOOTH);
     glLineWidth(paint_.stokenWidth);
 
     glBindVertexArray(vao_);
