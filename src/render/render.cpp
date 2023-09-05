@@ -98,6 +98,10 @@ void RenderEngine::loadShapeShader(){
     // GL_LINES 方式画线
     ShaderManager::getInstance()->loadAssetShader("primitive_lines" , 
         "shader/primitive_lines_vert.glsl", "shader/primitive_lines_frag.glsl");
+
+    //arc
+    ShaderManager::getInstance()->loadAssetShader("primitive_arc" , 
+        "shader/primitive_arc_vert.glsl", "shader/primitive_arc_frag.glsl");
 }
 
 void RenderEngine::resetNormalMat(float w , float h){
@@ -505,6 +509,15 @@ void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat ,
     Shader rectShader = ShaderManager::getInstance()->getShaderByName("primitive_rect");
     cmd.putParams(rectShader , rect ,transMat, paint);
     cmd.runCommands();
+}
+
+void RenderEngine::renderArc(float cx , float cy , float radius , 
+            float beginAngle , float endAngle , Paint &paint){
+    ArcRenderCommand cmd(this);
+    Shader arcShader = ShaderManager::getInstance()->getShaderByName("primitive_arc");
+    Rect rect(cx - radius , cy + radius , radius * 2.0f , radius * 2.0f);
+    cmd.putParams(arcShader , rect,beginAngle , endAngle, paint);
+    cmd.runCommands();        
 }
 
 void RenderEngine::renderLines(std::vector<float> &points , Paint &paint){

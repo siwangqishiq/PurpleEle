@@ -51,6 +51,7 @@ int main(int argc , char *argv[]){
                             app->viewWidth_, 
                             app->viewHeight_, 
                             "run", mointor, nullptr);
+
     
     if (window == nullptr) {
         std::cerr << "Failed to create GLFW window" << std::endl;

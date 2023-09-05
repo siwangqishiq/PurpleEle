@@ -168,6 +168,23 @@ private:
     bool renderByLines = true;
 };
 
+class ArcRenderCommand: public RenderCommand{
+public:
+    ArcRenderCommand(RenderEngine *engine) 
+        :RenderCommand(engine){
+    }
+
+    virtual void putParams(Shader shader, Rect &rect , float beginAngle , float endAngle , 
+        Paint &paint);
+
+    virtual void runCommands() override;
+private:
+    Shader shader_;
+    Paint paint_;
+    Rect rect_;
+    glm::vec2 angleRange_; 
+};
+
 
 
 

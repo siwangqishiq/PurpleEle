@@ -41,7 +41,21 @@ void ShapeDemo::tick(){
     // testRenderShapeRect();
     // testRenderLines();
     // testRenderLines2();
-    testRenderLinesStar();
+    // testRenderLinesStar();
+    testRenderArc();
+}
+
+void ShapeDemo::testRenderArc(){
+    Paint paint;
+    paint.color = COLOR_SKY_BLUE;
+
+    float cx = viewWidth_ / 2.0f;
+    float cy = viewHeight_ / 2.0f;
+
+    float radius = 200.0f;
+    static float angle = 0.0f;
+    angle += 1.0f;
+    renderEngine_->renderArc(cx , cy , radius , 0.0f , angle , paint);
 }
 
 void ShapeDemo::testRenderLinesStar(){

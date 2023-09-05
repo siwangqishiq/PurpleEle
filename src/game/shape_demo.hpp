@@ -37,4 +37,6 @@ private:
     void testRenderLines();
     void testRenderLines2();
     void testRenderLinesStar();
+    
+    void testRenderArc();
 };
