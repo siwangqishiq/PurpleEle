@@ -57,6 +57,10 @@ public:
     Rect getPlayerRect(){
         return playerRect_;
     }
+
+    int getLifeCount(){
+        return lifeCount;
+    }
 private:
     Rect playerRect_;
 

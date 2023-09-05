@@ -58,6 +58,8 @@ public:
 
     void playerGetScore(int addScore);
 
+    void renderLifeCount();
+
     const std::string AUDIO_HIT = "hit";
     const std::string AUDIO_JUMP = "jump";
     const std::string AUDIO_BGM = "bgm";
@@ -77,6 +79,8 @@ private:
     Application *appContext;
 
     std::shared_ptr<TextureImage> splashImage_;
+    std::shared_ptr<TextureImage> ninjaHeadImage_;
+
     float splashDeltaTime_ = 0.0f;
     float splashTextAlpha_ = 1.0f;
     bool splashIsPressed = false;

@@ -19,7 +19,7 @@ void NinjiaGame::init(){
 
     renderEngine_ = appContext->getRender();
     appContext->addEventActionCallback(this);
-    appContext->isShowFps = true;
+    appContext->isShowFps = false;
     
     //
     gameInit();
@@ -52,6 +52,8 @@ void NinjiaGame::gameInit(){
     splashImage_ = BuildImageByAsset("sprite/splash.png");
     splashIsPressed = false;
     splashDeltaTime_ = 0.0f;
+    ninjaHeadImage_ = BuildImageByAsset("sprite/ninjia_head.png");
+
     AudioManager::getInstance()->loadAudio("audio/hit.mp3",AUDIO_HIT);
     AudioManager::getInstance()->loadAudio("audio/jump.wav",AUDIO_JUMP);
     AudioManager::getInstance()->loadAudio("audio/pao.mp3",AUDIO_BGM , true);
@@ -155,6 +157,8 @@ void NinjiaGame::renderRunning(){
     terrain_->renderByCamera(camera);
     player_->renderByCamera(camera);
 
+    renderLifeCount();
+
     renderHud();
 }
 
@@ -205,6 +209,27 @@ void NinjiaGame::renderNinjaDistanceHud(){
 
 void NinjiaGame::playerGetScore(int addScore){
     this->targetScore_ += addScore;
+}
+
+void NinjiaGame::renderLifeCount(){
+    if(player_->getLifeCount() <= 0){
+        return;
+    }
+
+    float dstSize = viewHeight_ * (0.05f);
+    Rect dstRect;
+    dstRect.width = dstSize;
+    dstRect.height = dstSize;
+    float padding = 10.0f;
+    auto batch = renderEngine_->getSpriteBatch();
+    Rect srcRect =  ninjaHeadImage_->getRect();
+    batch->begin();
+    for(int i = 0 ; i < player_->getLifeCount() ;i++){
+        dstRect.top = viewHeight_ - padding;
+        dstRect.left = viewWidth_  - (i + 1) * dstSize - padding;
+        batch->renderImage(ninjaHeadImage_ , srcRect , dstRect);
+    }//end for i
+    batch->end();
 }
 
 void NinjiaGame::renderScore(){
