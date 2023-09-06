@@ -196,7 +196,7 @@ std::shared_ptr<CharInfo> TextRenderHelper::findCharInfo(wchar_t &ch){
 //读取字符配置
 void TextRenderHelper::buildTextCharConfig(){
     
-    std::string fontFoldName = "font1/";
+    std::string fontFoldName = "font_shouxie_all/";
 
     std::wstring charConfigStr = AssetManager::getInstance()->readTextFile("text/"+ fontFoldName +"char_config.json");
 

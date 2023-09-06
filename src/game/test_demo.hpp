@@ -89,6 +89,7 @@ private:
     void testRenderTextWithRect();
     void testRenderTextGravity();
     void testRenderTextCode();
+    void testRenderTextVerse();
 
     void testActionDown();
 
@@ -97,4 +98,6 @@ private:
     void testRenderBlurRoundRect2();
 
     void testLoadAudioFile();
+
+    
 };

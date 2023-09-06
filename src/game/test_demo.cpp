@@ -78,10 +78,11 @@ void TestDemo::tick(){
     // testRenderShader();
 
 //     testRenderText();
-//     testRenderTextWithRect();
+    // testRenderTextWithRect();
     // testRenderTextGravity();
     // testRenderTextCode();
-
+    testRenderTextVerse();
+    
     // testActionDown();
     //  testRenderBlurCircle();
     // testRenderLinearGradRect();
@@ -250,7 +251,7 @@ void TestDemo::testRenderTextCode(){
     TextPaint paint;
     float fontSize = 64.0f;
     paint.setTextSize(fontSize);
-    paint.textColor = glm::vec4(1.0 ,0.0 ,0.0, 1.0f);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0, 1.0f);
     paint.textGravity = Center;
 
     Rect warpRect;
@@ -260,12 +261,49 @@ void TestDemo::testRenderTextCode(){
         paint ,
         &warpRect);
 
-    Paint warpPaint;
-    warpPaint.color = glm::vec4(1.0f , 0.0f ,0.0f ,0.3f);
-    auto shapeBatch = renderEngine_->getShapeBatch();
-    shapeBatch->begin();
-    shapeBatch->renderRect(warpRect , warpPaint);
-    shapeBatch->end();
+    // Paint warpPaint;
+    // warpPaint.color = glm::vec4(1.0f , 0.0f ,0.0f ,0.3f);
+    // auto shapeBatch = renderEngine_->getShapeBatch();
+    // shapeBatch->begin();
+    // shapeBatch->renderRect(warpRect , warpPaint);
+    // shapeBatch->end();
+}
+
+void TestDemo::testRenderTextVerse(){
+    auto batch = renderEngine_->getSpriteBatch();
+    Rect srcRect;
+    srcRect.left = 0.0;
+    srcRect.top = wallpaperImage->getHeight();
+    srcRect.width = wallpaperImage->getWidth();
+    srcRect.height = wallpaperImage->getHeight();
+    Rect dstRect;
+    dstRect.left = 0;
+    dstRect.top = viewHeight_;
+    dstRect.width = viewWidth_;
+    dstRect.height = viewHeight_;
+
+    batch->begin();
+    batch->renderImage(wallpaperImage, srcRect , dstRect);
+    batch->end();
+
+    Rect limitRect;
+    limitRect.left = 0.0;
+    limitRect.top = viewHeight_;
+    limitRect.width = viewWidth_;
+    limitRect.height = viewHeight_;
+
+    TextPaint paint;
+    float fontSize = 64.0f;
+    paint.setTextSize(fontSize);
+    paint.textColor = glm::vec4(0.0 ,0.0 ,0.0, 1.0f);
+    paint.textGravity = Center;
+
+    Rect warpRect;
+
+    renderEngine_->renderTextWithRect(L"滕王阁序 \n腾蛟起凤 孟学士之词宗 \n紫电青霜   王将军之武库",
+        limitRect ,
+        paint ,
+        &warpRect);
 }
 
 void TestDemo::testRenderTextGravity(){
