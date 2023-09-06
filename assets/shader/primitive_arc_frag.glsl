@@ -12,8 +12,8 @@ float fillCircle(vec2 pos , vec2 center , float radius){
     vec2 horVec = vec2(1.0f , 0.0f);
     float angle = degrees(acos(dot(posVec, horVec)));
     float calFlag = posVec.x * horVec.y - posVec.y * horVec.x;//确定转动方向
-    if(calFlag > 0){
-        angle = 360 - angle;
+    if(calFlag > 0.0f){
+        angle = 360.0f - angle;
     }
 
     if(distance(pos , center) <= radius 
