@@ -18,7 +18,7 @@ ${BUILD_DIR}/main.o:${SRC_DIR}/main.cc
 	${CC} -std=${STD} -c ${SRC_DIR}/main.cc -o ${BUILD_DIR}/main.o -I .
 	
 link:compile
-	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/main.exe -Llib -lfreetypedll
+	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/main.exe -Llib -lfreetype.dll
 	
 build_font:link
 	${BUILD_DIR}/main
