@@ -7,18 +7,19 @@ uniform vec2 uAngleRange;
 out vec4 fragColor;
 
 float fillCircle(vec2 pos , vec2 center , float radius){
-    // return 1.0f - step(radius , distance(pos , center));
     vec2 posVec = normalize(pos - center);
     vec2 horVec = vec2(1.0f , 0.0f);
     float angle = degrees(acos(dot(posVec, horVec)));
-    float calFlag = posVec.x * horVec.y - posVec.y * horVec.x;//确定转动方向
+
+    mat2 vecMat = mat2(posVec , horVec); //构造2x2矩阵
+    float calFlag = determinant(vecMat); //求行列式 确定转动方向
     if(calFlag > 0.0f){
         angle = 360.0f - angle;
     }
 
     if(distance(pos , center) <= radius 
-        && angle > mod(uAngleRange.x , 360.0f)
-        && angle < mod(uAngleRange.y , 360.0f)){
+        && angle > mod(uAngleRange.x , 360.01f)
+        && angle < mod(uAngleRange.y , 360.01f)){
         return 1.0f;
     }else{
         return 0.0f;

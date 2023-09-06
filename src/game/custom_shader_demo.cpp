@@ -38,7 +38,6 @@ void CustomShaderDemo::tick(){
     rect.height = size;
     rect.top = viewHeight_ / 2.0f + size / 2.0f;
     rect.left = viewWidth_ / 2.0f - size / 2.0f;
-    
     renderEngine_->renderShader(customRenderShader_ , rect, [this , rect](){
         customRenderShader_.setUniformFloat("uLeft",rect.left);
         customRenderShader_.setUniformFloat("uTop",rect.top);
@@ -57,7 +56,6 @@ void CustomShaderDemo::tick(){
     // renderEngine_->renderShader(customRenderShader_ , screenRect, [this , screenRect](){
     //     customRenderShader_.setUniformFloat("uViewWidth",screenRect.width);
     //     customRenderShader_.setUniformFloat("uViewHeight",screenRect.height);
-
     //     customRenderShader_.setUniformFloat("uTime" , static_cast<float>(appContext->frameCount_));
     //     customRenderShader_.setUniformFloat("uFuzz" , 
     //         static_cast<float>(0.5f * glm::sin(delta_) + 0.5f));
