@@ -21,7 +21,7 @@ void TestDemo::init(){
     // testAudio();
     testImage = BuildImageByAsset("lan.jpg");
     testGakkiImage = BuildImageByAsset("test.jpeg");
-    wallpaperImage = BuildImageByAsset("bg.jpg");
+    wallpaperImage = BuildImageByAsset("bg.png");
     walkingImage = BuildImageByAsset("sprite/walk.png");//32 x 48
     yuanImage_ = BuildImageByAsset("sprite/yuan.png");
     customRenderShader = ShaderManager::getInstance()->loadAssetShader("custom" ,
