@@ -524,6 +524,10 @@ void RenderEngine::renderArc(float cx , float cy , float radius ,
 }
 
 void RenderEngine::renderLines(std::vector<float> &points , Paint &paint){
+    if(paint.stokenWidth < 1.0f){
+        return;
+    }
+    
     LinesRenderCommand cmd(this);
     Shader shader = ShaderManager::getInstance()->getShaderByName("primitive_lines");
     cmd.putParams(shader , points , paint);
