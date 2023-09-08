@@ -42,7 +42,66 @@ void ShapeDemo::tick(){
     // testRenderLines();
     // testRenderLines2();
     // testRenderLinesStar();
-    testRenderArc();
+    // testRenderArc();
+    // testRenderArc2();
+    testRenderArc3();
+}
+
+void ShapeDemo::testRenderArc3() {
+    static float time = 0.0f;
+    float stokenWidth = 50.0f * glm::sin(time) + 50.0f;
+    time += 0.01f;
+
+    Paint paint;
+    paint.color = COLOR_SKY_BLUE;
+    paint.fillStyle = Stroken; 
+    paint.stokenWidth = stokenWidth;
+
+    // arc1
+    float radius = viewHeight_ / 4.0f;
+    float centerX = viewWidth_  / 2.0f;
+    float centerY = viewHeight_ / 2.0f;
+
+    glm::vec2 leftArcCenter = glm::vec2(centerX - radius - radius , centerY);
+    glm::vec2 rightArcCenter = glm::vec2(centerX + radius + radius , centerY);
+
+    renderEngine_->renderArc(leftArcCenter[0] , leftArcCenter[1] 
+        , radius , 90.0f , 270.0f ,false, paint);
+
+    std::vector<float> line1(2*2);
+    line1[0] = leftArcCenter[0];
+    line1[1] = leftArcCenter[1] + radius;
+
+    line1[2] = rightArcCenter[0];
+    line1[3] = rightArcCenter[1] + radius;
+    renderEngine_->renderLines(line1 , paint);
+
+    renderEngine_->renderArc(rightArcCenter[0] , rightArcCenter[1] 
+        , radius , 90.0f , 270.0f ,true, paint);
+
+    std::vector<float> line2(2*2);
+    line2[0] = leftArcCenter[0];
+    line2[1] = leftArcCenter[1] - radius;
+
+    line2[2] = rightArcCenter[0];
+    line2[3] = rightArcCenter[1] - radius;
+    renderEngine_->renderLines(line2 , paint);
+}
+
+void ShapeDemo::testRenderArc2() {
+    Paint paint;
+    paint.color = glm::vec4(1.0f , 0.0f , 0.0f , 1.0f);
+    paint.fillStyle = Stroken; 
+    paint.stokenWidth = 20.0f;
+
+    float cx = 200.0f;
+    float cy = viewHeight_ / 2.0f;
+
+    float radius = 200.0f;
+    static float angle = 0.0f;
+    angle += 1.0f;
+    renderEngine_->renderArc(cx , cy , radius , angle , 360.0f ,true, paint);
+    renderEngine_->renderArc(cx + radius + radius , cy , radius , angle , 360.0f ,false, paint);
 }
 
 void ShapeDemo::testRenderArc(){
@@ -55,7 +114,7 @@ void ShapeDemo::testRenderArc(){
     float radius = 200.0f;
     static float angle = 0.0f;
     angle += 1.0f;
-    renderEngine_->renderArc(cx , cy , radius , angle , 360.0f , paint);
+    renderEngine_->renderArc(cx , cy , radius , angle , 270.0f , true, paint);
 }
 
 void ShapeDemo::testRenderLinesStar(){

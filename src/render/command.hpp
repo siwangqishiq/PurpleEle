@@ -174,7 +174,8 @@ public:
         :RenderCommand(engine){
     }
 
-    virtual void putParams(Shader shader, Rect &rect , float beginAngle , float endAngle , 
+    virtual void putParams(Shader shader, Rect &rect 
+        , float beginAngle , float endAngle , bool reverse,
         Paint &paint);
 
     virtual void runCommands() override;
@@ -183,6 +184,7 @@ private:
     Paint paint_;
     Rect rect_;
     glm::vec2 angleRange_; 
+    bool reverse_;
 };
 
 

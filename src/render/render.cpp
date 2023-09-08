@@ -512,11 +512,14 @@ void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat ,
 }
 
 void RenderEngine::renderArc(float cx , float cy , float radius , 
-            float beginAngle , float endAngle , Paint &paint){
+            float beginAngle ,float endAngle , bool isReverse , Paint &paint){
     ArcRenderCommand cmd(this);
     Shader arcShader = ShaderManager::getInstance()->getShaderByName("primitive_arc");
+    if(paint.fillStyle == Stroken){
+        radius += (paint.stokenWidth * 0.5f);
+    }
     Rect rect(cx - radius , cy + radius , radius * 2.0f , radius * 2.0f);
-    cmd.putParams(arcShader , rect,beginAngle , endAngle, paint);
+    cmd.putParams(arcShader , rect,beginAngle , endAngle, isReverse , paint);
     cmd.runCommands();        
 }
 

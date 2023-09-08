@@ -651,12 +651,14 @@ void LinesRenderCommand::runCommands(){
 }
 
 
-void ArcRenderCommand::putParams(Shader shader, Rect &rect , float beginAngle , float endAngle , 
+void ArcRenderCommand::putParams(Shader shader, Rect &rect 
+        , float beginAngle , float endAngle , bool reverse,
         Paint &paint){
     shader_ = shader;
     rect_ = rect;
     angleRange_[0] = beginAngle;
     angleRange_[1] = endAngle;
+    reverse_ = reverse;
     paint_ = paint;
 
     vertexCount_ = 4;
@@ -705,9 +707,13 @@ void ArcRenderCommand::runCommands(){
     shader_.useShader();
     shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
     shader_.setUniformVec4("uColor" , paint_.color);
+    shader_.setUniformInt("uFillStyle" , paint_.fillStyle);
+    shader_.setUniformFloat("uStrokenWidth" , paint_.stokenWidth);
+    shader_.setUniformFloat("uReverse" , reverse_? 1.0f: 0.0f);
     // std::cout<< "uAngleRange  " << angleRange_[0] << "   " << angleRange_[1] << std::endl; 
     shader_.setUniformVec2("uAngleRange" , angleRange_[0] , angleRange_[1]);
     shader_.setUniformVec4("uRect" , glm::vec4(rect_.left , rect_.top , rect_.width , rect_.height));
+
     glBindVertexArray(vao_);
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glEnableVertexAttribArray(0);

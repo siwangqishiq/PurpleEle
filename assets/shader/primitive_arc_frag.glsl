@@ -3,6 +3,12 @@ precision highp float;
 uniform vec4 uRect;
 uniform vec4 uColor;
 uniform vec2 uAngleRange;
+uniform int uFillStyle;
+uniform float uStrokenWidth;
+uniform bool uReverse;
+
+const int mode_filled = 0;
+const int mode_stoken = 1;
 
 out vec4 fragColor;
 
@@ -17,13 +23,28 @@ float fillCircle(vec2 pos , vec2 center , float radius){
         angle = 360.0f - angle;
     }
 
-    if(distance(pos , center) <= radius 
-        && angle > mod(uAngleRange.x , 360.01f)
-        && angle < mod(uAngleRange.y , 360.01f)){
-        return 1.0f;
-    }else{
+    float len = distance(pos , center);
+
+    if(len > radius){
         return 0.0f;
     }
+
+    bool isPaint = false;
+    if(angle > mod(uAngleRange.x , 360.01f)
+        && angle < mod(uAngleRange.y , 360.01f)){ 
+        isPaint = true;
+    }else{
+        isPaint = false;
+    }
+
+    if(uReverse){
+        isPaint = !isPaint;
+    }
+
+    if(isPaint && uFillStyle == mode_stoken && len < radius - uStrokenWidth){
+        isPaint = false;
+    }
+    return isPaint?1.0f:0.0f;
 }
 
 void main(){

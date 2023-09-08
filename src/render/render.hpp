@@ -66,7 +66,8 @@ public:
     //==============render api ================
     //弧线
     void renderArc(float cx , float cy , float radius , 
-            float beginAngle , float endAngle , Paint &paint);
+            float startAngle , float endAngle ,
+            bool isReverse, Paint &paint);
 
     //画单色直线
     void renderLines(std::vector<float> &points , Paint &paint);
