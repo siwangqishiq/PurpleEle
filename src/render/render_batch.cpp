@@ -370,9 +370,8 @@ void SpriteBatch::executeGlCommands(){
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
-
     glEnable(GL_DEPTH_TEST);
-
+    
     glBindBuffer(GL_ARRAY_BUFFER , vbo_);
     glBufferSubData(GL_ARRAY_BUFFER , vboOffset_ ,
                     index_ * sizeof(float) , vertexBuffer_.data());
@@ -380,13 +379,12 @@ void SpriteBatch::executeGlCommands(){
 
     shader_.useShader();
     shader_.setUniformMat3("transMat" , renderEngine_->normalMatrix_);
-
-    glBindVertexArray(vao_);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D , currentTextureId_);
-    glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
     shader_.setUniformInt("uTex",0);
 
+    glBindVertexArray(vao_);
+    glDrawArrays(GL_TRIANGLES , 0 , vertexCount_);
     glBindTexture(GL_TEXTURE_2D , 0);
     glBindVertexArray(0);
 }

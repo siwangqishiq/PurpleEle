@@ -64,6 +64,14 @@ public:
     glm::mat3 normalMatrix_;
 
     //==============render api ================
+
+    //自定义带纹理的shader
+    void renderTextureShader(
+            Shader &shader , 
+            Rect &showRect , 
+            unsigned int textureId,
+            std::function<void(void)> preRenderCallback);
+
     //弧线
     void renderArc(float cx , float cy , float radius , 
             float startAngle , float endAngle ,

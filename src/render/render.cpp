@@ -533,3 +533,14 @@ void RenderEngine::renderLines(std::vector<float> &points , Paint &paint){
     cmd.putParams(shader , points , paint);
     cmd.runCommands();
 }
+
+//自定义带纹理的shader
+void RenderEngine::renderTextureShader(
+        Shader &shader , 
+        Rect &showRect , 
+        unsigned int textureId,
+        std::function<void(void)> preRenderCallback){
+    CustomTextureShaderRenderCommand cmd(this);
+    cmd.putParams(shader , showRect , textureId);
+    cmd.runCommands();
+}

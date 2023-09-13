@@ -3,6 +3,7 @@
 #include "../render/render_batch.hpp"
 #include <memory>
 #include "glm/gtc/quaternion.hpp"
+#include "render/sprite.hpp"
 
 void ShapeDemo::init(){
     viewWidth_ = appContext->viewWidth_;
@@ -32,6 +33,12 @@ void ShapeDemo::init(){
     // glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lineWidth);
     // std::cout << "line min Width = " << lineWidth[0] <<
     //     "  line max Width = " << lineWidth[1] << std::endl;
+
+    image_ = BuildImageByAsset("lan.jpg");
+    customTextureShader_ = 
+        ShaderManager::getInstance()->loadAssetShader("custom_texture_shader2",
+                    "shader/sprite_batch_vertex.glsl", 
+                    "shader/custom_texture_shader.glsl");
 }
 
 void ShapeDemo::buildViews(){
@@ -44,7 +51,25 @@ void ShapeDemo::tick(){
     // testRenderLinesStar();
     // testRenderArc();
     // testRenderArc2();
-    testRenderArc3();
+    // testRenderArc3();
+
+    testCustomTextureShader();
+}
+
+void ShapeDemo::testCustomTextureShader(){
+    Rect rect;
+    rect.left = 0.0f;
+    rect.top = viewHeight_;
+    rect.width = viewHeight_;
+    rect.height = viewHeight_;
+
+    renderEngine_->renderTextureShader(customTextureShader_ , rect , 
+        image_->getTextureId() , nullptr);
+
+    // Paint paint;
+    // paint.color = COLOR_SKY_BLUE;
+    // auto m = glm::mat4(1.0f);
+    // renderEngine_->renderRect(rect , m, paint);
 }
 
 void ShapeDemo::testRenderArc3() {

@@ -3,6 +3,7 @@
 #include "application.hpp"
 #include "utils.hpp"
 #include <memory>
+#include "render/sprite.hpp"
 
 class ShapeDemo : public IScene,EventActionCallback {
 public:
@@ -33,6 +34,9 @@ private:
 
     std::shared_ptr<RenderEngine> renderEngine_;
 
+    Shader customTextureShader_;
+    std::shared_ptr<TextureImage> image_;
+
     void testRenderShapeRect();
     void testRenderLines();
     void testRenderLines2();
@@ -41,4 +45,6 @@ private:
     void testRenderArc();
     void testRenderArc2();
     void testRenderArc3();
+
+    void testCustomTextureShader();
 };
