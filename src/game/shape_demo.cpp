@@ -65,11 +65,10 @@ void ShapeDemo::testCustomTextureShader(){
 
     renderEngine_->renderTextureShader(customTextureShader_ , rect , 
         image_->getTextureId() , nullptr);
-
-    // Paint paint;
-    // paint.color = COLOR_SKY_BLUE;
-    // auto m = glm::mat4(1.0f);
-    // renderEngine_->renderRect(rect , m, paint);
+    TextPaint paint;
+    paint.textColor = COLOR_SKY_BLUE;
+    paint.setTextSize(64.0f);
+    renderEngine_->renderText(L"你好世界", rect.width ,rect.top - 200.0f , paint);
 }
 
 void ShapeDemo::testRenderArc3() {

@@ -503,6 +503,11 @@ void TextRenderHelper::layoutText(std::wstring &content,
     }//end for i
 }
 
+//绘制单独的一个矩形
+void RenderEngine::renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint){
+    renderRect(rect , transMat , paint);
+}
+
 void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat , 
         Paint &paint){
     RectRenderCommand cmd(this);

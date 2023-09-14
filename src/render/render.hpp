@@ -83,8 +83,16 @@ public:
     //绘制单独的一个矩形
     void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
 
+    //绘制单独的一个矩形
+    void renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint);
+
     //绘制文字
     void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
+
+    // //绘制文字
+    // void renderText(std::wstring &&text , float left , float bottom , TextPaint &paint){
+    //     renderText(text , left , bottom , paint);
+    // }
 
     void renderText(const wchar_t *text , float left , float bottom , TextPaint &paint){
         auto str = std::wstring(text);
@@ -95,7 +103,13 @@ public:
     void renderTextWithRect(std::wstring &text , Rect &showRect , 
             TextPaint &paint , 
             Rect *wrapContentRect);//
-
+    
+    void renderTextWithRect(std::wstring &&text , Rect &showRect , 
+            TextPaint &paint , 
+            Rect *wrapContentRect){
+        renderTextWithRect(text , showRect , paint ,wrapContentRect);
+    }
+    
     void renderTextWithRect(const wchar_t *text , 
             Rect &showRect , 
             TextPaint &paint ,
