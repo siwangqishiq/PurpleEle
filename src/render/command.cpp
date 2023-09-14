@@ -551,11 +551,16 @@ void LinesRenderCommand::renderByRects(std::vector<float> &points){
 
     uint32_t bufIdx = 0;
     while(index < points.size()){
-        startPoint = glm::vec2(points[index - 2] , points[index -1]);
+        startPoint = glm::vec2(points[index - 2], points[index -1]);
         endPoint = glm::vec2(points[index] , points[index + 1]);
 
         glm::vec2 dir = glm::normalize(endPoint - startPoint);
         
+        //起始点 需要考虑线段宽度 再偏移一段距离
+        const glm::vec2 adjustVec = lineHalfWidth * dir;
+        startPoint += -1.0f * adjustVec;
+        endPoint += adjustVec;
+
         glm::vec2 topDir(
              glm::cos(angle90)* dir[0] + glm::sin(angle90) * dir[1],
             -glm::sin(angle90)* dir[0] + glm::cos(angle90) * dir[1]

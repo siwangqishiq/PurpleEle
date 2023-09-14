@@ -146,7 +146,7 @@ private:
     int textCommandIndex;
     std::vector<std::shared_ptr<TextRenderCommand>> textCommandPool;
 
-    void fillLinesFromRect(Rect &rect , std::vector<float> &buf);
+    void fillLinesFromRect(Rect &rect ,glm::mat4 &transMat, std::vector<float> &buf);
 
     //fetch new render command
     std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);

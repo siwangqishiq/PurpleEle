@@ -51,10 +51,10 @@ void ShapeDemo::tick(){
     // testRenderLinesStar();
     // testRenderArc();
     // testRenderArc2();
-    // testRenderArc3();
+    testRenderArc3();
     // testCustomTextureShader();
 
-    testRenderShapeRect2();
+    // testRenderShapeRect2();
 }
 
 void ShapeDemo::testCustomTextureShader(){
@@ -94,10 +94,10 @@ void ShapeDemo::testRenderArc3() {
         , radius , 90.0f , 270.0f ,false, paint);
 
     std::vector<float> line1(2*2);
-    line1[0] = leftArcCenter[0];
+    line1[0] = leftArcCenter[0] + paint.stokenWidth / 2.0f;
     line1[1] = leftArcCenter[1] + radius;
 
-    line1[2] = rightArcCenter[0];
+    line1[2] = rightArcCenter[0] - paint.stokenWidth / 2.0f;
     line1[3] = rightArcCenter[1] + radius;
     renderEngine_->renderLines(line1 , paint);
 
@@ -105,10 +105,10 @@ void ShapeDemo::testRenderArc3() {
         , radius , 90.0f , 270.0f ,true, paint);
 
     std::vector<float> line2(2*2);
-    line2[0] = leftArcCenter[0];
+    line2[0] = leftArcCenter[0] + paint.stokenWidth / 2.0f;
     line2[1] = leftArcCenter[1] - radius;
 
-    line2[2] = rightArcCenter[0];
+    line2[2] = rightArcCenter[0]- paint.stokenWidth / 2.0f;
     line2[3] = rightArcCenter[1] - radius;
     renderEngine_->renderLines(line2 , paint);
 }
@@ -228,7 +228,7 @@ void ShapeDemo::testRenderShapeRect(){
 
     Paint paint;
     paint.color = COLOR_SKY_BLUE;
-    paint.fillStyle = Stroken;
+    paint.fillStyle = Filled;
     
     static float angle = 0.0f;
     glm::mat4 mat(1.0f);
@@ -254,10 +254,17 @@ void ShapeDemo::testRenderShapeRect2(){
     Paint paint;
     paint.color = COLOR_SKY_BLUE;
     paint.fillStyle = Stroken;
-    paint.stokenWidth = 4.0f;
+    paint.stokenWidth = 20.0f;
     
-    auto mat = glm::mat4(1.0f);
-    renderEngine_->renderRect(rect , mat, paint);
+    static float angle = 0.0f;
+    glm::mat4 mat(1.0f);
+    auto center = rect.center();
+    mat = glm::translate(mat , glm::vec3(center.x , center.y , 0.0f));
+    mat = glm::rotate(mat , glm::radians(angle) , glm::vec3(0.0, 0.0 , 1.0f));
+    mat = glm::translate(mat , glm::vec3(-center.x , -center.y , 0.0f));
+    
+    renderEngine_->renderRect(rect , mat , paint);
+    angle++;
 }
 
 void ShapeDemo::dispose(){

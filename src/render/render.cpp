@@ -516,7 +516,7 @@ void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat ,
         Paint &paint){
     if(paint.fillStyle == Stroken){
         std::vector<float> points(2 * 5);
-        fillLinesFromRect(rect , points);
+        fillLinesFromRect(rect , transMat, points);
         renderLines(points , paint);
     }else{
         RectRenderCommand cmd(this);
@@ -560,19 +560,42 @@ void RenderEngine::renderTextureShader(
     cmd.runCommands();
 }
 
-void RenderEngine::fillLinesFromRect(Rect &rect , std::vector<float> &buf){
-    buf[0] = rect.left;
-    buf[1] = rect.top;
+void RenderEngine::fillLinesFromRect(Rect &rect , glm::mat4 &transMat, std::vector<float> &buf){
+    glm::vec4 value;
 
-    buf[2] = rect.getRight();
-    buf[3] = rect.top;
+    value[0] = rect.left;
+    value[1] = rect.top;
+    value[2] = 0.0f;
+    value[3] = 1.0f;
+    value = transMat * value;
+    buf[0] = value[0];
+    buf[1] = value[1];
 
-    buf[4] = rect.getRight();
-    buf[5] = rect.getBottom();
 
-    buf[6] = rect.left;
-    buf[7] = rect.getBottom();
+    value[0] = rect.getRight();
+    value[1] = rect.top;
+    value[2] = 0.0f;
+    value[3] = 1.0f;
+    value = transMat * value;
+    buf[2] = value[0];
+    buf[3] = value[1];
 
-    buf[8] = rect.left;
-    buf[9] = rect.top;
+    value[0] = rect.getRight();
+    value[1] = rect.getBottom();
+    value[2] = 0.0f;
+    value[3] = 1.0f;
+    value = transMat * value;
+    buf[4] = value[0];
+    buf[5] = value[1];
+
+    value[0] = rect.left;
+    value[1] = rect.getBottom();
+    value[2] = 0.0f;
+    value[3] = 1.0f;
+    value = transMat * value;
+    buf[6] = value[0];
+    buf[7] = value[1];
+
+    buf[8] = buf[0];
+    buf[9] = buf[1];
 }
