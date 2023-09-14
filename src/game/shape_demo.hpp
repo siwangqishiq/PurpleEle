@@ -38,6 +38,7 @@ private:
     std::shared_ptr<TextureImage> image_;
 
     void testRenderShapeRect();
+    void testRenderShapeRect2();
     void testRenderLines();
     void testRenderLines2();
     void testRenderLinesStar();

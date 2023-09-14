@@ -52,8 +52,9 @@ void ShapeDemo::tick(){
     // testRenderArc();
     // testRenderArc2();
     // testRenderArc3();
+    // testCustomTextureShader();
 
-    testCustomTextureShader();
+    testRenderShapeRect2();
 }
 
 void ShapeDemo::testCustomTextureShader(){
@@ -240,6 +241,23 @@ void ShapeDemo::testRenderShapeRect(){
 
     renderEngine_->renderRect(rect , mat , paint);
     angle++;
+}
+
+void ShapeDemo::testRenderShapeRect2(){
+    Rect rect;
+
+    rect.width = viewHeight_ / 4.0f;
+    rect.height = viewHeight_ / 2.0f;
+    rect.left = viewWidth_ / 2.0f - rect.width / 2.0f;
+    rect.top = viewHeight_/ 2.0f + rect.height/2.0f;
+
+    Paint paint;
+    paint.color = COLOR_SKY_BLUE;
+    paint.fillStyle = Stroken;
+    paint.stokenWidth = 4.0f;
+    
+    auto mat = glm::mat4(1.0f);
+    renderEngine_->renderRect(rect , mat, paint);
 }
 
 void ShapeDemo::dispose(){

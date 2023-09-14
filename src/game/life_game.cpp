@@ -225,7 +225,6 @@ void LifeGame::tick(){
         for(int j = 0 ; j < cellRowCount_;j++){
             cellRect.left = x;
             cellRect.top = y;
-            
             // cellPaint.color = glm::vec4(GenRandomFloat() , GenRandomFloat() , 
             //     GenRandomFloat() ,1.0f);
 
@@ -244,15 +243,46 @@ void LifeGame::tick(){
         x = gameZoneRect_.left;
         y -= cellSize_;
     }//end for i;
-
     batch->end();
-    // limitCount=100;
 
-    // batch->begin();
-    // Paint circlePaint;
-    // circlePaint.color = COLOR_GRAY;
-    // batch->renderBlurCircle(100,100,200,20 , circlePaint);
-    // batch->end();
+
+    //render multi submit
+    // Paint paint;
+    // paint.color = COLOR_BLACK;
+
+    // auto mat = glm::mat4(1.0f);
+    // auto rectF = gameZoneRect_.toRectF();
+    // renderEngine_->renderRect(rectF , mat, paint);
+
+    // Paint cellPaint;
+    // cellPaint.color = COLOR_GREEN;
+    // cellPaint.stokenWidth = 1.0f; 
+
+    // float x = gameZoneRect_.left;
+    // float y = gameZoneRect_.top;
+
+    // Rect cellRect;
+    // cellRect.width = cellSize_;
+    // cellRect.height = cellSize_;
+
+    // // int drawCount = 0;
+    // for(int i = 0 ; i < cellRowCount_ ;i++){
+    //     for(int j = 0 ; j < cellRowCount_;j++){
+    //         cellRect.left = x;
+    //         cellRect.top = y;
+    //         if(cellData_[i][j] == 1){
+    //             cellPaint.fillStyle = Filled;
+    //             renderEngine_->renderRect(cellRect , mat , cellPaint);
+    //         }else{
+    //             cellPaint.fillStyle = Stroken;
+    //             renderEngine_->renderRect(cellRect , mat , cellPaint);
+    //         }
+          
+    //        x += cellSize_;
+    //     }//end for j
+    //     x = gameZoneRect_.left;
+    //     y -= cellSize_;
+    // }//end for i;
 }
 
 /**

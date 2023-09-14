@@ -503,17 +503,27 @@ void TextRenderHelper::layoutText(std::wstring &content,
     }//end for i
 }
 
-//绘制单独的一个矩形
-void RenderEngine::renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint){
-    renderRect(rect , transMat , paint);
-}
+// //绘制单独的一个矩形
+// void RenderEngine::renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint){
+//     renderRect(rect , transMat , paint);
+// }
+
+// void RenderEngine::renderRect(Rect &&rect , glm::mat4 &&transMat , Paint &paint){
+//     renderRect(rect , transMat , paint);
+// }
 
 void RenderEngine::renderRect(Rect &rect , glm::mat4 &transMat , 
         Paint &paint){
-    RectRenderCommand cmd(this);
-    Shader rectShader = ShaderManager::getInstance()->getShaderByName("primitive_rect");
-    cmd.putParams(rectShader , rect ,transMat, paint);
-    cmd.runCommands();
+    if(paint.fillStyle == Stroken){
+        std::vector<float> points(2 * 5);
+        fillLinesFromRect(rect , points);
+        renderLines(points , paint);
+    }else{
+        RectRenderCommand cmd(this);
+        Shader rectShader = ShaderManager::getInstance()->getShaderByName("primitive_rect");
+        cmd.putParams(rectShader , rect ,transMat, paint);
+        cmd.runCommands();
+    }
 }
 
 void RenderEngine::renderArc(float cx , float cy , float radius , 
@@ -548,4 +558,21 @@ void RenderEngine::renderTextureShader(
     CustomTextureShaderRenderCommand cmd(this);
     cmd.putParams(shader , showRect , textureId);
     cmd.runCommands();
+}
+
+void RenderEngine::fillLinesFromRect(Rect &rect , std::vector<float> &buf){
+    buf[0] = rect.left;
+    buf[1] = rect.top;
+
+    buf[2] = rect.getRight();
+    buf[3] = rect.top;
+
+    buf[4] = rect.getRight();
+    buf[5] = rect.getBottom();
+
+    buf[6] = rect.left;
+    buf[7] = rect.getBottom();
+
+    buf[8] = rect.left;
+    buf[9] = rect.top;
 }

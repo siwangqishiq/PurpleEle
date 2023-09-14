@@ -84,7 +84,10 @@ public:
     void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
 
     //绘制单独的一个矩形
-    void renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint);
+    // void renderRect(Rect &rect , glm::mat4 &&transMat , Paint &paint);
+
+    //绘制单独的一个矩形
+    // void renderRect(Rect &&rect , glm::mat4 &&transMat , Paint &paint);
 
     //绘制文字
     void renderText(std::wstring &text , float left , float bottom , TextPaint &paint);
@@ -142,6 +145,8 @@ private:
 
     int textCommandIndex;
     std::vector<std::shared_ptr<TextRenderCommand>> textCommandPool;
+
+    void fillLinesFromRect(Rect &rect , std::vector<float> &buf);
 
     //fetch new render command
     std::shared_ptr<TextRenderCommand> fetchTextRenderCommand(RenderEngine *engine);
