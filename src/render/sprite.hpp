@@ -30,6 +30,9 @@ public:
     std::shared_ptr<TextureImageRegion> createImageRegion(float offsetX , float offsetY,
         float regionWidth , float regionHeight);
 
+    //更新纹理数据
+    virtual void updateTextureData(uint8_t *pData);
+
 private:
     std::shared_ptr<TextureInfo> textureInfo_;
 };

@@ -53,6 +53,16 @@ void TextureImage::dispose(){
     TextureManager::getInstance()->freeTexture(*textureInfo_);
 }
 
+ void TextureImage::updateTextureData(uint8_t *pData){
+    glBindTexture(GL_TEXTURE_2D , getTextureId());
+    glTexSubImage2D(GL_TEXTURE_2D , 
+        0 , 0,  0,
+        getWidth() , 
+        getHeight(), 
+        GL_RED , GL_UNSIGNED_BYTE, pData);
+    glBindTexture(GL_TEXTURE_2D , 0);
+ }
+
 unsigned int TextureImage::getTextureId(){
     return textureInfo_ != nullptr? textureInfo_->textureId : 0;
 }

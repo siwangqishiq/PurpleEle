@@ -23,6 +23,7 @@ struct TextureInfo{
     int height;
     TextureType type = TEXTURE_2D;
     int depth;
+    int format;
 };
 
 static GLint convertChanelToInternalFormat(int channelFormat);

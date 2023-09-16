@@ -130,6 +130,7 @@ std::shared_ptr<TextureInfo> TextureManager::loadTextureArray(
     textureInfo->width = texWidth;
     textureInfo->height = texHeight;
     textureInfo->depth = textureFiles.size();
+    textureInfo->format = format;
 
     textureBank_[textureInfo->name] = textureInfo;
     return textureInfo;
@@ -171,6 +172,7 @@ std::shared_ptr<TextureInfo> TextureManager::loadTexture(std::string textureFile
     textureInfo->textureId = tId;
     textureInfo->width = texWidth;
     textureInfo->height = texHeight;
+    textureInfo->format = format;
 
     //add pool
     textureBank_[textureInfo->name] = textureInfo;
@@ -197,7 +199,7 @@ std::shared_ptr<TextureInfo> TextureManager::createEmptyTexture(std::string texN
     if(tId <= 0 ){
         return nullptr;
     }
-    
+
     glBindTexture(GL_TEXTURE_2D , tId);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
@@ -217,6 +219,7 @@ std::shared_ptr<TextureInfo> TextureManager::createEmptyTexture(std::string texN
     textureInfo->textureId = tId;
     textureInfo->width = width;
     textureInfo->height = height;
+    textureInfo->format = format;
 
     //add pool
     textureBank_[textureInfo->name] = textureInfo;
