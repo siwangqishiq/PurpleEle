@@ -7,6 +7,18 @@ std::shared_ptr<TextureImage> BuildImageByAsset(std::string path){
     return std::make_shared<TextureImage>(info);
 }
 
+std::shared_ptr<TextureImage> BuildEmptyImage(int width , int height , int format){
+    static int emptyTextureCount = 0;
+    emptyTextureCount++;
+
+    std::string name = std::string("empty_image") 
+        + std::to_string(emptyTextureCount) 
+        + std::to_string(width)+std::string("x")
+        + std::to_string(height);
+    auto info = TextureManager::getInstance()->createEmptyTexture(name , width , height , format);
+    return std::make_shared<TextureImage>(info);
+}
+
 std::shared_ptr<TextureImageRegion> TextureImage::createImageRegion(float offsetX, float offsetY, float regionWidth , float regionHeight){
     return std::make_shared<TextureImageRegion>(getTextureId(),
         offsetX , offsetY , regionWidth , regionHeight , getWidth() , getHeight());

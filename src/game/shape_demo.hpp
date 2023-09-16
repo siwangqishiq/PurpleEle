@@ -37,6 +37,8 @@ private:
     Shader customTextureShader_;
     std::shared_ptr<TextureImage> image_;
 
+    std::shared_ptr<TextureImage> emptyTex_;
+
     void testRenderShapeRect();
     void testRenderShapeRect2();
     void testRenderLines();
@@ -48,4 +50,6 @@ private:
     void testRenderArc3();
 
     void testCustomTextureShader();
+
+    void testEmptyTexture();
 };

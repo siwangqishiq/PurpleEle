@@ -190,6 +190,45 @@ std::shared_ptr<TextureInfo> TextureManager::acquireTexture(std::string textureF
     return loadTexture(textureFilePath , needFlip);
 }
 
+std::shared_ptr<TextureInfo> TextureManager::createEmptyTexture(std::string texName, 
+        int width , int height , int format){
+    unsigned int tId = -1;
+    glGenTextures(1 , &tId);
+    if(tId <= 0 ){
+        return nullptr;
+    }
+    
+    glBindTexture(GL_TEXTURE_2D , tId);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, 
+        format,
+        width, 
+        height, 0, 
+        format, GL_UNSIGNED_BYTE, nullptr);
+    glBindTexture(GL_TEXTURE_2D , 0);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+    auto textureInfo = std::make_shared<TextureInfo>();
+    textureInfo->name = texName;
+    textureInfo->textureId = tId;
+    textureInfo->width = width;
+    textureInfo->height = height;
+
+    //add pool
+    textureBank_[textureInfo->name] = textureInfo;
+    
+    Logi(TAG , "load texture id : %d , width : %d , height : %d" , 
+        textureInfo->textureId,
+        textureInfo->width,
+        textureInfo->height);
+    
+    return textureInfo;
+}
+
 std::string TextureManager::allTextureInfos(){
     std::string infoString = std::to_string(textureBank_.size()) +" [";
 

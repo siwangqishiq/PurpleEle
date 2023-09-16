@@ -39,6 +39,8 @@ void ShapeDemo::init(){
         ShaderManager::getInstance()->loadAssetShader("custom_texture_shader2",
                     "shader/sprite_batch_vertex.glsl", 
                     "shader/custom_texture_shader.glsl");
+
+    emptyTex_ = BuildEmptyImage(100 , 100 , GL_RGBA);
 }
 
 void ShapeDemo::buildViews(){
@@ -51,10 +53,26 @@ void ShapeDemo::tick(){
     // testRenderLinesStar();
     // testRenderArc();
     // testRenderArc2();
-    testRenderArc3();
+    // testRenderArc3();
     // testCustomTextureShader();
-
     // testRenderShapeRect2();
+    testEmptyTexture();
+}
+
+void ShapeDemo::testEmptyTexture(){
+    Rect rect;
+    rect.left = 0.0f;
+    rect.top = viewHeight_;
+    rect.width = viewHeight_;
+    rect.height = viewHeight_;
+
+    renderEngine_->renderTextureShader(customTextureShader_ , 
+        rect , emptyTex_->getTextureId() , 
+        [this](){
+            customTextureShader_.setUniformInt("mainTexture", 0);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D , emptyTex_->getTextureId());
+        });
 }
 
 void ShapeDemo::testCustomTextureShader(){
@@ -71,6 +89,8 @@ void ShapeDemo::testCustomTextureShader(){
     paint.setTextSize(64.0f);
     renderEngine_->renderText(L"你好世界", rect.width ,rect.top - 200.0f , paint);
 }
+
+
 
 void ShapeDemo::testRenderArc3() {
     static float time = 0.0f;

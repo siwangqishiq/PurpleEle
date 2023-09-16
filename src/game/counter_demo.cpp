@@ -30,7 +30,7 @@ void CounterDemo::buildViews(){
     rootView_->addView(topBanner , 0 , 0);
 
     std::shared_ptr<TextView> topTextView = std::make_shared<TextView>(viewWidth_ , bannerHeight);
-    topTextView->setText(L"Flutter Demo Home Page");
+    topTextView->setText(L"PurpleEle Demo Home Page");
     topTextView->setTextSize(bannerHeight / 3.5f);
     topTextView->setTextColor(COLOR_WHITE);
     topTextView->setTextGravity(CenterLeft);

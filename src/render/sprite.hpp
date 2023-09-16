@@ -81,3 +81,6 @@ public:
 
 //从asset目录中加载纹理图片资源
 std::shared_ptr<TextureImage> BuildImageByAsset(std::string path);
+
+//加载一张空的纹理 纹理内容
+std::shared_ptr<TextureImage> BuildEmptyImage(int width , int height , int format);

@@ -53,6 +53,9 @@ public:
 
     std::shared_ptr<TextureInfo> loadTextureArray(std::vector<std::string> &textureFiles , bool needFlip = false);
 
+    std::shared_ptr<TextureInfo> createEmptyTexture(std::string texName, 
+        int width , int height , int format);
+
     std::string allTextureInfos();
 private:
     static std::shared_ptr<TextureManager> instance_;
