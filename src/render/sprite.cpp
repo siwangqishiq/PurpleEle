@@ -45,6 +45,10 @@ int TextureImage::getHeight(){
     return textureInfo_ != nullptr? textureInfo_->height : 0;
 }
 
+int TextureImage::getPixFormat(){
+    return textureInfo_ != nullptr? textureInfo_->format : 0;
+}
+
 void TextureImage::dispose(){
     if(textureInfo_ == nullptr){
         return;
@@ -54,13 +58,18 @@ void TextureImage::dispose(){
 }
 
  void TextureImage::updateTextureData(uint8_t *pData){
+
+    std::cout << "updateTextureData " << glGetError() << std::endl;
     glBindTexture(GL_TEXTURE_2D , getTextureId());
     glTexSubImage2D(GL_TEXTURE_2D , 
         0 , 0,  0,
         getWidth() , 
         getHeight(), 
-        GL_RED , GL_UNSIGNED_BYTE, pData);
+        getPixFormat(), 
+        GL_UNSIGNED_BYTE, pData);
     glBindTexture(GL_TEXTURE_2D , 0);
+
+    std::cout << "updateTextureData after " << glGetError() << std::endl;
  }
 
 unsigned int TextureImage::getTextureId(){

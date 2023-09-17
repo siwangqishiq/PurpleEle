@@ -34,13 +34,13 @@ void ShapeDemo::init(){
     // std::cout << "line min Width = " << lineWidth[0] <<
     //     "  line max Width = " << lineWidth[1] << std::endl;
 
-    image_ = BuildImageByAsset("lan.jpg");
+    image_ = BuildImageByAsset("bg.jpg");
     customTextureShader_ = 
         ShaderManager::getInstance()->loadAssetShader("custom_texture_shader2",
                     "shader/sprite_batch_vertex.glsl", 
                     "shader/custom_texture_shader.glsl");
 
-    emptyTex_ = BuildEmptyImage(100 , 100 , GL_RGBA);
+    emptyTex_ = BuildEmptyImage(512 , 512 , GL_RED);
 }
 
 void ShapeDemo::buildViews(){
@@ -66,13 +66,28 @@ void ShapeDemo::testEmptyTexture(){
     rect.width = viewHeight_;
     rect.height = viewHeight_;
 
+    const int texSize = emptyTex_->getWidth() * emptyTex_->getHeight();
+    uint8_t *texData = new uint8_t[texSize];
+    for(int j = 0; j < emptyTex_->getHeight() ; j++){
+        for(int i = 0 ; i < emptyTex_->getWidth() ; i++){
+            if(i == j){
+                texData[j * emptyTex_->getWidth() + i] = 100;
+            }else{
+                texData[j * emptyTex_->getWidth() + i] = 255;
+            }
+        }
+    }
+
+    emptyTex_->updateTextureData(texData);
+
     renderEngine_->renderTextureShader(customTextureShader_ , 
-        rect , emptyTex_->getTextureId() , 
+        rect , 0, 
         [this](){
             customTextureShader_.setUniformInt("mainTexture", 0);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D , emptyTex_->getTextureId());
         });
+    delete[] texData;
 }
 
 void ShapeDemo::testCustomTextureShader(){

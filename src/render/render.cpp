@@ -557,6 +557,7 @@ void RenderEngine::renderTextureShader(
         std::function<void(void)> preRenderCallback){
     CustomTextureShaderRenderCommand cmd(this);
     cmd.putParams(shader , showRect , textureId);
+    cmd.setPreRenderCallback(preRenderCallback);
     cmd.runCommands();
 }
 

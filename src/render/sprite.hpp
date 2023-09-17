@@ -23,6 +23,7 @@ public:
 
     virtual int getWidth();
     virtual int getHeight();
+    virtual int getPixFormat();
     virtual unsigned int getTextureId();
 
     virtual void dispose();

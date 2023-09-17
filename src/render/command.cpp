@@ -790,13 +790,8 @@ void CustomTextureShaderRenderCommand::runCommands(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
 
-    shader_.setUniformInt("mainTexture" , 0);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureId_);
     shader_.useShader();
     shader_.setUniformMat3("transMat" , engine_->normalMatrix_);
-
     fillShader();
     
     glBindVertexArray(vao_);

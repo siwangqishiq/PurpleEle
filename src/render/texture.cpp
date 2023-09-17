@@ -205,14 +205,14 @@ std::shared_ptr<TextureInfo> TextureManager::createEmptyTexture(std::string texN
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP_TO_EDGE);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, 
         format,
         width, 
         height, 0, 
         format, GL_UNSIGNED_BYTE, nullptr);
     glBindTexture(GL_TEXTURE_2D , 0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    // glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
     auto textureInfo = std::make_shared<TextureInfo>();
     textureInfo->name = texName;
