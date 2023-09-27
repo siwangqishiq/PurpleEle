@@ -120,7 +120,7 @@ public:
         auto str = std::wstring(text);
         renderTextWithRect(str , showRect , paint ,wrapContentRect);
     }
-
+    
     //在指定矩形区域内绘制自定义shader
     void renderShader(Shader &shader , Rect &showRect , 
             std::function<void(void)> preRenderCallback);

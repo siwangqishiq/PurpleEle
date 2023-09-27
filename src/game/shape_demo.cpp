@@ -79,6 +79,7 @@ void ShapeDemo::testEmptyTexture(){
     }
 
     emptyTex_->updateTextureData(texData);
+    delete[] texData;
 
     renderEngine_->renderTextureShader(customTextureShader_ , 
         rect , 0, 
@@ -87,7 +88,6 @@ void ShapeDemo::testEmptyTexture(){
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D , emptyTex_->getTextureId());
         });
-    delete[] texData;
 }
 
 void ShapeDemo::testCustomTextureShader(){

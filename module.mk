@@ -6,8 +6,8 @@ ASSET_DIR := ../assets
 WIN_DIR := .
 BUILD_DIR := build
 INCLUDE_DIR := ../include
-STD := c++14
-# STD := gnu++14
+# STD := c++14
+STD := gnu++14
 OPTPARAMS := -O1
 
 .PHONY: clean

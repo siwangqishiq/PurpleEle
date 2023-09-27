@@ -34,7 +34,7 @@ void CounterDemo::buildViews(){
     topTextView->setTextSize(bannerHeight / 3.5f);
     topTextView->setTextColor(COLOR_WHITE);
     topTextView->setTextGravity(CenterLeft);
-    rootView_->addView(topTextView , viewWidth_ / 20.0f , 0.0f);
+    rootView_->addView(topTextView , 30.0f , 0.0f);
 
     int btnSize = bannerHeight;
     int padding = 20;
