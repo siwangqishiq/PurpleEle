@@ -96,7 +96,6 @@ public:
 
     //绘制周边带阴影的矩形
     void renderBlurRect(Rect &rect ,float blur, Paint &paint);
-    
 protected:
 
     void formatShape(ShapeType type , Rect &rect , Paint &paint , float extra = 0.0f);

@@ -80,6 +80,16 @@ public:
     //画单色直线
     void renderLines(std::vector<float> &points , Paint &paint);
 
+    //三角形绘制
+    void renderTriangles(
+                        float p1x,  float p1y, 
+                        float p2x , float p2y,
+                        float p3x , float p3y,
+                        glm::mat4 &transMat, Paint &paint);
+
+    //三角形绘制
+    void renderTriangles(std::vector<float> &data ,glm::mat4 &transMat, Paint &paint);
+
     //绘制单独的一个矩形
     void renderRect(Rect &rect , glm::mat4 &transMat , Paint &paint);
 

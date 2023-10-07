@@ -35,7 +35,7 @@ void CounterDemo::buildViews(){
     topTextView->setTextColor(COLOR_WHITE);
     topTextView->setTextGravity(CenterLeft);
     rootView_->addView(topTextView , 30.0f , 0.0f);
-
+    
     int btnSize = bannerHeight;
     int padding = 20;
     roundButton_ = std::make_shared<View>(btnSize , btnSize);

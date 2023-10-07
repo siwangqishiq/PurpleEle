@@ -549,6 +549,37 @@ void RenderEngine::renderLines(std::vector<float> &points , Paint &paint){
     cmd.runCommands();
 }
 
+//三角形绘制
+void RenderEngine::renderTriangles(
+                    float p1x,  float p1y, 
+                    float p2x , float p2y,
+                    float p3x , float p3y,
+                    glm::mat4 &transMat, Paint &paint){
+    const int attrPerVer = 3 + 4;
+    std::vector<float> data(attrPerVer * 3);
+    int index = 0;
+    std::vector<float> posVec = {p1x , p1y , p2x , p2y , p3x , p3y};
+    while(index < 3){
+        int offset = index * attrPerVer;
+        data[offset + 0] = posVec[index << 1 + 0];
+        data[offset + 1] = posVec[index << 1 + 1];
+        
+        data[offset + 2] = paint.color[0];
+        data[offset + 3] = paint.color[1];
+        data[offset + 4] = paint.color[2];
+        data[offset + 5] = paint.color[3];
+        index++;
+    }//end while
+    renderTriangles(data , transMat , paint);
+}
+
+//三角形绘制
+void RenderEngine::renderTriangles(std::vector<float> &data ,glm::mat4 &transMat, Paint &paint){
+    const int attrPerVer = 2 + 4;
+    int vertexCount = data.size() / attrPerVer;
+
+}
+
 //自定义带纹理的shader
 void RenderEngine::renderTextureShader(
         Shader &shader , 
