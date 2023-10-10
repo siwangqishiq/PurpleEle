@@ -18,9 +18,9 @@ const float espion_zero = 0.001;
 
 const int WORLD_MAX_OBJECT_COUNT = 20;//包含最大物体数量
 
-const int SAMPLE_TIMES = 4; //像素点采样次数
+const int SAMPLE_TIMES = 1; //像素点采样次数
 
-const int MAX_RAY_LIST_SIZE = 8;//光线的最大弹射次数
+const int MAX_RAY_LIST_SIZE = 4;//光线的最大弹射次数
 
 const int MATERIAL_TYPE_LAMBERTIAN = 1;//材质 漫反射
 const int MATERIAL_TYPE_METAL = 2;//材质 金属
@@ -157,9 +157,11 @@ bool worldAddSphere(inout World world , Sphere sphere){
 void buildScene(inout World world){
     world.count = 0;
     worldAddSphere(world , Sphere(vec3(-0.6, 0.01, -2.0 + uDeltaY) , 
-        0.5  ,Material(MATERIAL_TYPE_METAL , vec3(0.8, 0.8, 0.8) , 0.05)));
-    worldAddSphere(world , Sphere(vec3(0.6, 0.01, -2.0) , 
-        0.5 ,Material(MATERIAL_TYPE_METAL , vec3(0.5, 0.7, 0.5) , 0.05)));
+        0.5f  ,Material(MATERIAL_TYPE_METAL , vec3(0.8, 0.8, 0.8) , 0.05)));
+    worldAddSphere(world , Sphere(vec3(0.6, 0.3f + uDeltaY, -2.0) , 
+        0.5f ,Material(MATERIAL_TYPE_METAL , vec3(0.5, 0.7, 0.5) , uFuzz)));
+    // worldAddSphere(world , Sphere(vec3(0.0, 0.2f, -1.0) , 
+    //     0.2f ,Material(MATERIAL_TYPE_METAL , vec3(1.0, 1.0, 0.0) , uFuzz)));
         
      worldAddSphere(world , Sphere(vec3(0.0, -100.5, -1.0) , 
         100.0 ,Material(MATERIAL_TYPE_LAMBERTIAN , vec3(0.8, 0.8 , 0.0) , 0.0)));
