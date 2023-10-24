@@ -43,8 +43,8 @@
 
 ### 运行截图 
     使用PurpleEle渲染UI 
-    
-    <img width="300" src="https://github.com/siwangqishiq/PurpleEle/blob/main/img/tt.png">
+
+<img width="300" src="https://github.com/siwangqishiq/PurpleEle/blob/main/img/tt.png">
 
 #### 开发计划
   1. 渲染接口增加批量点图元渲染模式 用于引擎粒子系统开发
