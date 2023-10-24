@@ -97,7 +97,7 @@ void CounterDemo::buildViews(){
     tipsText->setTextGravity(Center);
     tipsText->setTextSize(tipTextHeight / 2.1f);
     rootView_->addView(tipsText , 0 , -viewHeight_ / 2.0f + tipTextHeight);
-
+    
     int countTextHeight = tipTextHeight * 2.0f;
     countText_ = std::make_shared<TextView>(viewWidth_ , countTextHeight);
     countText_->setTextColor(COLOR_GRAY);

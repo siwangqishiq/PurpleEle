@@ -137,14 +137,14 @@ void Application::onCreate(){
 
   
     startTime_ = static_cast<long>(currentTimeMillis());
-
     // currentScene_ = std::make_shared<TestDemo>(this);
     // currentScene_ = std::make_shared<UiDemo>(this);
+    // currentScene_ = std::make_shared<ShapeDemo>(this);
+    
     currentScene_ = std::make_shared<CounterDemo>(this);
     // currentScene_ = std::make_shared<LifeGame>(this);
-    // currentScene_ = std::make_shared<CustomShaderDemo>(this);
     // currentScene_ = std::make_shared<NinjiaGame>(this);
-    // currentScene_ = std::make_shared<ShapeDemo>(this);
+    // currentScene_ = std::make_shared<CustomShaderDemo>(this);
     currentScene_->init();
 }
 
