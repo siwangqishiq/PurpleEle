@@ -10,17 +10,11 @@
 #include "widget/timer.hpp"
 #include "render/render_batch.hpp"
 #include "utils.hpp"
-#include "game/test_demo.hpp"
-#include "game/shader_demo.hpp"
 #include "audio/audio.hpp"
-#include "game/ui_demo.hpp"
-#include "game/life_game.hpp"
 #include <string>
 #include "render/ui/view.hpp"
-#include "game/counter_demo.hpp"
-#include "game/custom_shader_demo.hpp"
-#include "game/ninjia/ninjia_game.hpp"
-#include "game/shape_demo.hpp"
+
+#include "render3d/demo3d/test_demo.hpp"
 
 void Application::onFree(){
     Logi(TAG , "app onFree");
@@ -137,14 +131,16 @@ void Application::onCreate(){
 
   
     startTime_ = static_cast<long>(currentTimeMillis());
-    // currentScene_ = std::make_shared<TestDemo>(this);
+    currentScene_ = std::make_shared<Test3dDemo>(this);
     // currentScene_ = std::make_shared<UiDemo>(this);
     // currentScene_ = std::make_shared<ShapeDemo>(this);
     
-    currentScene_ = std::make_shared<CounterDemo>(this);
+    // currentScene_ = std::make_shared<CounterDemo>(this);
     // currentScene_ = std::make_shared<LifeGame>(this);
     // currentScene_ = std::make_shared<NinjiaGame>(this);
     // currentScene_ = std::make_shared<CustomShaderDemo>(this);
+
+
     currentScene_->init();
 }
 

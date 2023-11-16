@@ -13,11 +13,12 @@ class RenderEngine;
 class Timer;
 class ViewGroup;
 class RootViewGroup;
-class TestDemo;
-class ShaderDemo;
-class UiDemo;
-class CounterDemo;
-class NinjiaGame;
+// class TestDemo;
+// class ShaderDemo;
+// class UiDemo;
+// class CounterDemo;
+// class NinjiaGame;
+class Test3dDemo;
 
 class EventActionCallback{
 public:

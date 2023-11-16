@@ -34,14 +34,8 @@ compile: build_dir \
 		${BUILD_DIR}/timer.o \
 		${BUILD_DIR}/sprite.o \
 		${BUILD_DIR}/audio_manager.o \
-		${BUILD_DIR}/test_demo.o \
-		${BUILD_DIR}/shader_demo.o \
-		${BUILD_DIR}/ui_demo.o \
-		${BUILD_DIR}/counter_demo.o \
-		${BUILD_DIR}/life_game.o \
-		${BUILD_DIR}/ninjia_game.o \
-		${BUILD_DIR}/custom_shader_demo.o \
-		${BUILD_DIR}/shape_demo.o 
+		${BUILD_DIR}/render3d.o \
+		${BUILD_DIR}/render_test.o 
 
 ${BUILD_DIR}/json.o: ${DIR}/libjson/json.cpp ${DIR}/libjson/json.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${DIR}/libjson/json.cpp -o ${BUILD_DIR}/json.o
@@ -97,52 +91,10 @@ ${BUILD_DIR}/drawable.o:${SRC_DIR}/render/ui/drawable.cpp \
 						${SRC_DIR}/render/ui/drawable.hpp
 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render/ui/drawable.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/drawable.o 
 
-${BUILD_DIR}/test_demo.o:${SRC_DIR}/game/test_demo.cpp ${SRC_DIR}/game/test_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/test_demo.cpp -o ${BUILD_DIR}/test_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
+${BUILD_DIR}/render3d.o:${SRC_DIR}/render3d/geometry.cpp \
+						${SRC_DIR}/render3d/geometry.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render3d/geometry.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/render3d.o 
 
-${BUILD_DIR}/shader_demo.o:${SRC_DIR}/game/shader_demo.cpp ${SRC_DIR}/game/shader_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/shader_demo.cpp -o ${BUILD_DIR}/shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/ui_demo.o:${SRC_DIR}/game/ui_demo.cpp ${SRC_DIR}/game/ui_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/ui_demo.cpp -o ${BUILD_DIR}/ui_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/counter_demo.o:${SRC_DIR}/game/counter_demo.cpp ${SRC_DIR}/game/counter_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/counter_demo.cpp -o ${BUILD_DIR}/counter_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/life_game.o:${SRC_DIR}/game/life_game.cpp ${SRC_DIR}/game/life_game.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/life_game.cpp -o ${BUILD_DIR}/life_game.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/shape_demo.o:${SRC_DIR}/game/shape_demo.cpp ${SRC_DIR}/game/shape_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/shape_demo.cpp -o ${BUILD_DIR}/shape_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/custom_shader_demo.o:${SRC_DIR}/game/custom_shader_demo.cpp ${SRC_DIR}/game/custom_shader_demo.hpp
-	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/game/custom_shader_demo.cpp -o ${BUILD_DIR}/custom_shader_demo.o -I ${INCLUDE_DIR} -I ${SRC_DIR}
-
-${BUILD_DIR}/ninjia_game.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_game.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_game.cpp \
-		${BUILD_DIR}/ninjia_sprite.o \
-		${BUILD_DIR}/ninjia_background.o
-	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_game.cpp -o ${BUILD_DIR}/ninjia_game.o
-
-${BUILD_DIR}/ninjia_sprite.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_sprite.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_sprite.cpp 
-	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_sprite.cpp -o ${BUILD_DIR}/ninjia_sprite.o
-
-${BUILD_DIR}/ninjia_background.o: ${SRC_DIR}/game/ninjia/ninjia_game_base.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_background.hpp \
-		${SRC_DIR}/game/ninjia/ninjia_background.cpp 
-	${CC} -std=${STD} -c ${OPTPARAMS} -I ${INCLUDE_DIR} -I ${SRC_DIR} ${SRC_DIR}/game/ninjia/ninjia_background.cpp -o ${BUILD_DIR}/ninjia_background.o
-		
-
-# ${BUILD_DIR}/audio_impl.o:${SRC_DIR}/audio/audio_impl.cpp \
-# 				${SRC_DIR}/audio/audio_impl.hpp
-# 	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/audio/audio_impl.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/audio_impl.o 
-
-
-clean_game:
-	rm -f ${BUILD_DIR}/ninjia_sprite.o 
-	rm -f ${BUILD_DIR}/ninjia_background.o 
-	rm -f ${BUILD_DIR}/ninjia_game.o 
-	rm -f ${BUILD_DIR}/main.exe
+${BUILD_DIR}/render_test.o:${SRC_DIR}/render3d/demo3d/test_demo.cpp \
+						${SRC_DIR}/render3d/demo3d/test_demo.hpp
+	${CC} -std=${STD} -c ${OPTPARAMS} ${SRC_DIR}/render3d/demo3d/test_demo.cpp -I ${INCLUDE_DIR} -I ${SRC_DIR} -o ${BUILD_DIR}/render_test.o 
